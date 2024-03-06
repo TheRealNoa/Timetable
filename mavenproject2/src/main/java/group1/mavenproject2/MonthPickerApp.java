@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -199,7 +200,13 @@ private void showSelectedDay(String month, int day) {
     }
 
     // Create a button with the selected month and day
-    Button selectedDayButton = createStyledButton(month + " " + day);
+    VBox vb = new VBox(10);
+    vb.setAlignment(Pos.CENTER);
+    
+    
+    Label selectionInfo = new Label("You have selected:" + month + " " + day);
+    Button selectedDayButton = createStyledButton("Continue");
+    selectedDayButton.setAlignment(Pos.CENTER);
 
     // Modify the selectedDayButton.setOnAction method to check if the second selection has been made
     selectedDayButton.setOnAction(e -> {
@@ -213,9 +220,11 @@ private void showSelectedDay(String month, int day) {
             displayFinalResult();
         }
     });
+    
+    vb.getChildren().addAll(selectionInfo,selectedDayButton);
 
     // Create the scene
-    Scene scene = new Scene(selectedDayButton, 200, 100); // Adjust dimensions as needed
+    Scene scene = new Scene(vb, 200, 100); // Adjust dimensions as needed
 
     // Declare the selectedDayStage variable as a local Stage object
 
