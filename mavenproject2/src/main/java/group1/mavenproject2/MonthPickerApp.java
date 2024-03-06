@@ -8,8 +8,30 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 public class MonthPickerApp extends Application {
     private Stage currentStage;
+
+    // Declare the variables for the selected month and day
+    private String selectedMonth1;
+    private String selectedMonth2;
+    private int selectedDay1;
+    private int selectedDay2;
+
+    // Add a list of days in each month
+    private List<Integer> daysInMonth = Arrays.asList(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+
+    // Create an array of months
+    private String[] months = {
+            "January", "February", "March", "April",
+            "May", "June", "July", "August",
+            "September", "October", "November", "December"
+    };
 
     @Override
     public void start(Stage primaryStage) {
@@ -64,11 +86,6 @@ public class MonthPickerApp extends Application {
         GridPane monthButtons = new GridPane();
         monthButtons.setHgap(10); // Horizontal spacing
         monthButtons.setVgap(10); // Vertical spacing
-        String[] months = {
-                "January", "February", "March", "April",
-                "May", "June", "July", "August",
-                "September", "October", "November", "December"
-        };
 
         int rowIndex = 0;
         int colIndex = 0;
@@ -89,23 +106,162 @@ public class MonthPickerApp extends Application {
 
     // Show the selected month in a new stage
     private void showSelectedMonth(String month) {
+        if (currentStage != null) {
+            currentStage.close();
+        }
+
+        Stage dayPickerStage = new Stage();
+        GridPane dayButtons = createDayButtons(month);
+
+        // Create the scene
+        Scene scene = new Scene(dayButtons, 400, 200); // Adjust dimensions as needed
+
+        // Set the scene and show the stage
+        dayPickerStage.setTitle("Select a Day");
+        dayPickerStage.setScene(scene);
+        dayPickerStage.show();
+
+        this.currentStage = dayPickerStage;
+    }
+
+    // Create buttons for each day in the selected month
+    private GridPane createDayButtons(String month) {
+        GridPane dayButtons = new GridPane();
+        dayButtons.setHgap(10); // Horizontal spacing
+        dayButtons.setVgap(10); // Vertical spacing
+
+        // Get the index of the selected month
+        int monthIndex = Arrays.asList(months).indexOf(month);
+
+        // Get the number of days in the selected month
+        int days = daysInMonth.get(monthIndex);
+
+        // Adjust for leap years if the month is February
+        if (month.equals("February")) {
+            // Get the current year from the system
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+
+            // Check if the year is a leap year
+            if (isLeapYear(year)) {
+                // Add one more day
+                days++;
+            }
+        }
+
+        // Create an array of suffixes for the days
+        String[] suffixes = {"st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th",
+                "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
+                "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th",
+                "st"};
+
+        int rowIndex = 0;
+        int colIndex = 0;
+        for (int day = 1; day <= days; day++) {
+            // Create a button with the day and the suffix
+            String label = day + suffixes[day - 1];
+            Button button = createStyledButton(label);
+
+            // Create an instance of the DayButtonHandler class and pass it to the setOnAction method
+            button.setOnAction(new DayButtonHandler(month, day));
+
+            dayButtons.add(button, colIndex, rowIndex);
+
+            colIndex++;
+            if (colIndex > 7) {
+                colIndex = 0;
+                rowIndex++;
+            }
+        }
+
+        return dayButtons;
+    }
+
+    // Show the selected day in a new stage
+   // Show the selected day in a new stage
+private void showSelectedDay(String month, int day) {
+    Stage selectedDayStage = new Stage();
     if (currentStage != null) {
         currentStage.close();
     }
 
-    Stage selectedMonthStage = new Stage();
-    Button selectedMonthButton = createStyledButton(month);
-    selectedMonthButton.setOnAction(e -> selectedMonthStage.close());
+    // Check if the first selection has been made
+    if (selectedMonth1 == null && selectedDay1 == 0) {
+        // Store the selected month and day as the first selection
+        selectedMonth1 = month;
+        selectedDay1 = day;
+    } else {
+        // Store the selected month and day as the second selection
+        selectedMonth2 = month;
+        selectedDay2 = day;
+    }
+
+    // Create a button with the selected month and day
+    Button selectedDayButton = createStyledButton(month + " " + day);
+
+    // Modify the selectedDayButton.setOnAction method to check if the second selection has been made
+    selectedDayButton.setOnAction(e -> {
+        // Check if the second selection has been made
+        if (selectedMonth2 == null && selectedDay2 == 0) {
+            // If not, then open a new stage for month selection
+            openMonthPickerStage();
+        } else {
+            // If yes, then close the stage and display the final result
+            selectedDayStage.close();
+            displayFinalResult();
+        }
+    });
 
     // Create the scene
-    Scene scene = new Scene(selectedMonthButton, 200, 100); // Adjust dimensions as needed
+    Scene scene = new Scene(selectedDayButton, 200, 100); // Adjust dimensions as needed
+
+    // Declare the selectedDayStage variable as a local Stage object
 
     // Set the scene and show the stage
-    selectedMonthStage.setTitle("Selected Month");
-    selectedMonthStage.setScene(scene);
-    selectedMonthStage.show();
+    selectedDayStage.setTitle("Selected Day");
+    selectedDayStage.setScene(scene);
+    selectedDayStage.show();
 
-    this.currentStage = selectedMonthStage;
+    this.currentStage = selectedDayStage;
+}
+
+    // Create a class that implements the EventHandler interface
+    class DayButtonHandler implements EventHandler<ActionEvent> {
+        // Declare the fields for the month and the day
+        private String month;
+        private int day;
+
+        // Create a constructor that takes the month and the day as parameters
+        public DayButtonHandler(String month, int day) {
+            this.month = month;
+            this.day = day;
+        }
+
+        // Override the handle method to call the showSelectedDay method
+        @Override
+        public void handle(ActionEvent event) {
+            showSelectedDay(month, day);
+        }
+    }
+
+    // Add a method to check if a year is a leap year
+    private boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+    private void displayFinalResult() {
+    // Create a button with the two selections
+    Button finalResultButton = createStyledButton(selectedMonth1 + " " + selectedDay1 + " and " + selectedMonth2 + " " + selectedDay2);
+    finalResultButton.setOnAction(e -> System.exit(0)); // Exit the program when the button is clicked
+
+    // Create the scene
+    Scene scene = new Scene(finalResultButton, 300, 100); // Adjust dimensions as needed
+
+    // Set the scene and show the stage
+    Stage finalResultStage = new Stage();
+    finalResultStage.setTitle("Final Result");
+    finalResultStage.setScene(scene);
+    finalResultStage.show();
+
+    this.currentStage = finalResultStage;
 }
 
     public static void main(String[] args) {

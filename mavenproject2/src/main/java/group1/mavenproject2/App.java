@@ -1,9 +1,5 @@
 package group1.mavenproject2;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,9 +14,6 @@ import javafx.scene.shape.Rectangle;
  * JavaFX App
  */
 public class App extends Application {
-     private static InetAddress host;
-    private static final int PORT = 25564;
-    
     private Stage currentStage;
    @Override
     public void start(Stage primaryStage) {
@@ -55,10 +48,8 @@ public class App extends Application {
         button.setPrefSize(100, 100);
         button.setOnAction(e -> {
             if (label.equals("Add Class")) {
-                sendToServer("Add Class recieved");
                 openNewStage();
-            }
-            else{
+            } else {
                 System.out.println("CLICKED");
             }
         });
@@ -96,17 +87,6 @@ public class App extends Application {
     newStage.show();
     this.currentStage = newStage;
 }
-    private void sendToServer(String data) {
-    try (Socket socket = new Socket("localhost", PORT); 
-         PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-
-        out.println(data);
-        System.out.println("Sent to server: " + data);
-    } catch (IOException ex) {
-        ex.printStackTrace();
-    }
-}
-        
     public static void main(String[] args) {
         launch(args);
     }

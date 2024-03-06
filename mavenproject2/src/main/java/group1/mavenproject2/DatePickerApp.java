@@ -10,12 +10,12 @@ import javafx.stage.Stage;
 import java.time.Month;
 import java.time.YearMonth;
 
-public class DayPickerApp extends Application {
+public class DatePickerApp extends Application {
     private Stage currentStage;
     private String selectedMonth;
 
     // Constructor with a parameter for the selected month
-    public DayPickerApp(String selectedMonth) {
+    public DatePickerApp(String selectedMonth) {
         this.selectedMonth = selectedMonth;
     }
     
@@ -74,7 +74,8 @@ public void start(Stage primaryStage) {
 
         return dayButtons;
     }
-
+    
+        
     // Show the selected day in a new stage
     private void showSelectedDay(String month, int day) {
         if (currentStage != null) {
@@ -94,6 +95,8 @@ public void start(Stage primaryStage) {
         selectedDayStage.setScene(scene);
         selectedDayStage.show();
     }
+    
+    
 
     public static void main(String[] args) {
         launch(args);
