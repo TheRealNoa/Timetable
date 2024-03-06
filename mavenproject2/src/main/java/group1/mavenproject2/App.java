@@ -1,5 +1,12 @@
 package group1.mavenproject2;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,9 +21,55 @@ import javafx.scene.shape.Rectangle;
  * JavaFX App
  */
 public class App extends Application {
+    
+    private static InetAddress localhost;
+    private static final int PORT = 25564;
+    private TCPEchoClient tcpClient;
+
+    
+   private static void run() {
+    Socket link = null;				//Step 1.
+    try 
+    {
+	link = new Socket(localhost,PORT);		//Step 1.
+	BufferedReader in = new BufferedReader(new InputStreamReader(link.getInputStream()));//Step 2.
+	PrintWriter out = new PrintWriter(link.getOutputStream(),true);	 //Step 2.
+
+	//Set up stream for keyboard entry...
+	BufferedReader userEntry =new BufferedReader(new InputStreamReader(System.in));
+	String message = null;
+        String response= null;
+	
+        System.out.println("Enter message to be sent to server: ");
+        message =  userEntry.readLine();
+        out.println(message); 		//Step 3.
+        response = in.readLine();		//Step 3.
+        System.out.println("\nSERVER RESPONSE> " + response);
+    } 
+    catch(IOException e)
+    {
+	e.printStackTrace();
+    } 
+    finally 
+    {
+        try 
+        {
+            System.out.println("\n* Closing connection... *");
+            link.close();				//Step 4.
+	}catch(IOException e)
+        {
+            System.out.println("Unable to disconnect/close!");
+            System.exit(1);
+	}
+    }
+ } // finish run method
     private Stage currentStage;
    @Override
     public void start(Stage primaryStage) {
+        
+        tcpClient = new TCPEchoClient();
+        tcpClient.connectToTCP();
+        
         this.currentStage = primaryStage;
         // Create buttons
         Button addButton = createStyledButton("Add Class");
@@ -89,5 +142,10 @@ public class App extends Application {
 }
     public static void main(String[] args) {
         launch(args);
+        Thread communication = new Thread   (()->
+        {
+        run();
+        });
+        communication.start();
+   }
     }
-}
