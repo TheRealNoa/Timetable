@@ -74,9 +74,7 @@ public void start(Stage primaryStage) {
 
         return dayButtons;
     }
-    
-        
-    // Show the selected day in a new stage
+   
     private void showSelectedDay(String month, int day) {
         if (currentStage != null) {
             currentStage.close();

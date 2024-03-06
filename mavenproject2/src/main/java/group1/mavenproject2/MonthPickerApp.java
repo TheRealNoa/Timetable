@@ -13,6 +13,9 @@ import java.util.Calendar;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 
 public class MonthPickerApp extends Application {
     private Stage currentStage;
@@ -247,13 +250,45 @@ private void showSelectedDay(String month, int day) {
     private boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
+   private String[] daysOfWeek = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
+    private void displayDayOfWeek() {
+        if (currentStage != null) {
+        currentStage.close();
+    }
+        VBox vb = new VBox(10);
+        vb.setAlignment(Pos.CENTER);
+        
+        Label infoLabel = new Label("Please select a day of the week:");
+        
+        Stage daysStage = new Stage();
+        GridPane daysButtons = new GridPane();
+        for (int i = 0; i < daysOfWeek.length; i++) {
+            Button button = new Button(daysOfWeek[i]);
+            button.setOnAction(e -> {
+                System.out.println("Clicked on: " + daysOfWeek[daysButtons.getChildren().indexOf(button)]);
+                daysStage.close(); // Close the window after clicking a button
+            });
+            daysButtons.add(button, i, 0);
+        }
+        daysButtons.setAlignment(Pos.CENTER);
+        vb.getChildren().addAll(infoLabel,daysButtons);
+        Scene scene = new Scene(vb, 350, 50);
+        daysStage.setScene(scene);
+        daysStage.setTitle("Days of Week");
+        daysStage.show();
+    }
+    
     private void displayFinalResult() {
     // Create a button with the two selections
-    Button finalResultButton = createStyledButton(selectedMonth1 + " " + selectedDay1 + " and " + selectedMonth2 + " " + selectedDay2);
-    finalResultButton.setOnAction(e -> System.exit(0)); // Exit the program when the button is clicked
+    Label InfoLabel = new Label("You have selected the period from:"+selectedMonth1 + " " + selectedDay1 + " to " + selectedMonth2 + " " + selectedDay2);
+    Button finalResultButton = createStyledButton("Next");
+    finalResultButton.setOnAction(e -> displayDayOfWeek()); // Exit the program when the button is clicked
 
+    VBox vb = new VBox(10);
+    vb.setAlignment(Pos.CENTER);
+    vb.getChildren().addAll(InfoLabel,finalResultButton);
     // Create the scene
-    Scene scene = new Scene(finalResultButton, 300, 100); // Adjust dimensions as needed
+    Scene scene = new Scene(vb, 400, 100); // Adjust dimensions as needed
 
     // Set the scene and show the stage
     Stage finalResultStage = new Stage();
