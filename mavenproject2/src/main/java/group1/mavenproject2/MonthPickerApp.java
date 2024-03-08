@@ -10,13 +10,12 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
+import javafx.scene.control.Slider;
 
 public class MonthPickerApp extends Application {
     private Stage currentStage;
@@ -274,7 +273,9 @@ private void showSelectedDay(String month, int day) {
         for (int i = 0; i < daysOfWeek.length; i++) {
             Button button = new Button(daysOfWeek[i]);
             button.setOnAction(e -> {
+                // I need to now insert time select...
                 System.out.println("Clicked on: " + daysOfWeek[daysButtons.getChildren().indexOf(button)]);
+                displayTimeSelection();
                 daysStage.close(); // Close the window after clicking a button
             });
             daysButtons.add(button, i, 0);
@@ -285,6 +286,33 @@ private void showSelectedDay(String month, int day) {
         daysStage.setScene(scene);
         daysStage.setTitle("Days of Week");
         daysStage.show();
+    }
+    private void displayTimeSelection()
+    {
+    //Two inputs:
+        //Start time: 
+        
+        Slider startSlider = new Slider(9,18,1);
+        startSlider.setBlockIncrement(1);
+        startSlider.setMinorTickCount(1);
+        startSlider.setMajorTickUnit(1);
+        startSlider.setSnapToTicks(true);
+        startSlider.setShowTickLabels(true);
+        startSlider.setShowTickMarks(true);
+        //Slider endSlider = new Slider(9.5,6,0.5);
+        Label InfoLabel = new Label("Select the Start time and end time");
+        
+        VBox vb = new VBox(10);
+        vb.setAlignment(Pos.CENTER);
+        vb.getChildren().addAll(startSlider,InfoLabel);
+        Scene timeSelectionScene = new Scene(vb,400,100);
+        
+        Stage timeSelectionStage = new Stage();
+        timeSelectionStage.setTitle("Time selection");
+        timeSelectionStage.setScene(timeSelectionScene);
+        timeSelectionStage.show();
+        
+        this.currentStage = timeSelectionStage;
     }
     
     private void displayFinalResult() {
