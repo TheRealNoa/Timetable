@@ -1,5 +1,7 @@
 package group1.mavenproject2;
 
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,9 +13,11 @@ import javafx.stage.Stage;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 
@@ -287,11 +291,22 @@ private void showSelectedDay(String month, int day) {
         daysStage.setTitle("Days of Week");
         daysStage.show();
     }
+    double upStartTime=9;
+    //Here's just a method to make the formatting of the slider look nice 
+    public void formatLabels(Slider s)
+    {
+   
+            
+    }
     private void displayTimeSelection()
     {
+        Label InfoLabel = new Label("Select the Start time and end time");
+        Label StartTimeLabel = new Label("Start time:");
+        Label EndTimeLabel = new Label("End time:");
     //Two inputs:
-        //Start time: 
-        
+    //Start time: 
+        //Note: Even though it's time, the values outputed are
+        // still regular numbers, so e.g. 9,9.5,10,10.5 ...
         Slider startSlider = new Slider(9,18,1);
         startSlider.setBlockIncrement(1);
         startSlider.setMinorTickCount(1);
@@ -299,12 +314,40 @@ private void showSelectedDay(String month, int day) {
         startSlider.setSnapToTicks(true);
         startSlider.setShowTickLabels(true);
         startSlider.setShowTickMarks(true);
+        
+    //End time:
+        Slider endSlider = new Slider(upStartTime,18,1);
+        endSlider.setBlockIncrement(1);
+        endSlider.setMinorTickCount(1);
+        endSlider.setMajorTickUnit(1);
+        endSlider.setSnapToTicks(true);
+        endSlider.setShowTickLabels(true);
+        endSlider.setShowTickMarks(true);
+        
+        //some fancy code for the end time slider :)
+        //Basically, whatever we select as the start time, the first value of
+        //end time is going to change accordingly.
+        //I think that'll save some hassle down the line
+        
+        startSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,Number old_val, Number new_val) 
+            {
+                if(new_val.doubleValue()%0.5==0)
+                // this is just to avoid all the actual values that the slider "outputs"
+                    System.out.println(new_val.doubleValue());
+                upStartTime=new_val.doubleValue()+0.5;
+                endSlider.setMin(upStartTime);
+            }
+        });
+        
+        //Here's a method that displays the time as time and doesn't include decimals...
+        
         //Slider endSlider = new Slider(9.5,6,0.5);
-        Label InfoLabel = new Label("Select the Start time and end time");
+     
         
         VBox vb = new VBox(10);
         vb.setAlignment(Pos.CENTER);
-        vb.getChildren().addAll(startSlider,InfoLabel);
+        vb.getChildren().addAll(InfoLabel,StartTimeLabel,startSlider,EndTimeLabel,endSlider);
         Scene timeSelectionScene = new Scene(vb,400,100);
         
         Stage timeSelectionStage = new Stage();
