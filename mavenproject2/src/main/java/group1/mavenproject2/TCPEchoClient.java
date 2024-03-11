@@ -17,21 +17,45 @@ public class TCPEchoClient {
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-
+            
             startListening();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally
+        {
+            disconnect();
         }
     }
-
+    private static void disconnect()
+    {
+        try{
+        out.println("client disconnected");
+        if (socket != null && !socket.isClosed()) 
+        {
+                socket.close();
+                in.close();
+                out.close();
+                System.out.println("Disconnected from server.");
+        }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private static void startListening() {
         try {
             String message;
             while ((message = in.readLine()) != null) {
                 System.out.println("Received from server: " + message);
             }
-        } catch (IOException e) {
+        }catch(SocketException s)
+        {
+        System.out.println("Connection reset");
+        } 
+        catch (IOException e) {
             e.printStackTrace();
+        }finally
+        {
+            disconnect();
         }
     }
 

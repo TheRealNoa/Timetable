@@ -324,6 +324,22 @@ private void showSelectedDay(String month, int day) {
         endSlider.setShowTickLabels(true);
         endSlider.setShowTickMarks(true);
         
+        endSlider.setLabelFormatter(new javafx.util.StringConverter<Double>() {
+            @Override
+            public String toString(Double value) {
+                if (Math.abs(value - Math.round(value)) == 0.5) {
+                    return String.format("%.0f:30", Math.floor(value));
+                } else {
+                    return String.format("%.0f", value);
+                }
+            }
+
+            @Override
+            public Double fromString(String string) {
+                return null;
+            }
+        });
+        
         //some fancy code for the end time slider :)
         //Basically, whatever we select as the start time, the first value of
         //end time is going to change accordingly.
