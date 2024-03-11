@@ -1,12 +1,5 @@
 package group1.mavenproject2;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,15 +10,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private Stage currentStage;
    @Override
     public void start(Stage primaryStage) {
-        
+        TCPEchoClient.sendMessage("Connection test");
         this.currentStage = primaryStage;
         // Create buttons
         Button addButton = createStyledButton("Add Class");
