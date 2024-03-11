@@ -1,5 +1,6 @@
 package group1.mavenproject2;
 
+import java.net.Socket;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,7 +16,7 @@ public class App extends Application {
     private Stage currentStage;
    @Override
     public void start(Stage primaryStage) {
-        TCPEchoClient.sendMessage("Connection test");
+        //TCPEchoClient.sendMessage("Connection test");
         this.currentStage = primaryStage;
         // Create buttons
         Button addButton = createStyledButton("Add Class");
@@ -87,11 +88,25 @@ public class App extends Application {
     this.currentStage = newStage;
 }
     public static void main(String[] args) {
+       
         Thread ServerConnect = new Thread(()->
         {
         TCPEchoClient.main(args);
         });
+         Thread ConnectionCheck = new Thread(()->
+        {
+        TCPEchoClient.start();
+        if(TCPEchoClient.socket!=null)
+        {
         ServerConnect.start();
+        }else
+        {
+        System.out.println("Socket not found. Client app running without connection to server.");
+        }
+        });
+        ConnectionCheck.start();
+        
+        
         launch(args);
    }
     }

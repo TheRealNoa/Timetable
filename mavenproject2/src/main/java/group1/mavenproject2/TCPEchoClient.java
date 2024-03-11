@@ -6,10 +6,16 @@ import java.net.*;
 public class TCPEchoClient {
     private static final String SERVER_IP = "127.0.0.1";
     private static final int PORT = 12345;
-    private static Socket socket;
+    public static Socket socket;
     private static BufferedReader in;
     private static PrintWriter out;
 
+    public static void start()
+    {
+    try{socket = new Socket(SERVER_IP, PORT);
+            System.out.println("Socket found.");}catch(IOException e){}
+    }
+    
     public static void main(String[] args) {
         try {
             socket = new Socket(SERVER_IP, PORT);

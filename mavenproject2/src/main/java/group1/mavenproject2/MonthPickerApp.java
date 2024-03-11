@@ -292,12 +292,7 @@ private void showSelectedDay(String month, int day) {
         daysStage.show();
     }
     double upStartTime=9;
-    //Here's just a method to make the formatting of the slider look nice 
-    public void formatLabels(Slider s)
-    {
-   
-            
-    }
+
     private void displayTimeSelection()
     {
         Label InfoLabel = new Label("Select the Start time and end time");
@@ -356,10 +351,6 @@ private void showSelectedDay(String month, int day) {
             }
         });
         
-        //Here's a method that displays the time as time and doesn't include decimals...
-        
-        //Slider endSlider = new Slider(9.5,6,0.5);
-     
         
         VBox vb = new VBox(10);
         vb.setAlignment(Pos.CENTER);
