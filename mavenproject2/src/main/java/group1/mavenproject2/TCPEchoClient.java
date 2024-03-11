@@ -6,51 +6,44 @@
 package group1.mavenproject2;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
+import static javafx.application.Application.launch;
 
 /**
  *
  * @author razi
  */
-public class TCPEchoClient {
- private static InetAddress host;
-    private static final int PORT = 25564;
-    private Socket socket;
-    private BufferedReader reader;
-    private PrintWriter writer;
-    
-    public TCPEchoClient() {
+public class TCPEchoClient{
+    private static final String SERVER_IP = "127.0.0.1";
+    private static final int PORT = 12345;
+
+    public static void main(String[] args) {
         try {
-            host = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            System.out.println("Host ID not found!");
+            Socket socket = new Socket(SERVER_IP, PORT);
+            System.out.println("Connected to server.");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                System.out.print("Enter message to send (type 'exit' to close connection): ");
+                String message = scanner.nextLine();
+                writer.println(message);
+
+                if (message.equalsIgnoreCase("exit")) {
+                    break;
+                }
+
+                String response = reader.readLine();
+                System.out.println("Server response: " + response);
+            }
+
+            socket.close();
+            System.out.println("Connection closed.");
+        } catch (IOException e) {
             e.printStackTrace();
-            System.exit(1);
         }
-        connectToTCP();
     }
+}
 
-    
-   public void connectToTCP() {			//Step 1.
-    try 
-    {
-	socket = new Socket(host,PORT);		//Step 1.
-	BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));//Step 2.
-	PrintWriter writer = new PrintWriter(socket.getOutputStream(),true);	 //Step 2.
-
-    } 
-    catch(IOException e)
-    {
-	e.printStackTrace();
-    } 
-   }
-   private void sendString(String s)
-   {
-       if(socket!=null&&reader!=null)
-       {
-           writer.println(s);
-       }else
-       {
-       System.err.println("Not connected to server?");
-       }
-   }
- } 
