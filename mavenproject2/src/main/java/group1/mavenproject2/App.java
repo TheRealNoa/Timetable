@@ -22,6 +22,15 @@ public class App extends Application {
         Button removeButton = createStyledButton("Remove Class");
         Button displayButton = createStyledButton("Display Schedule");
 
+        removeButton.setOnAction(e -> {
+        RemoveClassStage removeClassStage = new RemoveClassStage();
+        try {
+            removeClassStage.start(new Stage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        });
+
         // Arrange buttons horizontally
         HBox buttonBox = new HBox(10); // 10 is the spacing between buttons
         buttonBox.getChildren().addAll(addButton, removeButton, displayButton);
@@ -83,6 +92,8 @@ public class App extends Application {
     newStage.setScene(newScene);
     newStage.show();
     this.currentStage = newStage;
+    
+
 }
     public static void main(String[] args) {
        
@@ -102,6 +113,8 @@ public class App extends Application {
         }
         });
         ConnectionCheck.start();
+        
+        
         
         
         launch(args);
