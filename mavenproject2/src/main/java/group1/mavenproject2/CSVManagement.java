@@ -20,7 +20,7 @@ public class CSVManagement {
     public static void main(String[] args) {
   
   
-  stringBuilder.append("Index").append(",").append("Start date").append(",").append("End date").append(",").append("Day of week").append(",")
+  stringBuilder.append("Start date").append(",").append("End date").append(",").append("Day of week").append(",")
                .append("Start time").append(",").append("End time").append("\n");
   
   try ( FileWriter fileWriter = new FileWriter("C:\\temp\\csvMan.csv") ) {
@@ -34,19 +34,19 @@ public class CSVManagement {
     public static void write(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime)
     {
     String separator = ",";
-    String[] data = {StartTime,EndTime} ;
-    for(String s: data)
-    {
-        if(s!=data[data.length-1])
-        {
-        stringBuilder.append(s).append(separator);
-        }else
-        {
-        stringBuilder.append(s).append("\n");
+    String[] data = {StartDate, EndDate,DayOfWeek,StartTime,EndTime} ;
+    for (int i = 0; i < data.length; i++) {
+            String s = data[i];
+            stringBuilder.append(s);
+            
+            if (i < data.length - 1) {
+                stringBuilder.append(", ");
+            }else
+            {
+            stringBuilder.append("\n");
+            }
         }
-    }
     try ( FileWriter fileWriter = new FileWriter("C:\\temp\\csvMan.csv") ) {
-   
    fileWriter.write(stringBuilder.toString());
    
   } catch(Exception ex) {

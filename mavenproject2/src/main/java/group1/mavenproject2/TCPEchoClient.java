@@ -79,6 +79,7 @@ public class TCPEchoClient {
         }else
         {
         System.out.println("Not connected to server.");
+        CSVManagement.write(StartDate, EndDate, DayOfWeek, StartTime, EndTime);
         a.show();
         }
     }
