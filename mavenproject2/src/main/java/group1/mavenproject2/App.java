@@ -1,6 +1,5 @@
 package group1.mavenproject2;
 
-import java.net.Socket;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

@@ -18,7 +18,7 @@ public class TCPEchoClient {
     
     public static void main(String[] args) {
         try {
-            socket = new Socket(SERVER_IP, PORT);
+            //socket = new Socket(SERVER_IP, PORT);
             System.out.println("Connected to server.");
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
