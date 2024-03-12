@@ -60,8 +60,6 @@ public class App extends Application {
     }    
     Stage newStage = new Stage();
     Button dateButton = createStyledButton("Date");
-    Button timeButton = createStyledButton("Time");
-    Button roomButton = createStyledButton("Room Number");
 
     dateButton.setOnAction(e -> {
         MonthPickerApp monthPicker = new MonthPickerApp();
@@ -73,7 +71,7 @@ public class App extends Application {
     });
 
     HBox newButtonBox = new HBox(10);
-    newButtonBox.getChildren().addAll(dateButton, timeButton, roomButton);
+    newButtonBox.getChildren().addAll(dateButton);
     newButtonBox.setAlignment(Pos.CENTER);
 
     Rectangle newBox = new Rectangle(300, 100);
