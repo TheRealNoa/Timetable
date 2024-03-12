@@ -270,7 +270,7 @@ private void showSelectedDay(String month, int day) {
         VBox vb = new VBox(10);
         vb.setAlignment(Pos.CENTER);
         
-        Label infoLabel = new Label("Please select a day of the week:");
+        Label infoLabel = new Label("Please select a day of the week: ");
         
         Stage daysStage = new Stage();
         GridPane daysButtons = new GridPane();
@@ -296,8 +296,8 @@ private void showSelectedDay(String month, int day) {
     private void displayTimeSelection()
     {
         Label InfoLabel = new Label("Select the Start time and end time");
-        Label StartTimeLabel = new Label("Start time:");
-        Label EndTimeLabel = new Label("End time:");
+        Label StartTimeLabel = new Label("Start time: ");
+        Label EndTimeLabel = new Label("End time: ");
     //Two inputs:
     //Start time: 
         //Note: Even though it's time, the values outputed are
@@ -367,7 +367,7 @@ private void showSelectedDay(String month, int day) {
     
     private void displayFinalResult() {
     // Create a button with the two selections
-    Label InfoLabel = new Label("You have selected the period from:"+selectedMonth1 + " " + selectedDay1 + " to " + selectedMonth2 + " " + selectedDay2);
+    Label InfoLabel = new Label("You have selected the period from: "+selectedMonth1 + " " + selectedDay1 + " to " + selectedMonth2 + " " + selectedDay2);
     Button finalResultButton = createStyledButton("Next");
     finalResultButton.setOnAction(e -> displayDayOfWeek()); // Exit the program when the button is clicked
 

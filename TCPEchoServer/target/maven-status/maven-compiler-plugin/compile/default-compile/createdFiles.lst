@@ -1,1 +1,4 @@
+com\mycompany\tcpechoserver\Class.class
 com\mycompany\tcpechoserver\TCPEchoServer.class
+com\mycompany\tcpechoserver\TimePeriod.class
+com\mycompany\tcpechoserver\Day.class
