@@ -351,11 +351,17 @@ private void showSelectedDay(String month, int day) {
             }
         });
         
+        startSlider.maxWidth(100);
+        endSlider.maxWidth(100);
+        
+        endSlider.maxHeight(100);
+        
+        Button okButton = createStyledButton("ok");
         
         VBox vb = new VBox(10);
         vb.setAlignment(Pos.CENTER);
-        vb.getChildren().addAll(InfoLabel,StartTimeLabel,startSlider,EndTimeLabel,endSlider);
-        Scene timeSelectionScene = new Scene(vb,400,100);
+        vb.getChildren().addAll(InfoLabel,StartTimeLabel,startSlider,EndTimeLabel,endSlider,okButton);
+        Scene timeSelectionScene = new Scene(vb,600,100);
         
         Stage timeSelectionStage = new Stage();
         timeSelectionStage.setTitle("Time selection");
