@@ -29,6 +29,7 @@ public class MonthPickerApp extends Application {
     private String selectedMonth2;
     private int selectedDay1;
     private int selectedDay2;
+    
 
     // Add a list of days in each month
     private List<Integer> daysInMonth = Arrays.asList(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -262,6 +263,7 @@ private void showSelectedDay(String month, int day) {
     private boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
+    public String DayOfWeek = "";
    private String[] daysOfWeek = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
     private void displayDayOfWeek() {
         if (currentStage != null) {
@@ -279,6 +281,7 @@ private void showSelectedDay(String month, int day) {
             button.setOnAction(e -> {
                 // I need to now insert time select...
                 System.out.println("Clicked on: " + daysOfWeek[daysButtons.getChildren().indexOf(button)]);
+                DayOfWeek = daysOfWeek[daysButtons.getChildren().indexOf(button)];
                 displayTimeSelection();
                 daysStage.close(); // Close the window after clicking a button
             });
@@ -292,7 +295,8 @@ private void showSelectedDay(String month, int day) {
         daysStage.show();
     }
     double upStartTime=9;
-
+   String StartTime = "";
+        String EndTime = "";
     private void displayTimeSelection()
     {
         Label InfoLabel = new Label("Select the Start time and end time");
@@ -351,16 +355,26 @@ private void showSelectedDay(String month, int day) {
             }
         });
         
-        startSlider.maxWidth(100);
-        endSlider.maxWidth(100);
-        
-        endSlider.maxHeight(100);
         
         Button okButton = createStyledButton("ok");
-        
-        
+        startSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                StartTime = newValue.doubleValue() + "";
+            }
+        });
+        endSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                EndTime = newValue.doubleValue() + "";
+            
+            }
+        });
+
+        String StartDate = selectedMonth1 + " " + selectedDay1;
+        String EndDate = selectedMonth2 + " " + selectedDay2;
         okButton.setOnAction(e->
-                TCPEchoClient.sendClientData(selectedMonth1, selectedMonth1, selectedMonth1, selectedMonth1, selectedMonth1)
+                TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime)
         
         );
         
