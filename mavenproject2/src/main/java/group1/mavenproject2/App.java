@@ -1,5 +1,6 @@
 package group1.mavenproject2;
 
+import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -111,7 +112,12 @@ public class App extends Application {
         }
         });
         ConnectionCheck.start();
-        
+        Thread csvManagement = new Thread(()->
+        {
+            CSVManagement.main(args);
+            System.out.println("Tried");
+        });
+        csvManagement.start();
         
         launch(args);
    }

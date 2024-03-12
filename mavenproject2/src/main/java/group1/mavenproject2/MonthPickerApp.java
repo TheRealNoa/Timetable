@@ -358,6 +358,12 @@ private void showSelectedDay(String month, int day) {
         
         Button okButton = createStyledButton("ok");
         
+        
+        okButton.setOnAction(e->
+                TCPEchoClient.sendClientData(selectedMonth1, selectedMonth1, selectedMonth1, selectedMonth1, selectedMonth1)
+        
+        );
+        
         VBox vb = new VBox(10);
         vb.setAlignment(Pos.CENTER);
         vb.getChildren().addAll(InfoLabel,StartTimeLabel,startSlider,EndTimeLabel,endSlider,okButton);

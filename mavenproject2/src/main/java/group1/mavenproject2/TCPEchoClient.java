@@ -2,6 +2,8 @@ package group1.mavenproject2;
 
 import java.io.*;
 import java.net.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class TCPEchoClient {
     private static final String SERVER_IP = "127.0.0.1";
@@ -65,7 +67,44 @@ public class TCPEchoClient {
         }
     }
 
+    public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime) {
+      Alert a = new Alert(AlertType.ERROR);
+      String[] client ={StartDate,EndDate,DayOfWeek,StartTime,EndTime};
+      String temp="";
+      a.setContentText("You are not connected to the server.");
+        if(socket!=null){
+            out.println("FullClientData");
+            out.println(concatenateWithComma(client));
+
+        }else
+        {
+        System.out.println("Not connected to server.");
+        a.show();
+        }
+    }
+    // keeping this just in case...
     public static void sendMessage(String message) {
+      Alert a = new Alert(AlertType.ERROR);
+      a.setContentText("You are not connected to the server.");
+        if(socket!=null){
         out.println(message);
+        }else
+        {
+        System.out.println("Not connected to server.");
+        a.show();
+        }
+    }
+    public static String concatenateWithComma(String[] array) {
+        StringBuilder tempBuilder = new StringBuilder();
+        
+        for (int i = 0; i < array.length; i++) {
+            tempBuilder.append(array[i]);
+            
+            if (i < array.length - 1) {
+                tempBuilder.append(",");
+            }
+        }
+        
+        return tempBuilder.toString();
     }
 }
