@@ -75,6 +75,7 @@ public class App extends Application {
         MonthPickerApp monthPicker = new MonthPickerApp();
         try {
             monthPicker.start(new Stage());
+            currentStage.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

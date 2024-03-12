@@ -58,6 +58,7 @@ public class TCPEchoClient {
         }catch(SocketException s)
         {
         System.out.println("Connection reset");
+        socket = null;
         } 
         catch (IOException e) {
             e.printStackTrace();
@@ -73,13 +74,13 @@ public class TCPEchoClient {
       String temp="";
       a.setContentText("You are not connected to the server.");
         if(socket!=null){
-            out.println("FullClientData");
-            out.println(concatenateWithComma(client));
+            //out.println("FullClientData"); myb this should be a command ?
+            out.println("FI," + concatenateWithComma(client));
 
         }else
         {
         System.out.println("Not connected to server.");
-        CSVManagement.write(StartDate, EndDate, DayOfWeek, StartTime, EndTime);
+        CSVManagement.write("FI",StartDate, EndDate, DayOfWeek, StartTime, EndTime); // FI Is for "Full Info"
         a.show();
         }
     }

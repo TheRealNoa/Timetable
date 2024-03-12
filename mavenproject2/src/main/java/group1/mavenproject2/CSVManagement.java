@@ -31,7 +31,7 @@ public class CSVManagement {
    ex.printStackTrace();
   }
  }
-    public static void write(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime)
+    public static void write(String command,String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime)
     {
     String separator = ",";
     String[] data = {StartDate, EndDate,DayOfWeek,StartTime,EndTime} ;

@@ -294,9 +294,9 @@ private void showSelectedDay(String month, int day) {
         daysStage.setTitle("Days of Week");
         daysStage.show();
     }
-    double upStartTime=9;
+   double upStartTime=9;
    String StartTime = "";
-        String EndTime = "";
+   String EndTime = "";
     private void displayTimeSelection()
     {
         Label InfoLabel = new Label("Select the Start time and end time");
@@ -307,6 +307,7 @@ private void showSelectedDay(String month, int day) {
         //Note: Even though it's time, the values outputed are
         // still regular numbers, so e.g. 9,9.5,10,10.5 ...
         Slider startSlider = new Slider(9,18,1);
+        StartTime = "9";
         startSlider.setBlockIncrement(1);
         startSlider.setMinorTickCount(1);
         startSlider.setMajorTickUnit(1);
@@ -315,7 +316,8 @@ private void showSelectedDay(String month, int day) {
         startSlider.setShowTickMarks(true);
         
     //End time:
-        Slider endSlider = new Slider(upStartTime,18,1);
+        Slider endSlider = new Slider(upStartTime+0.5,18,1);
+        EndTime = upStartTime + "";
         endSlider.setBlockIncrement(1);
         endSlider.setMinorTickCount(1);
         endSlider.setMajorTickUnit(1);
