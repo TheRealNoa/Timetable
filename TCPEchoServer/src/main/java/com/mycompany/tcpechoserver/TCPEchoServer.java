@@ -2,6 +2,8 @@ package com.mycompany.tcpechoserver;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TCPEchoServer{
     private static ServerSocket serverSocket;
@@ -43,17 +45,17 @@ public class TCPEchoServer{
             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
             String message;
-            String[] messageArr;
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
                 // Echo back to client
                 writer.println("Server received: " + message);
                 if(message.contains("FI"))
                 {
-                messageArr = message.split(",");
-          
-                
-                for(String m:messageArr)
+                String[]tempArr;
+                tempArr = message.split(",");
+                List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
+                arrayList.remove(0);
+                for(String m:arrayList)
                 {
                 System.out.println(m);
                 }
