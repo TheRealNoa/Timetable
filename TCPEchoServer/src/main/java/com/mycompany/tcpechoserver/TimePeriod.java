@@ -13,6 +13,7 @@ import java.sql.Time;
 public class TimePeriod {
     public Time Stime;
     public Time Etime;
+    public TimePeriod(){};
     public TimePeriod(Time Stime, Time Etime)
     {
         this.Stime=Stime;
@@ -26,7 +27,11 @@ public class TimePeriod {
     {
         return this.Etime;
     }
-    
+    @Override
+    public String toString()
+    {
+        return Stime + ":" + Etime;
+    }
      public boolean clashesWith(TimePeriod a)
       {
        if(this.Etime.before(a.getStime())|| this.Stime.after(a.getEtime()) || this.Etime.equals(a.getEtime()))

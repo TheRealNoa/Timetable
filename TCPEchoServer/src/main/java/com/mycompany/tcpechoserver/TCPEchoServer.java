@@ -1,6 +1,9 @@
 package com.mycompany.tcpechoserver;
 import java.io.*;
 import java.net.*;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +18,7 @@ public class TCPEchoServer{
     private static Day Thursday = new Day ("Thursday");
     private static Day Friday = new Day ("Friday");
     private static Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
+    private static TimePeriod TP = new TimePeriod();
     public static void main(String[] args) {
 
         // Days initialisation
@@ -47,7 +51,37 @@ public class TCPEchoServer{
             }
         }*/
     }
-
+    private static void assignDay(String message)
+    {
+    String[]tempArr;
+                tempArr = message.split(",");
+                List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
+                arrayList.remove(0);
+                for(Day d:days)
+                {
+                if (arrayList.contains(d.toString())){
+                    CurrentDay = d;
+                }
+                }
+    }
+    private static void assignTimePeriod(String message)
+    {
+        String[]tempArr;
+            tempArr = message.split(",");
+                List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
+                DateFormat formatter= new SimpleDateFormat("HH:mm");
+                Double t1 = Double.parseDouble(arrayList.get(4));
+                Double t2 = Double.parseDouble(arrayList.get(5));
+                
+                long milliseconds1 = (long) (t1 * 60 * 60 * 1000);
+                long milliseconds2 = (long) (t2 * 60 * 60 * 1000);
+                
+                Time startTime = new Time(milliseconds1);
+                Time endTime = new Time(milliseconds2);
+                
+                TP = new TimePeriod(startTime,endTime);
+                
+    }
     private static void handleClient(Socket clientSocket) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -60,18 +94,9 @@ public class TCPEchoServer{
                 writer.println("Server received: " + message);
                 if(message.contains("FI"))
                 {
-                String[]tempArr;
-                tempArr = message.split(",");
-                List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
-                arrayList.remove(0);
-                for(Day d:days)
-                {
-                if (arrayList.contains(d.toString())){
-                    System.out.println("Detected: " + d.toString());
-                    CurrentDay = d;
-                    System.out.println(CurrentDay.toString());
-                }
-                }
+                assignDay(message);
+                assignTimePeriod(message);
+                System.out.println(TP.toString());
                 }
             }
         }catch(SocketException s)
