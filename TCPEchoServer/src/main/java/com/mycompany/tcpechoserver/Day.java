@@ -13,9 +13,15 @@ public class Day {
     ArrayList<TimePeriod> BusyPeriods = new ArrayList<TimePeriod>();
     private Time TempSTime;
     private Time TempETime;
+    public Day(){}
     public Day(String name)
     {
     this.name=name;
+    }
+    @Override
+    public String toString()
+    {
+        return this.name;
     }
     public void addBookedTimeSlot(TimePeriod a)
     {

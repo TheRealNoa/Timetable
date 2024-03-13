@@ -8,9 +8,18 @@ import java.util.List;
 public class TCPEchoServer{
     private static ServerSocket serverSocket;
     private static final int PORT = 12345;
-
+    private static Day CurrentDay = new Day();
+    private static Day Monday = new Day("Monday");
+    private static Day Tuesday = new Day("Tuesday");
+    private static Day Wednesday = new Day("Wednesday");
+    private static Day Thursday = new Day ("Thursday");
+    private static Day Friday = new Day ("Friday");
+    private static Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
     public static void main(String[] args) {
 
+        // Days initialisation
+        
+        //
         try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server is running and waiting for connections...");
@@ -55,9 +64,13 @@ public class TCPEchoServer{
                 tempArr = message.split(",");
                 List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
                 arrayList.remove(0);
-                for(String m:arrayList)
+                for(Day d:days)
                 {
-                System.out.println(m);
+                if (arrayList.contains(d.toString())){
+                    System.out.println("Detected: " + d.toString());
+                    CurrentDay = d;
+                    System.out.println(CurrentDay.toString());
+                }
                 }
                 }
             }
