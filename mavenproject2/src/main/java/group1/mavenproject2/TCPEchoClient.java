@@ -11,6 +11,7 @@ public class TCPEchoClient {
     public static Socket socket;
     private static BufferedReader in;
     private static PrintWriter out;
+    public static boolean connection=true;
 
     public static void start()
     {
@@ -41,6 +42,7 @@ public class TCPEchoClient {
         if (socket != null && !socket.isClosed()) 
         {
                 socket.close();
+                socket = null;
                 in.close();
                 out.close();
                 System.out.println("Disconnected from server.");
@@ -53,7 +55,13 @@ public class TCPEchoClient {
         try {
             String message;
             while ((message = in.readLine()) != null) {
+                if(message.equals("TERMINATE"))
+                {
+                    System.out.println(message);
+                }else
+                {
                 System.out.println("Received from server: " + message);
+                }
             }
         }catch(SocketException s)
         {
@@ -62,12 +70,8 @@ public class TCPEchoClient {
         } 
         catch (IOException e) {
             e.printStackTrace();
-        }finally
-        {
-            disconnect();
         }
     }
-
     public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime) {
       Alert a = new Alert(AlertType.ERROR);
       String[] client ={StartDate,EndDate,DayOfWeek,StartTime,EndTime};
@@ -76,24 +80,29 @@ public class TCPEchoClient {
         if(socket!=null){
             //out.println("FullClientData"); myb this should be a command ?
             out.println("FI," + concatenateWithComma(client));
+            MonthPickerApp.currentStage.close();
+            App.currentStage=App.primaryStage;
+            App.currentStage.show();
 
         }else
         {
         System.out.println("Not connected to server.");
+        MonthPickerApp.currentStage.close();
+        App.currentStage = App.primaryStage;
+        App.currentStage.show();
         CSVManagement.write("FI",StartDate, EndDate, DayOfWeek, StartTime, EndTime); // FI Is for "Full Info"
         a.show();
         }
     }
     // keeping this just in case...
     public static void sendMessage(String message) {
-      Alert a = new Alert(AlertType.ERROR);
-      a.setContentText("You are not connected to the server.");
-        if(socket!=null){
+        if(socket!=null && connection){
         out.println(message);
         }else
         {
-        System.out.println("Not connected to server.");
-        a.show();
+        Alert a = new Alert(AlertType.ERROR);
+         a.setContentText("You are not connected to the server.");
+         a.show();
         }
     }
     public static String concatenateWithComma(String[] array) {

@@ -34,7 +34,7 @@ public class TCPEchoServer{
             }
         }catch(SocketException b)
         {
-            System.out.println("Client terminated app. Server shutdown.");
+            System.out.println("Client terminated the server app. Server shutdown.");
            // try{serverSocket.close();}catch(IOException e){e.printStackTrace();}
         } 
         catch (IOException e) {
@@ -64,6 +64,13 @@ public class TCPEchoServer{
                 }
                 }
     }
+    private static void displayTimetable()
+    {
+        for(Day d:days)
+        {
+            System.out.println(d.displayDay());
+        }
+    }
     private static void assignTimePeriod(String message)
     {
         String[]tempArr;
@@ -73,13 +80,14 @@ public class TCPEchoServer{
                 Double t1 = Double.parseDouble(arrayList.get(4));
                 Double t2 = Double.parseDouble(arrayList.get(5));
                 
-                long milliseconds1 = (long) (t1 * 60 * 60 * 1000);
-                long milliseconds2 = (long) (t2 * 60 * 60 * 1000);
+                long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
+                long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
                 
                 Time startTime = new Time(milliseconds1);
                 Time endTime = new Time(milliseconds2);
                 
                 TP = new TimePeriod(startTime,endTime);
+                CurrentDay.addTimeSlot(TP);
                 
     }
     private static void handleClient(Socket clientSocket) {
@@ -97,7 +105,20 @@ public class TCPEchoServer{
                 assignDay(message);
                 assignTimePeriod(message);
                 System.out.println(TP.toString());
-                }
+                }else if(message.contains("TD"))
+                {
+                    System.out.println("Timetable:");
+                    displayTimetable();
+                }else if(message.equals("STOP"))
+                        {
+                        writer.println("TERMINATE");
+                        try{serverSocket.close();
+                        reader.close();
+                        writer.close();}catch(IOException e)
+                        {
+                        System.out.println("Error handled");
+                        }
+                        }
             }
         }catch(SocketException s)
         {
@@ -108,7 +129,7 @@ public class TCPEchoServer{
         }
         }
         */catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("IO exception handled");
         }/* finally {
             try {
                 if (clientSocket != null) {

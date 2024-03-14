@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -12,17 +14,28 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class App extends Application {
-
-    private Stage currentStage;
+    public static Stage primaryStage;
+    public static Stage currentStage;
    @Override
     public void start(Stage primaryStage) {
         //TCPEchoClient.sendMessage("Connection test");
+        this.primaryStage=primaryStage;
         this.currentStage = primaryStage;
         // Create buttons
         Button addButton = createStyledButton("Add Class");
         Button removeButton = createStyledButton("Remove Class");
         Button displayButton = createStyledButton("Display Schedule");
+        Button stop = new Button("Stop");
 
+        stop.setOnAction(e->
+        {
+        TCPEchoClient.sendMessage("STOP");
+        });
+        
+        displayButton.setOnAction(e->
+        {
+        TCPEchoClient.sendMessage("TD");
+        });
         removeButton.setOnAction(e -> {
         RemoveClassStage removeClassStage = new RemoveClassStage();
         try {
@@ -34,7 +47,7 @@ public class App extends Application {
         
         // Arrange buttons horizontally
         HBox buttonBox = new HBox(10); // 10 is the spacing between buttons
-        buttonBox.getChildren().addAll(addButton, removeButton, displayButton);
+        buttonBox.getChildren().addAll(addButton, removeButton, displayButton, stop);
         buttonBox.setAlignment(Pos.CENTER);
 
         // Create a grey box around the buttons

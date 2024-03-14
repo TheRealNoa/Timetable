@@ -34,11 +34,22 @@ public class TimePeriod {
     }
      public boolean clashesWith(TimePeriod a)
       {
-       if(this.Etime.before(a.getStime())|| this.Stime.after(a.getEtime()) || this.Etime.equals(a.getEtime()))
+          if(a.getStime().equals(this.Etime))
+          {
+          return false;
+          }else if(this.Etime.before(a.getStime())|| this.Stime.after(a.getEtime()))
+       {
+       return false;
+       }else if(this.Stime.equals(a.getEtime()))
        {
        return false;
        }else
        {
+           System.out.println("Clash");
+           System.out.println("------------------------");
+           System.out.println("Clashing times:");
+           System.out.println(this.Stime + "-" + this.Etime);
+           System.out.println(a.getStime() + "-" + a.getEtime());
        return true;
        }
       }

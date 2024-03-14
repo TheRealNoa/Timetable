@@ -1,7 +1,5 @@
 package group1.mavenproject2;
 
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,14 +13,15 @@ import java.util.Calendar;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 
 public class MonthPickerApp extends Application {
-    private Stage currentStage;
+    public static Stage currentStage;
 
     // Declare the variables for the selected month and day
     private String selectedMonth1;
@@ -282,7 +281,7 @@ private void showSelectedDay(String month, int day) {
                 // I need to now insert time select...
                 System.out.println("Clicked on: " + daysOfWeek[daysButtons.getChildren().indexOf(button)]);
                 DayOfWeek = daysOfWeek[daysButtons.getChildren().indexOf(button)];
-                displayTimeSelection();
+                displayClassSelection();
                 daysStage.close(); // Close the window after clicking a button
             });
             daysButtons.add(button, i, 0);
@@ -297,7 +296,50 @@ private void showSelectedDay(String month, int day) {
    double upStartTime=9;
    String StartTime = "";
    String EndTime = "";
-    private void displayTimeSelection()
+   boolean empty=true;
+   String ClassName = "";
+   private void check()
+   {
+   if(empty)
+   {
+   Alert a = new Alert(Alert.AlertType.ERROR);
+   a.setContentText("Please type in the class name.");
+   a.show();
+   }else
+   {
+   currentStage.close();
+   displayTimeSelection();
+   }
+   }
+   private void displayClassSelection()
+   {
+   Label selectClass = new Label("Please enter class name:");
+   TextField tf = new TextField();
+   tf.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                empty = false;
+                ClassName=newValue;
+            } else {
+                empty=true;
+            }
+        });
+   VBox vb = new VBox();
+   Button ok = new Button("Ok");
+   vb.setAlignment(Pos.CENTER);
+   vb.getChildren().addAll(selectClass,tf,ok);
+   ok.setOnAction(e->
+           check()
+        );
+   Scene timeSelectionScene = new Scene(vb,300,200);
+  
+        Stage finalResultStage = new Stage();
+        finalResultStage.setTitle("Class selection");
+        finalResultStage.setScene(timeSelectionScene);
+        finalResultStage.show();
+        this.currentStage = finalResultStage;
+   
+   } 
+   private void displayTimeSelection()
     {
         Label InfoLabel = new Label("Select the Start time and end time");
         Label StartTimeLabel = new Label("Start time: ");
@@ -376,8 +418,10 @@ private void showSelectedDay(String month, int day) {
         String StartDate = selectedMonth1 + " " + selectedDay1;
         String EndDate = selectedMonth2 + " " + selectedDay2;
         okButton.setOnAction(e->
-                TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime)
-        
+        {
+            TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime);
+            
+        }
         );
         
         VBox vb = new VBox(10);
@@ -397,7 +441,7 @@ private void showSelectedDay(String month, int day) {
     // Create a button with the two selections
     Label InfoLabel = new Label("You have selected the period from: "+selectedMonth1 + " " + selectedDay1 + " to " + selectedMonth2 + " " + selectedDay2);
     Button finalResultButton = createStyledButton("Next");
-    finalResultButton.setOnAction(e -> displayDayOfWeek()); // Exit the program when the button is clicked
+    finalResultButton.setOnAction(e -> displayDayOfWeek());
 
     VBox vb = new VBox(10);
     vb.setAlignment(Pos.CENTER);

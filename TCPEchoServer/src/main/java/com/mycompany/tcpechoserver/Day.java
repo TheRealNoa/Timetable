@@ -10,32 +10,50 @@ import java.util.ArrayList;
  */
 public class Day {
     String name;
-    ArrayList<TimePeriod> BusyPeriods = new ArrayList<TimePeriod>();
+    ArrayList<TimePeriod> BusyPeriods;
     private Time TempSTime;
     private Time TempETime;
     public Day(){}
     public Day(String name)
     {
     this.name=name;
+    BusyPeriods = new ArrayList<>();
     }
     @Override
     public String toString()
     {
         return this.name;
     }
-    public void addBookedTimeSlot(TimePeriod a)
+    public String BusyPeriodsOut() {
+    String temp = "";
+    for (TimePeriod t : BusyPeriods) {
+        temp += t + "\n";
+    }
+    return temp;
+}
+    public String displayDay()
     {
-        //check here if start and end time clash
-        for(TimePeriod t:BusyPeriods)
-        {
-           if(t.clashesWith(a))
-           {
-               System.out.println("Error, Times clash.");
-           }else
-            {
-            this.BusyPeriods.add(a);
-            }
-        }
+    return "Day: " + this.name + "\n" + "Busy periods:" + BusyPeriodsOut() + "\n";
+    }
+    public void addTimeSlot(TimePeriod a){
+    if(checkBookings(a))
+    {
+    System.out.println("Error, can't book.");
+    }
+    else
+    {
+    System.out.println("Added a booking");
+    BusyPeriods.add(a);
+    }
+    }
+    public boolean checkBookings(TimePeriod a)
+    {
+     for(TimePeriod t:BusyPeriods)
+     {
+         if(t.clashesWith(a))
+             return true;
+     }
+      return false;
     }
     
 }
