@@ -2,6 +2,8 @@ package group1.mavenproject2;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -51,6 +53,7 @@ public class TCPEchoClient {
             e.printStackTrace();
         }
     }
+    public static ArrayList<String> daysList;
     private static void startListening() {
         try {
             String message;
@@ -58,6 +61,20 @@ public class TCPEchoClient {
                 if(message.equals("TERMINATE"))
                 {
                     System.out.println(message);
+                }else if(message.contains("SBPTEAR"))
+                {
+                    System.out.println("Recieved SBPTEAR");
+                    int commaIndex = message.indexOf(", ");
+                    if (commaIndex != -1) {
+                    message = message.substring(commaIndex + 2);
+                } 
+                    daysList = new ArrayList<>();
+                    String[] daysArr = message.substring(1,message.length()-1).split("(?<=]),\\s");
+                    for(String s:daysArr)
+                    {
+                    daysList.add(s);
+                    }
+                    Platform.runLater(() -> RemoveClassStage.showDaySchedule(daysList));
                 }else
                 {
                 System.out.println("Received from server: " + message);
@@ -72,9 +89,9 @@ public class TCPEchoClient {
             e.printStackTrace();
         }
     }
-    public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime) {
+    public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime, String Class) {
       Alert a = new Alert(AlertType.ERROR);
-      String[] client ={StartDate,EndDate,DayOfWeek,StartTime,EndTime};
+      String[] client ={StartDate,EndDate,DayOfWeek,StartTime,EndTime,Class};
       String temp="";
       a.setContentText("You are not connected to the server.");
         if(socket!=null){
@@ -90,7 +107,7 @@ public class TCPEchoClient {
         MonthPickerApp.currentStage.close();
         App.currentStage = App.primaryStage;
         App.currentStage.show();
-        CSVManagement.write("FI",StartDate, EndDate, DayOfWeek, StartTime, EndTime); // FI Is for "Full Info"
+        CSVManagement.write("FI",StartDate, EndDate, DayOfWeek, StartTime, EndTime,Class); // FI Is for "Full Info"
         a.show();
         }
     }

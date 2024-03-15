@@ -24,6 +24,10 @@ public class Day {
     {
         return this.name;
     }
+    public ArrayList<TimePeriod> getBusyPeriods()
+    {
+    return BusyPeriods;
+    }
     public String BusyPeriodsOut() {
     String temp = "";
     for (TimePeriod t : BusyPeriods) {
@@ -33,7 +37,7 @@ public class Day {
 }
     public String displayDay()
     {
-    return "Day: " + this.name + "\n" + "Busy periods:" + BusyPeriodsOut() + "\n";
+    return "Day: " + this.name + "\n" + "Busy periods:" + "\n" + BusyPeriodsOut() + "\n";
     }
     public void addTimeSlot(TimePeriod a){
     if(checkBookings(a))

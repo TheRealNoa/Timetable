@@ -73,10 +73,8 @@ public class TCPEchoServer{
     }
     private static void assignTimePeriod(String message)
     {
-        String[]tempArr;
-            tempArr = message.split(",");
+        String[]tempArr= message.split(",");
                 List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
-                DateFormat formatter= new SimpleDateFormat("HH:mm");
                 Double t1 = Double.parseDouble(arrayList.get(4));
                 Double t2 = Double.parseDouble(arrayList.get(5));
                 
@@ -86,7 +84,7 @@ public class TCPEchoServer{
                 Time startTime = new Time(milliseconds1);
                 Time endTime = new Time(milliseconds2);
                 
-                TP = new TimePeriod(startTime,endTime);
+                TP = new TimePeriod(startTime,endTime,arrayList.get(arrayList.size()-1));
                 CurrentDay.addTimeSlot(TP);
                 
     }
@@ -119,6 +117,19 @@ public class TCPEchoServer{
                         System.out.println("Error handled");
                         }
                         }
+                else if(message.contains("ShowDaySchedule"))
+                {
+                    String[] tempArr = message.split(",");
+                    String dayString = tempArr[1];
+                    System.out.println("Day recieved:" + tempArr[1]);
+                for(Day d : days)
+                {
+                if(d.name.equalsIgnoreCase(dayString))
+                {
+                writer.println("SBPTEAR, " + d.getBusyPeriods());
+                }
+                }
+                }
             }
         }catch(SocketException s)
         {

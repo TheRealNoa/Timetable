@@ -1,24 +1,90 @@
 package group1.mavenproject2;
 
+import static group1.mavenproject2.MonthPickerApp.currentStage;
+import static group1.mavenproject2.MonthPickerApp.daysStage;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class RemoveClassStage extends Application {
 
     private Stage currentStage;
+    private String DayOfWeek="";
+    public void sendDaySchedules()
+    {
+    TCPEchoClient.sendMessage("ShowDaySchedule," + DayOfWeek);
+    }
+    public static void showDaySchedule(ArrayList<String> daySchedules) {
+        if (daySchedules == null || daySchedules.isEmpty()) {
+            System.out.println("No schedule received.");
+            return;
+        }
 
+        Stage scheduleStage = new Stage();
+        VBox scheduleLayout = new VBox(10);
+        scheduleLayout.setAlignment(Pos.CENTER);
+
+        for (String schedule : daySchedules) {
+            Button button = new Button(schedule);
+            button.setOnAction(e -> {
+                // Handle button click event here
+                System.out.println("Button clicked: " + schedule);
+            });
+            scheduleLayout.getChildren().add(button);
+        }
+
+        Scene scene = new Scene(scheduleLayout, 400, 300);
+        scheduleStage.setScene(scene);
+        scheduleStage.setTitle("Day's Schedule");
+        scheduleStage.show();
+    }
+
+    public void openDays()
+    {
+        if (currentStage != null) {
+        currentStage.close();
+    }
+        VBox vb = new VBox(10);
+        vb.setAlignment(Pos.CENTER);
+        
+        Label infoLabel = new Label("Please select a day of the week: ");
+        
+        Stage daysStage = new Stage();
+        GridPane daysButtons = new GridPane();
+        for (int i = 0; i < MonthPickerApp.daysOfWeek.length; i++) {
+            Button button = new Button(MonthPickerApp.daysOfWeek[i]);
+            button.setOnAction(e -> {
+                DayOfWeek = MonthPickerApp.daysOfWeek[daysButtons.getChildren().indexOf(button)];
+                sendDaySchedules();
+                daysStage.close(); // Close the window after clicking a button
+            });
+            daysButtons.add(button, i, 0);
+        }
+        daysButtons.setAlignment(Pos.CENTER);
+        vb.getChildren().addAll(infoLabel,daysButtons);
+        Scene scene = new Scene(vb, 350, 50);
+        daysStage.setScene(scene);
+        daysStage.setTitle("Days of Week");
+        daysStage.show();
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         this.currentStage = primaryStage;
 
         // Create a "Classes here" button
         Button classesHereButton = new Button("Classes here");
-        classesHereButton.setOnAction(e -> openClassRemovedStage());
+        classesHereButton.setOnAction(e -> 
+        {
+            openDays();
+                    }
+        );
 
         // Create the scene
         VBox layout = new VBox(10); // 10 is the spacing between items
@@ -29,6 +95,7 @@ public class RemoveClassStage extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
 
     private void openClassRemovedStage() {
         if (currentStage != null) {

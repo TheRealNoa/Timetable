@@ -5,6 +5,8 @@
 package com.mycompany.tcpechoserver;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+
 
 /**
  *
@@ -13,11 +15,16 @@ import java.sql.Time;
 public class TimePeriod {
     public Time Stime;
     public Time Etime;
+    public String Class;
+    public String formattedTime;
     public TimePeriod(){};
-    public TimePeriod(Time Stime, Time Etime)
+    public TimePeriod(Time Stime, Time Etime, String Class)
     {
         this.Stime=Stime;
         this.Etime=Etime;
+        this.Class=Class;
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        formattedTime = formatter.format(Stime) + "-" + formatter.format(Etime);
     }
     public Time getStime()
     {
@@ -27,10 +34,14 @@ public class TimePeriod {
     {
         return this.Etime;
     }
+    public String getClassName()
+    {
+    return this.Class;
+    }
     @Override
     public String toString()
     {
-        return Stime + ":" + Etime;
+        return formattedTime + ", Class: " + this.Class;
     }
      public boolean clashesWith(TimePeriod a)
       {

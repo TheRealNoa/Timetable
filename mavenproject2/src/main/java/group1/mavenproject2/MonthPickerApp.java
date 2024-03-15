@@ -263,8 +263,9 @@ private void showSelectedDay(String month, int day) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
     public String DayOfWeek = "";
-   private String[] daysOfWeek = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
-    private void displayDayOfWeek() {
+    public static Stage daysStage;
+   public static String[] daysOfWeek = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
+   public void displayDayOfWeek() {
         if (currentStage != null) {
         currentStage.close();
     }
@@ -273,7 +274,7 @@ private void showSelectedDay(String month, int day) {
         
         Label infoLabel = new Label("Please select a day of the week: ");
         
-        Stage daysStage = new Stage();
+        this.daysStage = new Stage();
         GridPane daysButtons = new GridPane();
         for (int i = 0; i < daysOfWeek.length; i++) {
             Button button = new Button(daysOfWeek[i]);
@@ -419,7 +420,7 @@ private void showSelectedDay(String month, int day) {
         String EndDate = selectedMonth2 + " " + selectedDay2;
         okButton.setOnAction(e->
         {
-            TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime);
+            TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime, ClassName);
             
         }
         );

@@ -21,7 +21,7 @@ public class CSVManagement {
   
   
   stringBuilder.append("Start date").append(",").append("End date").append(",").append("Day of week").append(",")
-               .append("Start time").append(",").append("End time").append("\n");
+               .append("Start time").append(",").append("End time").append(",").append("Class name").append("\n");
   
   try ( FileWriter fileWriter = new FileWriter("C:\\temp\\csvMan.csv") ) {
    
@@ -31,10 +31,10 @@ public class CSVManagement {
    ex.printStackTrace();
   }
  }
-    public static void write(String command,String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime)
+    public static void write(String command,String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime, String Class)
     {
     String separator = ",";
-    String[] data = {StartDate, EndDate,DayOfWeek,StartTime,EndTime} ;
+    String[] data = {StartDate, EndDate,DayOfWeek,StartTime,EndTime,Class} ;
     for (int i = 0; i < data.length; i++) {
             String s = data[i];
             stringBuilder.append(s);
