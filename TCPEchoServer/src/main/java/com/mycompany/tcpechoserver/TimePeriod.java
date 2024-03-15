@@ -18,6 +18,14 @@ public class TimePeriod {
     public String Class;
     public String formattedTime;
     public TimePeriod(){};
+    public TimePeriod(Time Stime, Time Etime)
+    {
+        this.Stime=Stime;
+        this.Etime=Etime;
+        this.Class=Class;
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        formattedTime = formatter.format(Stime) + "-" + formatter.format(Etime);
+    }
     public TimePeriod(Time Stime, Time Etime, String Class)
     {
         this.Stime=Stime;

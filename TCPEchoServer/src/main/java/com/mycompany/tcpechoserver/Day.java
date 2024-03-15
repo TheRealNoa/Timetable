@@ -59,5 +59,17 @@ public class Day {
      }
       return false;
     }
+    public void removeBooking(TimePeriod a)
+    {
+    for(int i=0;i<BusyPeriods.size();i++)
+    {
+        TimePeriod t = BusyPeriods.get(i);
+    if(t.clashesWith(a))
+    {
+    BusyPeriods.remove(t);
+    System.out.println("Removed class:" + t);
+    }
+    }
+    }
     
 }

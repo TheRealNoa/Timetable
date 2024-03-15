@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 public class RemoveClassStage extends Application {
 
     private Stage currentStage;
-    private String DayOfWeek="";
+    private static String DayOfWeek="";
     public void sendDaySchedules()
     {
     TCPEchoClient.sendMessage("ShowDaySchedule," + DayOfWeek);
@@ -35,6 +35,8 @@ public class RemoveClassStage extends Application {
             button.setOnAction(e -> {
                 // Handle button click event here
                 System.out.println("Button clicked: " + schedule);
+                TCPEchoClient.sendMessage("RemClassMsG," + schedule + "," + DayOfWeek);
+                scheduleStage.close();
             });
             scheduleLayout.getChildren().add(button);
         }

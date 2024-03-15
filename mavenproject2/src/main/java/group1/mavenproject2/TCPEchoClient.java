@@ -75,7 +75,11 @@ public class TCPEchoClient {
                     daysList.add(s);
                     }
                     Platform.runLater(() -> RemoveClassStage.showDaySchedule(daysList));
+                    // This handles the IllegalStateException that I was getting...
+                    // It was appearing because apparently we can't execute RemoveClassStage.showDaySchedule(daysList)
+                    // on the same thread as the TCPEchoClient thread... has to be a JavaFX thread
                 }else
+                
                 {
                 System.out.println("Received from server: " + message);
                 }

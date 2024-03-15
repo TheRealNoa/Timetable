@@ -130,6 +130,31 @@ public class TCPEchoServer{
                 }
                 }
                 }
+                else if(message.contains("RemClassMsG,"))
+                {
+                String[] tempArr = message.split(",");
+                if(!tempArr[1].equals("")){
+                    for(Day d:days)
+                {
+                if(d.name.equalsIgnoreCase(tempArr[3]))
+                {
+                    System.out.println("Trying to remove class.");
+                    String[]tempArr2 = tempArr[1].split("-");
+                    Double t1 = convertTimeToDecimal(tempArr2[0]);
+                Double t2 = convertTimeToDecimal(tempArr2[1]);
+                long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
+                long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
+                
+                Time startTime = new Time(milliseconds1);
+                Time endTime = new Time(milliseconds2);
+                TimePeriod tempT = new TimePeriod(startTime,endTime);
+                System.out.println(tempT);
+                d.removeBooking(tempT);
+                System.out.println(d.getBusyPeriods());
+                }
+                }
+                }
+                }
             }
         }catch(SocketException s)
         {
@@ -151,4 +176,13 @@ public class TCPEchoServer{
             }
         }
     */}
+     public static double convertTimeToDecimal(String time) {
+        String[] parts = time.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+
+        double decimalHours = hours + (minutes / 60.0);
+
+        return decimalHours;
+    }
 }
