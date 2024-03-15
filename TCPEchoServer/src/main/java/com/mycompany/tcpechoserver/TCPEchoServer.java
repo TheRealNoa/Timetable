@@ -136,7 +136,7 @@ public class TCPEchoServer{
                 if(!tempArr[1].equals("")){
                     for(Day d:days)
                 {
-                if(d.name.equalsIgnoreCase(tempArr[3]))
+                if(d.name.equalsIgnoreCase(tempArr[2]))
                 {
                     System.out.println("Trying to remove class.");
                     String[]tempArr2 = tempArr[1].split("-");

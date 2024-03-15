@@ -29,17 +29,18 @@ public class RemoveClassStage extends Application {
         Stage scheduleStage = new Stage();
         VBox scheduleLayout = new VBox(10);
         scheduleLayout.setAlignment(Pos.CENTER);
-
-        for (String schedule : daySchedules) {
-            Button button = new Button(schedule);
-            button.setOnAction(e -> {
-                // Handle button click event here
-                System.out.println("Button clicked: " + schedule);
-                TCPEchoClient.sendMessage("RemClassMsG," + schedule + "," + DayOfWeek);
-                scheduleStage.close();
-            });
-            scheduleLayout.getChildren().add(button);
-        }
+        System.out.println(daySchedules);
+        for (int i = 0; i < daySchedules.size(); i += 2) {
+    String schedule = daySchedules.get(i);
+    Button button = new Button(schedule);
+    button.setOnAction(e -> {
+        // Handle button click event here
+        System.out.println("Button clicked: " + schedule);
+        TCPEchoClient.sendMessage("RemClassMsG," + schedule + "," + DayOfWeek);
+        scheduleStage.close();
+    });
+    scheduleLayout.getChildren().add(button);
+}
 
         Scene scene = new Scene(scheduleLayout, 400, 300);
         scheduleStage.setScene(scene);

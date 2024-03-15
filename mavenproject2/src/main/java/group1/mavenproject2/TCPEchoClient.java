@@ -68,12 +68,11 @@ public class TCPEchoClient {
                     if (commaIndex != -1) {
                     message = message.substring(commaIndex + 2);
                 } 
-                    daysList = new ArrayList<>();
-                    String[] daysArr = message.substring(1,message.length()-1).split("(?<=]),\\s");
-                    for(String s:daysArr)
-                    {
-                    daysList.add(s);
-                    }
+                   daysList = new ArrayList<>();
+                    String[] daysArr = message.substring(1, message.length() - 1).split(", ");
+                     for(String s : daysArr) {
+                        daysList.add(s);
+                        }
                     Platform.runLater(() -> RemoveClassStage.showDaySchedule(daysList));
                     // This handles the IllegalStateException that I was getting...
                     // It was appearing because apparently we can't execute RemoveClassStage.showDaySchedule(daysList)
