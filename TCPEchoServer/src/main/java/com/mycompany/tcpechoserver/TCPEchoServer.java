@@ -21,36 +21,23 @@ public class TCPEchoServer{
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
     public static void main(String[] args) {
-
-        // Days initialisation
-        
-        //
         try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server is running and waiting for connections...");
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connected to client: " + clientSocket.getInetAddress().getHostAddress());
-                handleClient(clientSocket);
+                //handleClient(clientSocket);
+                Thread tempT = new Thread(new ClientHandler(clientSocket));
+                tempT.start();
             }
         }catch(SocketException b)
         {
             System.out.println("Client terminated the server app. Server shutdown.");
-           // try{serverSocket.close();}catch(IOException e){e.printStackTrace();}
         } 
         catch (IOException e) {
             e.printStackTrace();
         }
-        /*finally {
-            try {
-                if (serverSocket != null) {
-                    serverSocket.close();
-                    
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
     private static void assignDay(String message)
     {
@@ -106,9 +93,17 @@ public class TCPEchoServer{
     Module mod = new Module(modName,className);
     return mod;
     }
-    private static void handleClient(Socket clientSocket) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+     private static class ClientHandler implements Runnable {
+        private final Socket clientSocket;
+
+        public ClientHandler(Socket clientSocket) {
+            this.clientSocket = clientSocket;
+        }
+
+        @Override
+        public void run() {
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
             String message;
@@ -190,27 +185,18 @@ public class TCPEchoServer{
                  removeAllClassesFromOneClass(className);
                 }
             }
-        }catch(SocketException s)
-        {
-        System.out.println("Connection reset.");}
-        /*try{serverSocket.close();}catch(IOException e)
-        {
-        System.out.println("Server closed due to client shutting down.");
-        }
-        }
-        */catch (IOException e) {
-            System.out.println("IO exception handled");
-        }/* finally {
-            try {
-                if (clientSocket != null) {
-                    clientSocket.close();                    
-                }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    clientSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-    */}
-    public static void removeAllClassesFromOneClass(String m)
+    }
+     public static void removeAllClassesFromOneClass(String m)
     {
     for(Day d:days)
     {
