@@ -1,5 +1,6 @@
 package group1.mavenproject2;
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,10 +25,10 @@ public class MonthPickerApp extends Application {
     public static Stage currentStage;
 
     // Declare the variables for the selected month and day
-    private String selectedMonth1;
-    private String selectedMonth2;
-    private int selectedDay1;
-    private int selectedDay2;
+    private static String selectedMonth1;
+    private static String selectedMonth2;
+    private static int selectedDay1;
+    private static int selectedDay2;
     
 
     // Add a list of days in each month
@@ -262,9 +263,36 @@ private void showSelectedDay(String month, int day) {
     private boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
-    public String DayOfWeek = "";
+    public static String DayOfWeek = "";
     public static Stage daysStage;
    public static String[] daysOfWeek = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
+   static Stage removeClassStage;
+   public static void removeClassEntirely(Stage removeClassStage) {
+       VBox root = new VBox();
+       MonthPickerApp.removeClassStage = removeClassStage; 
+       Button removeClass = new Button("Remove Class");
+        removeClass.setOnAction(e->
+        {
+        });
+        for(String s:classes)
+        {
+        Button classButton = new Button(s);
+        root.getChildren().add(classButton);
+        classButton.setOnAction(e->
+        {
+            classSelected = classButton.getText();
+        TCPEchoClient.sendMessage("DeleteClasses," + classSelected);
+        });
+        }
+        
+        root.getChildren().add(removeClass);
+
+        Scene scene = new Scene(root, 200, 100);
+        removeClassStage = new Stage();
+        removeClassStage.setScene(scene);
+        removeClassStage.setTitle("Remove Class");
+        removeClassStage.show();
+    }
    public void displayDayOfWeek() {
         if (currentStage != null) {
         currentStage.close();
@@ -282,23 +310,23 @@ private void showSelectedDay(String month, int day) {
                 // I need to now insert time select...
                 System.out.println("Clicked on: " + daysOfWeek[daysButtons.getChildren().indexOf(button)]);
                 DayOfWeek = daysOfWeek[daysButtons.getChildren().indexOf(button)];
-                displayClassSelection();
+                displayModuleSelection();
                 daysStage.close(); // Close the window after clicking a button
             });
             daysButtons.add(button, i, 0);
         }
         daysButtons.setAlignment(Pos.CENTER);
         vb.getChildren().addAll(infoLabel,daysButtons);
-        Scene scene = new Scene(vb, 350, 50);
+        Scene scene = new Scene(vb, 350, 150);
         daysStage.setScene(scene);
         daysStage.setTitle("Days of Week");
         daysStage.show();
     }
-   double upStartTime=9;
-   String StartTime = "";
-   String EndTime = "";
-   boolean empty=true;
-   String ClassName = "";
+   static double upStartTime=9;
+   static String StartTime = "";
+   static String EndTime = "";
+   static boolean empty=true;
+   static String ClassName = "";
    private void check()
    {
    if(empty)
@@ -308,13 +336,51 @@ private void showSelectedDay(String month, int day) {
    a.show();
    }else
    {
+   displayClassSelectionMsg();
    currentStage.close();
-   displayTimeSelection();
+   //displayTimeSelection();
    }
    }
-   private void displayClassSelection()
+   static Stage showDayScheduleScene=new Stage();
+   private void displayClassSelectionMsg()
    {
-   Label selectClass = new Label("Please enter class name:");
+   TCPEchoClient.sendMessage("RCL");
+   
+   }
+   public boolean isOpen;
+   public static String classSelected="";
+   public static ArrayList<String> classes= new ArrayList<>();;
+    public static void showClasses(ArrayList<String> classList) {
+        if (classList == null || classList.isEmpty()) {
+            System.out.println("No schedule received.");
+            return;
+        }
+        MonthPickerApp m = new MonthPickerApp();
+        VBox vb = new VBox(10);
+        for(int i=1;i<classList.size();i++)
+        {
+            String s = classList.get(i);
+            classes.add(s);
+        Button b = new Button(s);
+        vb.getChildren().add(b);
+        b.setOnAction(e->
+        {
+        classSelected=b.getText();
+        currentStage.close();
+        displayTimeSelection();
+        });
+        }
+        Scene timeSelectionScene = new Scene(vb,300,200);
+  
+        showDayScheduleScene.setTitle("Class selection");
+        showDayScheduleScene.setScene(timeSelectionScene);
+        showDayScheduleScene.show();
+        currentStage = showDayScheduleScene;
+        
+    }
+   private void displayModuleSelection()
+   {
+   Label selectClass = new Label("Please enter module name:");
    TextField tf = new TextField();
    tf.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
@@ -331,7 +397,7 @@ private void showSelectedDay(String month, int day) {
    ok.setOnAction(e->
            check()
         );
-   Scene timeSelectionScene = new Scene(vb,300,200);
+   Scene timeSelectionScene = new Scene(vb,300,300);
   
         Stage finalResultStage = new Stage();
         finalResultStage.setTitle("Class selection");
@@ -340,7 +406,7 @@ private void showSelectedDay(String month, int day) {
         this.currentStage = finalResultStage;
    
    } 
-   private void displayTimeSelection()
+   public static void displayTimeSelection()
     {
         Label InfoLabel = new Label("Select the Start time and end time");
         Label StartTimeLabel = new Label("Start time: ");
@@ -401,7 +467,7 @@ private void showSelectedDay(String month, int day) {
         });
         
         
-        Button okButton = createStyledButton("ok");
+        Button okButton = new Button("ok");
         startSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -420,7 +486,7 @@ private void showSelectedDay(String month, int day) {
         String EndDate = selectedMonth2 + " " + selectedDay2;
         okButton.setOnAction(e->
         {
-            TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime, ClassName);
+            TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime, ClassName, classSelected);
             
         }
         );
@@ -428,14 +494,14 @@ private void showSelectedDay(String month, int day) {
         VBox vb = new VBox(10);
         vb.setAlignment(Pos.CENTER);
         vb.getChildren().addAll(InfoLabel,StartTimeLabel,startSlider,EndTimeLabel,endSlider,okButton);
-        Scene timeSelectionScene = new Scene(vb,600,100);
+        Scene timeSelectionScene = new Scene(vb,600,200);
         
         Stage timeSelectionStage = new Stage();
         timeSelectionStage.setTitle("Time selection");
         timeSelectionStage.setScene(timeSelectionScene);
         timeSelectionStage.show();
         
-        this.currentStage = timeSelectionStage;
+        currentStage = timeSelectionStage;
     }
     
     private void displayFinalResult() {

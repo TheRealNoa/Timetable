@@ -13,11 +13,29 @@ public class Day {
     ArrayList<TimePeriod> BusyPeriods;
     private Time TempSTime;
     private Time TempETime;
+    private ArrayList<Module> modules;
+    private ArrayList<ModuleTimePeriodEntry> combinedList;
     public Day(){}
     public Day(String name)
     {
     this.name=name;
     BusyPeriods = new ArrayList<>();
+    modules = new ArrayList<>();
+    combinedList = new ArrayList<>();
+    }
+    public void addModule(Module m)
+    {
+    this.modules.add(m);
+    }
+    public void removeModuleByClass(String c)
+    {
+    for(int i=1;i<modules.size();i++)
+    {
+    Module m= modules.get(i);
+    if(m.hasClass(c)){
+        modules.remove(m);
+    }
+    }
     }
     @Override
     public String toString()
@@ -39,7 +57,7 @@ public class Day {
     {
     return "Day: " + this.name + "\n" + "Busy periods:" + "\n" + BusyPeriodsOut() + "\n";
     }
-    public void addTimeSlot(TimePeriod a){
+    public void addTimeSlot(TimePeriod a, Module m){
     if(checkBookings(a))
     {
     System.out.println("Error, can't book.");
@@ -47,7 +65,10 @@ public class Day {
     else
     {
     System.out.println("Added a booking");
+
     BusyPeriods.add(a);
+    ModuleTimePeriodEntry entry =  new ModuleTimePeriodEntry(m, a);
+    combinedList.add(entry);    
     }
     }
     public boolean checkBookings(TimePeriod a)
@@ -68,6 +89,17 @@ public class Day {
     {
     BusyPeriods.remove(t);
     System.out.println("Removed class:" + t);
+    }
+    }
+    }
+     public void removeAllClassTimes(String className)
+    {
+    for(TimePeriod t:BusyPeriods)
+    {
+    if(t.getClass().toString().contains(className))
+    {
+     System.out.println("Contains");
+    BusyPeriods.remove(t);
     }
     }
     }

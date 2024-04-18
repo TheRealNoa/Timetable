@@ -1,11 +1,8 @@
 package group1.mavenproject2;
 
-import java.io.FileNotFoundException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -13,20 +10,59 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+
+
 public class App extends Application {
     public static Stage primaryStage;
     public static Stage currentStage;
+    public int pageNumber;
    @Override
     public void start(Stage primaryStage) {
-        //TCPEchoClient.sendMessage("Connection test");
+        pageNumber=1;
+//TCPEchoClient.sendMessage("Connection test");
         this.primaryStage=primaryStage;
         this.currentStage = primaryStage;
         // Create buttons
         Button addButton = createStyledButton("Add Class");
         Button removeButton = createStyledButton("Remove Class");
         Button displayButton = createStyledButton("Display Schedule");
+        Button removeClassButton = createStyledButton("Remove a class entirely");
+        Button createAClass = createStyledButton("Create a Class");
+        Button back = new Button("Back");
+        
+        
         Button stop = new Button("Stop");
-
+        
+        back.setOnAction(e->
+        {
+        try
+        {
+        System.out.println("");
+        if(pageNumber<2)
+        {
+        throw new IncorrectActionException();
+        }
+        }catch(IncorrectActionException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        });
+        
+        createAClass.setOnAction(e->
+        {
+            ClassCreation cc = new ClassCreation();
+            try {
+            currentStage.close();
+            cc.start(new Stage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        });
+        removeClassButton.setOnAction(e->
+        {
+           MonthPickerApp.removeClassEntirely(MonthPickerApp.currentStage);
+        });
+        
         stop.setOnAction(e->
         {
         TCPEchoClient.sendMessage("STOP");
@@ -47,16 +83,16 @@ public class App extends Application {
         
         // Arrange buttons horizontally
         HBox buttonBox = new HBox(10); // 10 is the spacing between buttons
-        buttonBox.getChildren().addAll(addButton, removeButton, displayButton, stop);
+        buttonBox.getChildren().addAll(back,addButton, removeButton, displayButton,removeClassButton,createAClass, stop);
         buttonBox.setAlignment(Pos.CENTER);
 
         // Create a grey box around the buttons
-        Rectangle box = new Rectangle(400, 150);
+        Rectangle box = new Rectangle(800, 150);
         box.setFill(Color.GREY);
         StackPane stackPane = new StackPane(box, buttonBox);
 
         // Create the scene
-        Scene scene = new Scene(stackPane, 400, 150); // Adjust dimensions as needed
+        Scene scene = new Scene(stackPane, 800, 150); // Adjust dimensions as needed
 
         // Set the scene and show the stage
         primaryStage.setTitle("Class Scheduler");

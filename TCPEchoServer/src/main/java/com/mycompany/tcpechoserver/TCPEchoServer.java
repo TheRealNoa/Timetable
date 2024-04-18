@@ -19,6 +19,7 @@ public class TCPEchoServer{
     private static Day Friday = new Day ("Friday");
     private static Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
     private static TimePeriod TP = new TimePeriod();
+    private static ArrayList<String> classes = new ArrayList<>();
     public static void main(String[] args) {
 
         // Days initialisation
@@ -85,8 +86,25 @@ public class TCPEchoServer{
                 Time endTime = new Time(milliseconds2);
                 
                 TP = new TimePeriod(startTime,endTime,arrayList.get(arrayList.size()-1));
-                CurrentDay.addTimeSlot(TP);
                 
+                CurrentDay.addTimeSlot(TP,assignModule(message));
+                
+    }
+    static String className;
+    private static void assignClassName(String message)
+    {
+    String[]tempArr= message.split(",");
+    List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
+    className = arrayList.getLast();
+    }
+    
+    private static Module assignModule(String m)
+    {
+        String[]tempArr= m.split(",");
+    List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
+    String modName = arrayList.get(arrayList.size()-2);
+    Module mod = new Module(modName,className);
+    return mod;
     }
     private static void handleClient(Socket clientSocket) {
         try {
@@ -97,11 +115,13 @@ public class TCPEchoServer{
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
                 // Echo back to client
-                writer.println("Server received: " + message);
+                //writer.println("Server received: " + message);
                 if(message.contains("FI"))
                 {
                 assignDay(message);
                 assignTimePeriod(message);
+                assignClassName(message);
+                assignModule(message);
                 System.out.println(TP.toString());
                 }else if(message.contains("TD"))
                 {
@@ -154,6 +174,20 @@ public class TCPEchoServer{
                 }
                 }
                 }
+                }else if(message.contains("NewClass"))
+                {
+                String[] tempArr = message.split(",");
+                classes.add(tempArr[1]);
+                System.out.println(classes);
+                }else if(message.equals("RCL"))
+                {
+                    System.out.println("Sending back list of classes");
+                writer.println("RLC1 ," + classes);
+                }else if(message.contains("DeleteClasses"))
+                {
+                 String[] tempArr = message.split(",");
+                 String className = tempArr[1];
+                 removeAllClassesFromOneClass(className);
                 }
             }
         }catch(SocketException s)
@@ -176,6 +210,14 @@ public class TCPEchoServer{
             }
         }
     */}
+    public static void removeAllClassesFromOneClass(String m)
+    {
+    for(Day d:days)
+    {
+    d.removeAllClassTimes(m);
+    }
+    //System.out.println("Removed all of this classes modules");
+    }
      public static double convertTimeToDecimal(String time) {
         String[] parts = time.split(":");
         int hours = Integer.parseInt(parts[0]);

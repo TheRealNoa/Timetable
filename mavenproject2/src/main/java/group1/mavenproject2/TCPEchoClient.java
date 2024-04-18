@@ -77,7 +77,18 @@ public class TCPEchoClient {
                     // This handles the IllegalStateException that I was getting...
                     // It was appearing because apparently we can't execute RemoveClassStage.showDaySchedule(daysList)
                     // on the same thread as the TCPEchoClient thread... has to be a JavaFX thread
-                }else
+                }else if(message.contains("RLC1"))
+                {
+                    System.out.println("RECIEVED RLC FROM SERVER" + message);
+                    String[] tempArr = message.split(",");
+                    ArrayList<String> t = new ArrayList<>();
+                    for(String s:tempArr)
+                    {
+                    t.add(s);
+                    }
+                  Platform.runLater(() -> MonthPickerApp.showClasses(t));
+                }
+                else
                 
                 {
                 System.out.println("Received from server: " + message);
@@ -92,9 +103,9 @@ public class TCPEchoClient {
             e.printStackTrace();
         }
     }
-    public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime, String Class) {
+    public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime, String Class, String CourseName) {
       Alert a = new Alert(AlertType.ERROR);
-      String[] client ={StartDate,EndDate,DayOfWeek,StartTime,EndTime,Class};
+      String[] client ={StartDate,EndDate,DayOfWeek,StartTime,EndTime,Class,CourseName};
       String temp="";
       a.setContentText("You are not connected to the server.");
         if(socket!=null){
