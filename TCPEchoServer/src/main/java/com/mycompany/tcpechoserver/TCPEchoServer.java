@@ -2,8 +2,6 @@ package com.mycompany.tcpechoserver;
 import java.io.*;
 import java.net.*;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,12 +10,12 @@ public class TCPEchoServer{
     private static ServerSocket serverSocket;
     private static final int PORT = 12345;
     private static Day CurrentDay = new Day();
-    private static Day Monday = new Day("Monday");
-    private static Day Tuesday = new Day("Tuesday");
-    private static Day Wednesday = new Day("Wednesday");
-    private static Day Thursday = new Day ("Thursday");
-    private static Day Friday = new Day ("Friday");
-    private static Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
+    private static  final Day Monday = new Day("Monday");
+    private static final Day Tuesday = new Day("Tuesday");
+    private static final Day Wednesday = new Day("Wednesday");
+    private static final Day Thursday = new Day ("Thursday");
+    private static final Day Friday = new Day ("Friday");
+    private static final Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
     public static void main(String[] args) {
@@ -63,8 +61,8 @@ public class TCPEchoServer{
     {
         String[]tempArr= message.split(",");
                 List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
-                Double t1 = Double.parseDouble(arrayList.get(4));
-                Double t2 = Double.parseDouble(arrayList.get(5));
+                Double t1 = Double.valueOf(arrayList.get(4));
+                Double t2 = Double.valueOf(arrayList.get(5));
                 
                 long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
                 long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
@@ -118,11 +116,13 @@ public class TCPEchoServer{
                 assignClassName(message);
                 assignModule(message);
                 System.out.println(TP.toString());
-                }else if(message.contains("TD"))
+                }
+                else if(message.contains("TD"))
                 {
                     System.out.println("Timetable:");
                     displayTimetable();
-                }else if(message.equals("STOP"))
+                }
+                else if(message.equals("STOP"))
                         {
                         writer.println("TERMINATE");
                         try{serverSocket.close();
@@ -137,44 +137,47 @@ public class TCPEchoServer{
                     String[] tempArr = message.split(",");
                     String dayString = tempArr[1];
                     System.out.println("Day recieved:" + tempArr[1]);
-                for(Day d : days)
-                {
-                if(d.name.equalsIgnoreCase(dayString))
-                {
-                writer.println("SBPTEAR, " + d.getBusyPeriods());
-                }
-                }
+                    for(Day d : days)
+                    {
+                        if(d.name.equalsIgnoreCase(dayString))
+                        {
+                            writer.println("SBPTEAR, " + d.getBusyPeriods());
+                        }
+                    }       
                 }
                 else if(message.contains("RemClassMsG,"))
                 {
-                String[] tempArr = message.split(",");
-                if(!tempArr[1].equals("")){
-                    for(Day d:days)
-                {
-                if(d.name.equalsIgnoreCase(tempArr[2]))
-                {
-                    System.out.println("Trying to remove class.");
-                    String[]tempArr2 = tempArr[1].split("-");
-                    Double t1 = convertTimeToDecimal(tempArr2[0]);
-                Double t2 = convertTimeToDecimal(tempArr2[1]);
-                long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
-                long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
+                    String[] tempArr = message.split(",");
+                    if(!tempArr[1].equals(""))
+                    {
+                        for(Day d:days)
+                        {
+                            if(d.name.equalsIgnoreCase(tempArr[2]))
+                            {
+                        System.out.println("Trying to remove class.");
+                        String[]tempArr2 = tempArr[1].split("-");
+                        Double t1 = convertTimeToDecimal(tempArr2[0]);
+                        Double t2 = convertTimeToDecimal(tempArr2[1]);
+                        long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
+                        long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
                 
-                Time startTime = new Time(milliseconds1);
-                Time endTime = new Time(milliseconds2);
-                TimePeriod tempT = new TimePeriod(startTime,endTime);
-                System.out.println(tempT);
-                d.removeBooking(tempT);
-                System.out.println(d.getBusyPeriods());
+                    Time startTime = new Time(milliseconds1);
+                    Time endTime = new Time(milliseconds2);
+                    TimePeriod tempT = new TimePeriod(startTime,endTime);
+                    System.out.println(tempT);
+                    d.removeBooking(tempT);
+                    System.out.println(d.getBusyPeriods());
+                            }
+                        }
+                    }
                 }
-                }
-                }
-                }else if(message.contains("NewClass"))
+                else if(message.contains("NewClass"))
                 {
                 String[] tempArr = message.split(",");
                 classes.add(tempArr[1]);
                 System.out.println(classes);
-                }else if(message.equals("RCL"))
+                }
+                else if(message.equals("RCL"))
                 {
                     System.out.println("Sending back list of classes");
                 writer.println("RLC1 ," + classes);
