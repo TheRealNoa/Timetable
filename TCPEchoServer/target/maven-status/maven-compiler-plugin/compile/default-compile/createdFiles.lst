@@ -1,6 +1,8 @@
 com\mycompany\tcpechoserver\Class.class
 com\mycompany\tcpechoserver\TCPEchoServer.class
 com\mycompany\tcpechoserver\Module.class
+com\mycompany\tcpechoserver\EarlyMorningShift$ShiftClassesRecursion.class
+com\mycompany\tcpechoserver\EarlyMorningShift.class
 com\mycompany\tcpechoserver\ModuleTimePeriodEntry.class
 com\mycompany\tcpechoserver\TCPEchoServer$ClientHandler.class
 com\mycompany\tcpechoserver\TimePeriod.class

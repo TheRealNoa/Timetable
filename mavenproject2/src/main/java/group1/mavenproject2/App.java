@@ -29,9 +29,16 @@ public class App extends Application {
         Button removeClassButton = createStyledButton("Remove a class entirely");
         Button createAClass = createStyledButton("Create a Class");
         Button back = new Button("Back");
+        Button earlyTimes = new Button("Early");
+        
         
         
         Button stop = new Button("Stop");
+        
+        earlyTimes.setOnAction(e->
+        {
+        TCPEchoClient.sendMessage("EarlyTimes");
+        });
         
         back.setOnAction(e->
         {
@@ -83,7 +90,7 @@ public class App extends Application {
         
         // Arrange buttons horizontally
         HBox buttonBox = new HBox(10); // 10 is the spacing between buttons
-        buttonBox.getChildren().addAll(back,addButton, removeButton, displayButton,removeClassButton,createAClass, stop);
+        buttonBox.getChildren().addAll(back,addButton, removeButton, displayButton,removeClassButton,createAClass, stop, earlyTimes);
         buttonBox.setAlignment(Pos.CENTER);
 
         // Create a grey box around the buttons

@@ -143,6 +143,9 @@ public class TCPEchoServer{
                 }else if(message.contains("DeleteClasses"))
                 {
                  dealWithDC();
+                }else if(message.equals("EarlyTimes"))
+                {
+                dealWithET();
                 }
             }
             } catch (IOException e) {
@@ -156,6 +159,12 @@ public class TCPEchoServer{
             }
         }
     }
+     public static synchronized void dealWithET()
+     {
+     EarlyMorningShift earlyMorningShift = new EarlyMorningShift();
+     String[] args = {};
+     earlyMorningShift.main(args);
+     }
      public static synchronized void dealWithFI()
      {
      assignDay(message);

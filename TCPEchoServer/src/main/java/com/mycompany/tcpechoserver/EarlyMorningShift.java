@@ -4,47 +4,63 @@
  */
 package com.mycompany.tcpechoserver;
 import java.sql.Time;
-/**
- *
- * @author noaca
- */
+import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.ForkJoinPool;
+
 public class EarlyMorningShift {
-public static final Day[] days = TCPEchoServer.days;
+    private static final Time TWELVE_PM = new Time(12 * 3600 * 1000);
+    private static final Time NINE_AM = new Time(8 * 3600 * 1000);
+    private static final Time HALF_HOUR = new Time(1800000);
 
-static final Time twelve = new Time(12 * 3600 * 1000);
-public void shiftClasses(Day d)
-{
-for(TimePeriod tp:d.BusyPeriods)
-{
-   if(tp.Stime.after(twelve))
-   {
-   clashesWithEarlyTime(tp,d);
-   }
-}
-}
-public static void clashesWithEarlyTime(TimePeriod t, Day d) {
-    Time nine = new Time(9 * 3600 * 1000);
-    Time half = new Time(1800000);
+    public static void main(String[] args) {
+        System.out.println("Executing main from EarlyMorningShift");
+        ForkJoinPool forkJoinPool = new ForkJoinPool(TCPEchoServer.days.length);
+        for (Day day : TCPEchoServer.days) {
+            forkJoinPool.submit(new ShiftClassesRecursion(day));
+        }
+        forkJoinPool.shutdown();
+    }
 
-    t.setSTime(nine);
+    static class ShiftClassesRecursion extends RecursiveAction {
+        private Day day;
 
-    long lenOfPeriodMillis = t.getEtime().getTime() - t.getStime().getTime();
-    Time lenOfPeriod = new Time(lenOfPeriodMillis);
+        public ShiftClassesRecursion(Day day) {
+            this.day = day;
+        }
 
-    t.setETime(new Time(nine.getTime() + lenOfPeriodMillis));
+        @Override
+        protected void compute() {
+            shiftClasses(day);
+        }
 
-    boolean clashed;
-    do {
-        clashed = false;
-        for (TimePeriod tp : d.getEarlyBookings()) {
-            if (t.clashesWith(tp)) {
-                t.setSTime(new Time(t.getStime().getTime() + half.getTime()));
-                t.setETime(new Time(t.getStime().getTime() + lenOfPeriodMillis));
-                clashed = true;
-                break;
+        private void shiftClasses(Day d) {
+            for (TimePeriod tp : d.getBusyPeriods()) {
+                if (tp.getStime().after(TWELVE_PM)) {
+                    clashesWithEarlyTime(tp, d);
+                }
             }
         }
-    } while (clashed && t.getStime().before(twelve));
-}
 
+        private void clashesWithEarlyTime(TimePeriod t, Day d) {
+            long lenOfPeriodMillis = t.getEtime().getTime() - t.getStime().getTime();
+            Time lenOfPeriod = new Time(lenOfPeriodMillis);
+            t.setETime(new Time(NINE_AM.getTime() + lenOfPeriodMillis));
+            t.setSTime(NINE_AM);
+
+            boolean clashed;
+            do {
+                clashed = false;
+                for (TimePeriod tp : d.getEarlyBookings()) {
+                    if (t.clashesWith(tp)) {
+                        t.setSTime(new Time(t.getStime().getTime() + HALF_HOUR.getTime()));
+                        t.setETime(new Time(t.getStime().getTime() + lenOfPeriodMillis));
+                        clashed = true;
+                        System.out.println("Clashed");
+                        break;
+                    }
+                    System.out.println("Didn't clash");
+                }
+            } while (clashed && t.getStime().before(TWELVE_PM));
+        }
+    }
 }
