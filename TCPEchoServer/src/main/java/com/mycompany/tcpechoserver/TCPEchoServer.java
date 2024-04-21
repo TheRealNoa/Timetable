@@ -109,6 +109,7 @@ public class TCPEchoServer{
                 System.out.println("Received from client: " + message);
                 // Echo back to client
                 //writer.println("Server received: " + message);
+                // going to change this to include memory access control
                 if(message.contains("FI"))
                 {
                 assignDay(message);
