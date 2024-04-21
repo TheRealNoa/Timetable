@@ -18,6 +18,10 @@ public class TCPEchoServer{
     private static final Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
+    private static String message;
+    private static BufferedReader reader;
+    private static PrintWriter writer;
+    
     public static void main(String[] args) {
         try {
             serverSocket = new ServerSocket(PORT);
@@ -101,10 +105,9 @@ public class TCPEchoServer{
         @Override
         public void run() {
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            String message;
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
                 // Echo back to client
@@ -112,81 +115,34 @@ public class TCPEchoServer{
                 // going to change this to include memory access control
                 if(message.contains("FI"))
                 {
-                assignDay(message);
-                assignTimePeriod(message);
-                assignClassName(message);
-                assignModule(message);
-                System.out.println(TP.toString());
+                dealWithFI();
                 }
                 else if(message.contains("TD"))
                 {
-                    System.out.println("Timetable:");
-                    displayTimetable();
+                dealWithTD();
                 }
                 else if(message.equals("STOP"))
-                        {
-                        writer.println("TERMINATE");
-                        try{serverSocket.close();
-                        reader.close();
-                        writer.close();}catch(IOException e)
-                        {
-                        System.out.println("Error handled");
-                        }
-                        }
+                {
+                dealWithStop();
+                }
                 else if(message.contains("ShowDaySchedule"))
                 {
-                    String[] tempArr = message.split(",");
-                    String dayString = tempArr[1];
-                    System.out.println("Day recieved:" + tempArr[1]);
-                    for(Day d : days)
-                    {
-                        if(d.name.equalsIgnoreCase(dayString))
-                        {
-                            writer.println("SBPTEAR, " + d.getBusyPeriods());
-                        }
-                    }       
+                 dealWithSDS();
                 }
                 else if(message.contains("RemClassMsG,"))
                 {
-                    String[] tempArr = message.split(",");
-                    if(!tempArr[1].equals(""))
-                    {
-                        for(Day d:days)
-                        {
-                            if(d.name.equalsIgnoreCase(tempArr[2]))
-                            {
-                        System.out.println("Trying to remove class.");
-                        String[]tempArr2 = tempArr[1].split("-");
-                        Double t1 = convertTimeToDecimal(tempArr2[0]);
-                        Double t2 = convertTimeToDecimal(tempArr2[1]);
-                        long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
-                        long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
-                
-                    Time startTime = new Time(milliseconds1);
-                    Time endTime = new Time(milliseconds2);
-                    TimePeriod tempT = new TimePeriod(startTime,endTime);
-                    System.out.println(tempT);
-                    d.removeBooking(tempT);
-                    System.out.println(d.getBusyPeriods());
-                            }
-                        }
-                    }
+                 dealWithRC();
                 }
                 else if(message.contains("NewClass"))
                 {
-                String[] tempArr = message.split(",");
-                classes.add(tempArr[1]);
-                System.out.println(classes);
+                 dealWithNC();
                 }
                 else if(message.equals("RCL"))
                 {
-                    System.out.println("Sending back list of classes");
-                writer.println("RLC1 ," + classes);
+                 dealWithRCL();
                 }else if(message.contains("DeleteClasses"))
                 {
-                 String[] tempArr = message.split(",");
-                 String className = tempArr[1];
-                 removeAllClassesFromOneClass(className);
+                 dealWithDC();
                 }
             }
             } catch (IOException e) {
@@ -200,6 +156,90 @@ public class TCPEchoServer{
             }
         }
     }
+     public static synchronized void dealWithFI()
+     {
+     assignDay(message);
+     assignTimePeriod(message);
+     assignClassName(message);
+     assignModule(message);
+     System.out.println(TP.toString());
+     }
+     public static synchronized void dealWithTD()
+     {
+      System.out.println("Timetable:");
+      displayTimetable();
+     }
+     public static synchronized void dealWithStop()
+     {
+     writer.println("TERMINATE");
+     try
+     {
+         serverSocket.close();
+         reader.close();
+         writer.close();
+     }
+     catch(IOException e)
+        {
+        System.out.println("Error handled");
+        }
+                        
+     }
+     public static synchronized void dealWithSDS()
+     {
+      String[] tempArr = message.split(",");
+      String dayString = tempArr[1];
+      System.out.println("Day recieved:" + tempArr[1]);
+      for(Day d : days)
+      {
+       if(d.name.equalsIgnoreCase(dayString))
+        {
+        writer.println("SBPTEAR, " + d.getBusyPeriods());
+        }
+      }       
+     }
+     public static synchronized void dealWithRC()
+     {
+      String[] tempArr = message.split(",");
+      if(!tempArr[1].equals(""))
+      {
+        for(Day d:days)
+        {
+            if(d.name.equalsIgnoreCase(tempArr[2]))
+            {
+                System.out.println("Trying to remove class.");
+                String[]tempArr2 = tempArr[1].split("-");
+                Double t1 = convertTimeToDecimal(tempArr2[0]);
+                Double t2 = convertTimeToDecimal(tempArr2[1]);
+                long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
+                long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
+                
+                Time startTime = new Time(milliseconds1);
+                Time endTime = new Time(milliseconds2);
+                TimePeriod tempT = new TimePeriod(startTime,endTime);
+                System.out.println(tempT);
+                d.removeBooking(tempT);
+                System.out.println(d.getBusyPeriods());
+            }
+        }
+      }
+    }
+     public static synchronized void dealWithNC()
+     {
+     String[] tempArr = message.split(",");
+     classes.add(tempArr[1]);
+     System.out.println(classes);
+     }
+     public static synchronized void dealWithRCL()
+     {
+     System.out.println("Sending back list of classes");
+     writer.println("RLC1 ," + classes);
+     }
+     public static synchronized void dealWithDC()
+     {
+        String[] tempArr = message.split(",");
+        String className = tempArr[1];
+        removeAllClassesFromOneClass(className);
+     }
      public static void removeAllClassesFromOneClass(String m)
     {
     for(Day d:days)
