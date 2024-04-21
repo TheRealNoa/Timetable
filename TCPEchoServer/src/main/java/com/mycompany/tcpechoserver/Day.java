@@ -15,6 +15,7 @@ public class Day {
     private Time TempETime;
     private ArrayList<Module> modules;
     private ArrayList<ModuleTimePeriodEntry> combinedList;
+    public ArrayList<TimePeriod> earlyPeriods;
     public Day(){}
     public Day(String name)
     {
@@ -104,4 +105,20 @@ public class Day {
     }
     }
     
+     
+     /// part 2 methods
+     
+     public ArrayList<TimePeriod> getEarlyBookings()
+     {
+     earlyPeriods = new ArrayList<>();
+     Time twelve = new Time(12*3600*1000);
+     for(TimePeriod tp:BusyPeriods)
+     {
+     if(tp.Stime.before(twelve))
+             {
+             earlyPeriods.add(tp);
+             }
+     }
+     return earlyPeriods;
+     }
 }

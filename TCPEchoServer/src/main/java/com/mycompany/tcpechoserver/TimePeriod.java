@@ -42,6 +42,14 @@ public class TimePeriod {
     {
         return this.Etime;
     }
+    public void setSTime(Time t)
+    {
+    this.Stime=t;
+    }
+    public void setETime(Time t)
+    {
+    this.Etime=t;
+    }
     public String getClassName()
     {
     return this.Class;

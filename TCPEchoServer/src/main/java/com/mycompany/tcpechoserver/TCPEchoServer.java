@@ -15,7 +15,7 @@ public class TCPEchoServer{
     private static final Day Wednesday = new Day("Wednesday");
     private static final Day Thursday = new Day ("Thursday");
     private static final Day Friday = new Day ("Friday");
-    private static final Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
+    public static final Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
     private static String message;
