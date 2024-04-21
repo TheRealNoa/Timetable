@@ -30,7 +30,6 @@ public class EarlyMorningShift {
 
         @Override
         protected void compute() {
-            System.out.println("Computing");
             shiftClasses(day);
         }
 
@@ -60,7 +59,10 @@ public class EarlyMorningShift {
                 System.out.println("Clashed");
                 break;
             }
+            System.out.println("New Time:" + t.Stime + ":" + t.Etime);
             System.out.println("Didn't clash");
+            System.out.println("Day bookings:");
+            System.out.println(d.getBusyPeriods());
         }
     } while (clashed && t.getStime().before(TWELVE_PM));
         }

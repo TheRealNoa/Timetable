@@ -3,6 +3,8 @@ package com.mycompany.tcpechoserver;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -43,10 +45,9 @@ public class Day {
     {
         return this.name;
     }
-    public ArrayList<TimePeriod> getBusyPeriods()
-    {
-    return BusyPeriods;
-    }
+    public List<TimePeriod> getBusyPeriods() {
+    return Collections.unmodifiableList(BusyPeriods);
+}
     public String BusyPeriodsOut() {
     String temp = "";
     for (TimePeriod t : BusyPeriods) {

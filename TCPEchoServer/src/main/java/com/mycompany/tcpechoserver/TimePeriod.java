@@ -34,6 +34,7 @@ public class TimePeriod {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         formattedTime = formatter.format(Stime) + "-" + formatter.format(Etime);
     }
+    
     public Time getStime()
     {
         return this.Stime;
@@ -42,23 +43,21 @@ public class TimePeriod {
     {
         return this.Etime;
     }
-    public void setSTime(Time t)
-    {
-    this.Stime=t;
+    public void setSTime(Time tim) {
+    this.Stime.setTime(tim.getTime());
     }
-    public void setETime(Time t)
-    {
-    this.Etime=t;
+
+    public void setETime(Time time) {
+    this.Etime.setTime(time.getTime());
     }
     public String getClassName()
     {
     return this.Class;
     }
     @Override
-    public String toString()
-    {
-        return formattedTime + ", Class: " + this.Class;
-    }
+public String toString() {
+    return new SimpleDateFormat("HH:mm").format(Stime) + "-" + new SimpleDateFormat("HH:mm").format(Etime) + ", Class: " + Class;
+}
      public boolean clashesWith(TimePeriod a)
       {
           if(a.getStime().equals(this.Etime))
@@ -80,4 +79,5 @@ public class TimePeriod {
        return true;
        }
       }
+     
 }
