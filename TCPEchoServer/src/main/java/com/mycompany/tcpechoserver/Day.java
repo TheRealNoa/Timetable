@@ -108,17 +108,19 @@ public class Day {
      
      /// part 2 methods
      
-     public ArrayList<TimePeriod> getEarlyBookings()
-     {
-     earlyPeriods = new ArrayList<>();
-     Time twelve = new Time(12*3600*1000);
-     for(TimePeriod tp:BusyPeriods)
-     {
-     if(tp.Stime.before(twelve))
-             {
-             earlyPeriods.add(tp);
-             }
-     }
-     return earlyPeriods;
-     }
+     public ArrayList<TimePeriod> getEarlyBookings() {
+    ArrayList<TimePeriod> earlyPeriods = new ArrayList<>();
+    Time twelvePM = new Time(11 * 3600 * 1000);
+
+    for (int i=0; i<BusyPeriods.size()-1; i++) {
+        if (BusyPeriods.get(i).getStime().before(twelvePM)) {
+            System.out.println("Debug:");
+            System.out.println("--------------");
+            System.out.println("tp Stime index:" + i +" Start time:"+ BusyPeriods.get(i).getStime() + ": twelvePM:" + twelvePM);
+            earlyPeriods.add(BusyPeriods.get(i));
+        }
+    }
+
+    return earlyPeriods;
+}
 }
