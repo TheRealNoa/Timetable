@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.tcpechoserver;
+
 import java.sql.Time;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.ForkJoinPool;
@@ -43,7 +40,7 @@ public class EarlyMorningShift {
             }
         }
 
-        private void clashesWithEarlyTime(TimePeriod t, Day d) {
+    private void clashesWithEarlyTime(TimePeriod t, Day d) {
     long lenOfPeriodMillis = t.getEtime().getTime() - t.getStime().getTime();
     Time lenOfPeriod = new Time(lenOfPeriodMillis);
     t.setETime(new Time(NINE_AM.getTime() + lenOfPeriodMillis));

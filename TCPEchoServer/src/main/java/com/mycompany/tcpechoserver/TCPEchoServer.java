@@ -178,21 +178,26 @@ public class TCPEchoServer{
       System.out.println("Timetable:");
       displayTimetable();
      }
-     public static synchronized void dealWithStop()
-     {
-     writer.println("TERMINATE");
-     try
-     {
-         serverSocket.close();
-         reader.close();
-         writer.close();
-     }
-     catch(IOException e)
-        {
-        System.out.println("Error handled");
+     public static synchronized void dealWithStop() {
+    try {
+        writer.println("TERMINATE");
+
+        if (serverSocket != null && !serverSocket.isClosed()) {
+            serverSocket.close();
         }
-                        
-     }
+        if (reader != null) {
+            reader.close();
+        }
+        if (writer != null) {
+            writer.close();
+        }
+
+        System.out.println("Server stopped successfully.");
+    } catch (IOException e) {
+        System.err.println("Error occurred during server shutdown:");
+        e.printStackTrace();
+    }
+}
      public static synchronized void dealWithSDS()
      {
       String[] tempArr = message.split(",");
