@@ -39,26 +39,10 @@ public class TCPEchoClient {
     }
         if(socket==null)
         {
-        disconnect();
+        stop();
         }
 
 }
-    public static void disconnect()
-    {
-        try{
-        out.println("client disconnected");
-        if (socket != null && !socket.isClosed()) 
-        {
-                socket.close();
-                socket = null;
-                in.close();
-                out.close();
-                System.out.println("Disconnected from server.");
-        }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     public static ArrayList<String> daysList;
     private static void startListening() {
         while(isRunning){
@@ -159,5 +143,18 @@ public class TCPEchoClient {
         }
         
         return tempBuilder.toString();
+    }
+    public static void stop() {
+        isRunning = false;
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+                in.close();
+                out.close();
+                System.out.println("Disconnected from server.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

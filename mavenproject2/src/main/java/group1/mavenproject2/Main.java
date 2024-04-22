@@ -31,7 +31,7 @@ public class Main {
         ConnectionCheck.start();
         
         launch(AppView.class, args);
-        TCPEchoClient.socket=null;        
+        TCPEchoClient.stop();
    }
 
     }
