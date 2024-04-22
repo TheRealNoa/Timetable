@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
