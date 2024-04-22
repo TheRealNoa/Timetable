@@ -21,7 +21,6 @@ public class TCPEchoServer{
     private static String message;
     private static BufferedReader reader;
     private static PrintWriter writer;
-    
     public static void main(String[] args) {
         try {
             serverSocket = new ServerSocket(PORT);
