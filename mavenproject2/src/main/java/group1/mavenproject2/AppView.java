@@ -21,19 +21,23 @@ import javafx.stage.Stage;
 public class AppView extends Application {
     private AppModel model;
     private AppController controller;
-
+    public static Stage primaryStage;
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         model = new AppModel();
         controller = new AppController(model);
 
         Button addButton = createStyledButton("Add Class");
-        // Create other buttons similarly
+        Button removeButton = createStyledButton("Remove class");
+        Button displayTimetable = createStyledButton("Display timetable");
+        Button stopButton = createStyledButton("Stop");
+        Button earlyButton = createStyledButton("Move to mornings");
 
         HBox buttonBox = new HBox(10);
-        buttonBox.getChildren().addAll(addButton); // Add other buttons
+        buttonBox.getChildren().addAll(addButton,removeButton,displayTimetable,stopButton,earlyButton);
         buttonBox.setAlignment(Pos.CENTER);
-        addButton.setOnAction(e->{controller.handleButtonAction("Add Class");});
+        
         Rectangle box = new Rectangle(800, 150);
         box.setFill(Color.GREY);
         StackPane stackPane = new StackPane(box, buttonBox);
@@ -43,6 +47,13 @@ public class AppView extends Application {
         primaryStage.setTitle("Class Scheduler");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        //Button Controlls
+        addButton.setOnAction(e->{controller.handleButtonAction("Add Class");});
+        removeButton.setOnAction(e->{controller.handleButtonAction("Remove Class");});
+        displayTimetable.setOnAction(e->{controller.handleButtonAction("Display Timetable button");});
+        stopButton.setOnAction(e->{controller.handleButtonAction("Stop button");});
+        earlyButton.setOnAction(e->{controller.handleButtonAction("Move afternoon classes to mornings");});
     }
 
     private Button createStyledButton(String label) {
@@ -51,5 +62,6 @@ public class AppView extends Application {
         button.setOnAction(event -> controller.handleButtonAction(label));
         return button;
     }
+    
 }
 

@@ -20,7 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 
-public class MonthPickerApp extends Application {
+public class MonthPickerView extends Application {
     public static Stage currentStage;
 
     // Declare the variables for the selected month and day
@@ -268,7 +268,7 @@ private void showSelectedDay(String month, int day) {
    static Stage removeClassStage;
    public static void removeClassEntirely(Stage removeClassStage) {
        VBox root = new VBox();
-       MonthPickerApp.removeClassStage = removeClassStage; 
+       MonthPickerView.removeClassStage = removeClassStage; 
        Button removeClass = new Button("Remove Class");
         removeClass.setOnAction(e->
         {
@@ -354,7 +354,7 @@ private void showSelectedDay(String month, int day) {
             System.out.println("No schedule received.");
             return;
         }
-        MonthPickerApp m = new MonthPickerApp();
+        MonthPickerView m = new MonthPickerView();
         VBox vb = new VBox(10);
         for(int i=1;i<classList.size();i++)
         {

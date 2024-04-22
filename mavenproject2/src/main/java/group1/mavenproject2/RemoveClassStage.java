@@ -1,7 +1,7 @@
 package group1.mavenproject2;
 
-import static group1.mavenproject2.MonthPickerApp.currentStage;
-import static group1.mavenproject2.MonthPickerApp.daysStage;
+import static group1.mavenproject2.MonthPickerView.currentStage;
+import static group1.mavenproject2.MonthPickerView.daysStage;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -63,10 +63,10 @@ public class RemoveClassStage extends Application {
         
         Stage daysStage = new Stage();
         GridPane daysButtons = new GridPane();
-        for (int i = 0; i < MonthPickerApp.daysOfWeek.length; i++) {
-            Button button = new Button(MonthPickerApp.daysOfWeek[i]);
+        for (int i = 0; i < MonthPickerView.daysOfWeek.length; i++) {
+            Button button = new Button(MonthPickerView.daysOfWeek[i]);
             button.setOnAction(e -> {
-                DayOfWeek = MonthPickerApp.daysOfWeek[daysButtons.getChildren().indexOf(button)];
+                DayOfWeek = MonthPickerView.daysOfWeek[daysButtons.getChildren().indexOf(button)];
                 sendDaySchedules();
                 daysStage.close(); // Close the window after clicking a button
             });

@@ -22,7 +22,7 @@ public class DatePickerApp extends Application {
     @Override
 public void start(Stage primaryStage) {
     this.currentStage = primaryStage;
-    MonthPickerApp monthPicker = new MonthPickerApp();
+    MonthPickerView monthPicker = new MonthPickerView();
     try {
         monthPicker.start(new Stage());
         // Do not call the getSelectedMonth () method here

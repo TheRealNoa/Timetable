@@ -104,10 +104,10 @@ public class TCPEchoServer{
 
         @Override
         public void run() {
+            if(clientSocket!=null){
             try {
             reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             writer = new PrintWriter(clientSocket.getOutputStream(), true);
-
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
                 // Echo back to client
@@ -131,7 +131,9 @@ public class TCPEchoServer{
                 }
                 else if(message.contains("RemClassMsG,"))
                 {
-                 dealWithRC();
+                    try{
+                 dealWithRC();}
+                    catch(java.lang.ArrayIndexOutOfBoundsException a){}
                 }
                 else if(message.contains("NewClass"))
                 {
@@ -148,15 +150,21 @@ public class TCPEchoServer{
                 dealWithET();
                 }
             }
-            } catch (IOException e) {
+            }catch(java.net.SocketException s)
+            {
+            s.printStackTrace();
+            }
+            catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 try {
                     clientSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        }
         }
     }
      public static synchronized void dealWithET()

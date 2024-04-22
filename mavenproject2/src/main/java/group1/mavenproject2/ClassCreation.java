@@ -36,7 +36,7 @@ public class ClassCreation extends Application {
         primaryStage.close();
         App.currentStage=App.primaryStage;
         App.currentStage.show();
-        MonthPickerApp.classes.add(ClassName);
+        MonthPickerView.classes.add(ClassName);
         });
         VBox root = new VBox(10);
         root.getChildren().addAll(label,tf,ok);

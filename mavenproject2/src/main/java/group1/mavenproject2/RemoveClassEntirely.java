@@ -8,7 +8,7 @@ package group1.mavenproject2;
  *
  * @author noaca
  */
-import static group1.mavenproject2.MonthPickerApp.showDayScheduleScene;
+import static group1.mavenproject2.MonthPickerView.showDayScheduleScene;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;

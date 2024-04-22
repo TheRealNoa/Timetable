@@ -11,6 +11,7 @@ import static javafx.application.Application.launch;
  * @author noaca
  */
 public class Main {
+    public static volatile boolean isRunning = true;
     public static void main(String[] args) {
         Thread ServerConnect = new Thread(()->
         {
@@ -30,6 +31,8 @@ public class Main {
         ConnectionCheck.start();
         
         launch(AppView.class, args);
+        TCPEchoClient.socket=null;        
    }
+
     }
 

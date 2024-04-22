@@ -67,7 +67,7 @@ public class App extends Application {
         });
         removeClassButton.setOnAction(e->
         {
-           MonthPickerApp.removeClassEntirely(MonthPickerApp.currentStage);
+           MonthPickerView.removeClassEntirely(MonthPickerView.currentStage);
         });
         
         stop.setOnAction(e->
@@ -128,7 +128,7 @@ public class App extends Application {
     Button dateButton = createStyledButton("Date");
 
     dateButton.setOnAction(e -> {
-        MonthPickerApp monthPicker = new MonthPickerApp();
+        MonthPickerView monthPicker = new MonthPickerView();
         try {
             monthPicker.start(new Stage());
             currentStage.close();

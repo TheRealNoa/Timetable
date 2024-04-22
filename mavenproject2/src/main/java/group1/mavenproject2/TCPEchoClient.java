@@ -14,30 +14,36 @@ public class TCPEchoClient {
     private static BufferedReader in;
     private static PrintWriter out;
     public static boolean connection=true;
-
+    public static boolean isRunning = true;
     public static void start()
+    
     {
     try{socket = new Socket(SERVER_IP, PORT);
-            System.out.println("Socket found.");}catch(IOException e){}
+            System.out.println("Socket found.");}
+    catch(IOException e)
+    {
+    e.printStackTrace();
+    }
     }
     
     public static void main(String[] args) {
         try {
-            //socket = new Socket(SERVER_IP, PORT);
+            // Establish connection and start listening
             System.out.println("Connected to server.");
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-            
             startListening();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally
-        {
-            disconnect();
-        }
+    } catch (IOException e) {
+        e.printStackTrace();
     }
-    private static void disconnect()
+        if(socket==null)
+        {
+        disconnect();
+        }
+
+}
+    public static void disconnect()
     {
         try{
         out.println("client disconnected");
@@ -55,8 +61,10 @@ public class TCPEchoClient {
     }
     public static ArrayList<String> daysList;
     private static void startListening() {
+        while(isRunning){
         try {
             String message;
+            
             while ((message = in.readLine()) != null) {
                 if(message.equals("TERMINATE"))
                 {
@@ -86,7 +94,7 @@ public class TCPEchoClient {
                     {
                     t.add(s);
                     }
-                  Platform.runLater(() -> MonthPickerApp.showClasses(t));
+                  Platform.runLater(() -> MonthPickerView.showClasses(t));
                 }
                 else
                 
@@ -94,7 +102,8 @@ public class TCPEchoClient {
                 System.out.println("Received from server: " + message);
                 }
             }
-        }catch(SocketException s)
+        }
+        catch(SocketException s)
         {
         System.out.println("Connection reset");
         socket = null;
@@ -102,6 +111,8 @@ public class TCPEchoClient {
         catch (IOException e) {
             e.printStackTrace();
         }
+        }
+        
     }
     public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime, String EndTime, String Class, String CourseName) {
       Alert a = new Alert(AlertType.ERROR);
@@ -111,14 +122,15 @@ public class TCPEchoClient {
         if(socket!=null){
             //out.println("FullClientData"); myb this should be a command ?
             out.println("FI," + concatenateWithComma(client));
-            MonthPickerApp.currentStage.close();
-            App.currentStage=App.primaryStage;
-            App.currentStage.show();
+            MonthPickerView.currentStage.close();
+            AppView.primaryStage.show();
+            //App.currentStage=App.primaryStage;
+            //App.currentStage.show();
 
         }else
         {
         System.out.println("Not connected to server.");
-        MonthPickerApp.currentStage.close();
+        MonthPickerView.currentStage.close();
         App.currentStage = App.primaryStage;
         App.currentStage.show();
         a.show();
