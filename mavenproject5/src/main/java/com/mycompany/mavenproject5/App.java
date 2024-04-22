@@ -23,6 +23,7 @@ public class App extends Application {
 
         model.setData("Hello MVC!");
         controller.init();
+        
         Scene scene = new Scene(view, 300, 200);
         primaryStage.setScene(scene);
         primaryStage.setTitle("MVC Example");

@@ -121,7 +121,6 @@ public class TCPEchoClient {
         MonthPickerApp.currentStage.close();
         App.currentStage = App.primaryStage;
         App.currentStage.show();
-        CSVManagement.write("FI",StartDate, EndDate, DayOfWeek, StartTime, EndTime,Class); // FI Is for "Full Info"
         a.show();
         }
     }

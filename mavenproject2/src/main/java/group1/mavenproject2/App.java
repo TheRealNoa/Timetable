@@ -169,12 +169,6 @@ public class App extends Application {
         }
         });
         ConnectionCheck.start();
-        Thread csvManagement = new Thread(()->
-        {
-            CSVManagement.main(args);
-            System.out.println("Tried");
-        });
-        csvManagement.start();
         
         launch(args);
    }
