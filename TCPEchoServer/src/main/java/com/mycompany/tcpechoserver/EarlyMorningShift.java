@@ -31,6 +31,7 @@ public class EarlyMorningShift {
         @Override
         protected void compute() {
             shiftClasses(day);
+            //System.out.println("Computing " + day.name);
         }
 
         private void shiftClasses(Day d) {
@@ -65,6 +66,8 @@ public class EarlyMorningShift {
             System.out.println(d.getBusyPeriods());
         }
     } while (clashed && t.getStime().before(TWELVE_PM));
+    System.out.println("Day bookings:");
+    System.out.println(d.getBusyPeriods());
         }
     }
 }
