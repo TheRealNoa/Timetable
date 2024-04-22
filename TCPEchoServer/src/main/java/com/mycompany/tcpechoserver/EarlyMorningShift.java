@@ -8,7 +8,7 @@ import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.ForkJoinPool;
 
 public class EarlyMorningShift {
-    private static final Time TWELVE_PM = new Time(12 * 3600 * 1000);
+    private static final Time TWELVE_PM = new Time(11 * 3600 * 1000);
     private static final Time NINE_AM = new Time(8 * 3600 * 1000);
     private static final Time HALF_HOUR = new Time(1800000);
 
@@ -60,10 +60,10 @@ public class EarlyMorningShift {
                 System.out.println("Clashed");
                 break;
             }
-            System.out.println("New Time:" + t.Stime + ":" + t.Etime);
+            /*System.out.println("New Time:" + t.Stime + ":" + t.Etime);
             System.out.println("Didn't clash");
             System.out.println("Day bookings:");
-            System.out.println(d.getBusyPeriods());
+            System.out.println(d.getBusyPeriods());*/
         }
     } while (clashed && t.getStime().before(TWELVE_PM));
     System.out.println("Day bookings:");
