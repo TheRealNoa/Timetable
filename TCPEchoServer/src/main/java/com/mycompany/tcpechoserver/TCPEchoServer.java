@@ -20,8 +20,6 @@ public class TCPEchoServer{
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
     private static String message;
-    private static BufferedReader reader;
-    private static PrintWriter writer;
     public static void main(String[] args) {
         try {
             serverSocket = new ServerSocket(PORT);
@@ -97,16 +95,21 @@ public class TCPEchoServer{
     }
      private static class ClientHandler implements Runnable {
         private final Socket clientSocket;
+        private BufferedReader reader;
+        private PrintWriter writer;
 
         public ClientHandler(Socket clientSocket) {
             this.clientSocket = clientSocket;
+            try {
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
         @Override
         public void run() {
             try {
-            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
@@ -123,11 +126,11 @@ public class TCPEchoServer{
                 }
                 else if(message.equals("STOP"))
                 {
-                dealWithStop();
+                dealWithStop(writer,reader);
                 }
                 else if(message.contains("ShowDaySchedule"))
                 {
-                 dealWithSDS();
+                 dealWithSDS(writer);
                 }
                 else if(message.contains("RemClassMsG,"))
                 {
@@ -139,7 +142,7 @@ public class TCPEchoServer{
                 }
                 else if(message.equals("RCL"))
                 {
-                 dealWithRCL();
+                 dealWithRCL(writer);
                 }else if(message.contains("DeleteClasses"))
                 {
                  dealWithDC();
@@ -178,18 +181,18 @@ public class TCPEchoServer{
       System.out.println("Timetable:");
       displayTimetable();
      }
-     public static synchronized void dealWithStop() {
+     public static synchronized void dealWithStop(PrintWriter pw, BufferedReader br) {
     try {
-        writer.println("TERMINATE");
+        pw.println("TERMINATE");
 
         if (serverSocket != null && !serverSocket.isClosed()) {
             serverSocket.close();
         }
-        if (reader != null) {
-            reader.close();
+        if (br != null) {
+            br.close();
         }
-        if (writer != null) {
-            writer.close();
+        if (pw != null) {
+            pw.close();
         }
 
         System.out.println("Server stopped successfully.");
@@ -199,7 +202,7 @@ public class TCPEchoServer{
     }
 }   
      public static String dayString;
-     public static synchronized void dealWithSDS()
+     public static synchronized void dealWithSDS(PrintWriter pw)
      {
       String[] tempArr = message.split(",");
       dayString = tempArr[1];
@@ -208,8 +211,11 @@ public class TCPEchoServer{
       {
        if(d.name.equalsIgnoreCase(dayString))
         {
-        writer.println("SBPTEAR, " + d.getBusyPeriods());
-        }
+        pw.println("SBPTEAR, " + d.getBusyPeriods());
+        }else
+       {
+       pw.println("Wtf day");
+       }
       }       
      }
      public static synchronized void dealWithRC() {
@@ -243,10 +249,10 @@ public class TCPEchoServer{
      classes.add(tempArr[1]);
      System.out.println(classes);
      }
-     public static synchronized void dealWithRCL()
+     public static synchronized void dealWithRCL(PrintWriter pw)
      {
      System.out.println("Sending back list of classes");
-     writer.println("RLC1 ," + classes);
+     pw.println("RLC1 ," + classes);
      }
      public static synchronized void dealWithDC()
      {

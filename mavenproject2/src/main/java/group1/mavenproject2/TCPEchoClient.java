@@ -125,6 +125,7 @@ public class TCPEchoClient {
     public static synchronized void sendMessage(String message) {
         if(socket!=null && connection){
         out.println(message);
+        System.out.println("sendMessage ran");
         }else
         {
         Alert a = new Alert(AlertType.ERROR);

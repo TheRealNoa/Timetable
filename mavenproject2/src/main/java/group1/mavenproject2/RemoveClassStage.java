@@ -19,6 +19,7 @@ public class RemoveClassStage extends Application {
     public void sendDaySchedules()
     {
     TCPEchoClient.sendMessage("ShowDaySchedule," + DayOfWeek);
+    System.out.println("Sent day schedule");
     }
     public static void showDaySchedule(ArrayList<String> daySchedules) {
         if (daySchedules == null || daySchedules.isEmpty()) {
