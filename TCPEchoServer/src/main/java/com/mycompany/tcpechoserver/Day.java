@@ -65,7 +65,7 @@ public class Day {
     public synchronized String displayDay()
     {
     if(BusyPeriodsOut()!=""){
-    return "Day," + this.name + "\n" + BusyPeriodsOut() ;
+    return "Day," + this.name + "," + BusyPeriodsOut() ;
     }
     else{
     return "Day," + this.name + ",No scheduled classes.";

@@ -146,24 +146,16 @@ public class TCPEchoClient {
         return tempBuilder.toString();
     }
     
-    public static void processTimetableDisplay()
-    {
-    String[] lines = message.split("\n");
-    for (int i = 1; i < lines.length; i++) {
-        String line = lines[i].trim();
-        if (!line.isEmpty()) {
-            processTimetableEntry(line);
-        }
-    }
-    }
     public static void processTimetableEntry(String message)
     {
-        //System.out.println("Processing timetable entry");
+        ArrayList<String> s = new ArrayList<String>();
         String[] parts = message.split(",");
         for(int i=1;i<parts.length;i++)
         {
-        System.out.println(parts[i]);
+            s.add(parts[i]);
         }
+        TimetableController tc = new TimetableController(s);
+        tc.inputsToUI();
     }
     public static void stop() {
         isRunning = false;
