@@ -50,14 +50,26 @@ public class Day {
 }
     public synchronized String BusyPeriodsOut() {
     String temp = "";
-    for (TimePeriod t : BusyPeriods) {
-        temp += t + "\n";
+    if(BusyPeriods.size()>0){
+    for (int i=0;i<BusyPeriods.size();i++) {
+        if(i<BusyPeriods.size()-1){
+        temp += BusyPeriods.get(i) + "\n";
+        }else
+        {
+        temp += BusyPeriods.get(i);
+        }
+    }
     }
     return temp;
 }
     public synchronized String displayDay()
     {
-    return "Day: " + this.name + "\n" + "Busy periods:" + "\n" + BusyPeriodsOut() + "\n";
+    if(BusyPeriodsOut()!=""){
+    return "Day: " + this.name + "\n" + "Schedule:" + "\n" + BusyPeriodsOut() ;
+    }
+    else{
+    return "Day: " + this.name + ", no scheduled classes.";
+    }
     }
     public synchronized void addTimeSlot(TimePeriod a, Module m){
     if(checkBookings(a))

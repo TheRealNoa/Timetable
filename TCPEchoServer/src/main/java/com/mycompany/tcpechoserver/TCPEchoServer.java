@@ -52,11 +52,11 @@ public class TCPEchoServer{
                 }
                 }
     }
-    private static void displayTimetable()
+    private static void displayTimetable(PrintWriter pw)
     {
         for(Day d:days)
         {
-            System.out.println(d.displayDay());
+            pw.println(d.displayDay());
         }
     }
     private static void assignTimePeriod(String message)
@@ -122,7 +122,7 @@ public class TCPEchoServer{
                 }
                 else if(message.contains("TD"))
                 {
-                dealWithTD();
+                dealWithTD(writer);
                 }
                 else if(message.equals("STOP"))
                 {
@@ -176,10 +176,10 @@ public class TCPEchoServer{
      assignModule(message);
      System.out.println(TP.toString());
      }
-     public static synchronized void dealWithTD()
+     public static synchronized void dealWithTD(PrintWriter pw)
      {
       System.out.println("Timetable:");
-      displayTimetable();
+      displayTimetable(pw);
      }
      public static synchronized void dealWithStop(PrintWriter pw, BufferedReader br) {
     try {
