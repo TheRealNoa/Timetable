@@ -28,7 +28,6 @@ public class TCPEchoClient {
     
     public static void main(String[] args) {
         try {
-            // Establish connection and start listening
             System.out.println("Connected to server.");
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -108,16 +107,12 @@ public class TCPEchoClient {
             out.println("FI," + concatenateWithComma(client));
             MonthPickerView.currentStage.close();
             AppView.primaryStage.show();
-            //App.currentStage=App.primaryStage;
-            //App.currentStage.show();
 
         }else
         {
         System.out.println("Not connected to server.");
         MonthPickerView.currentStage.close();
         AppView.primaryStage.show();
-        //App.currentStage = App.primaryStage;
-        //App.currentStage.show();
         a.show();
         }
     }

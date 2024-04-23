@@ -4,14 +4,6 @@
  */
 package group1.mavenproject2;
 
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 /**
  *
@@ -26,62 +18,25 @@ public class AppController {
 
     public void handleButtonAction(String label) {
         if (label.equals("Add Class")) {    
-        openNewStage();
+        model.openDateStage();
         } 
         else if (label.equals("Remove Class")) 
         {
-        RemoveClassStage removeClassStage = new RemoveClassStage();
-        try{
-        removeClassStage.start(new Stage());
-        }catch(Exception ex)
-                {
-                ex.printStackTrace();
-                }
+        model.openRemoveClassStage();
         }
         else if (label.equals("Display Timetable button"))
         {
-            TCPEchoClient.sendMessage("TD");
+        model.displayTimeTable();
         }
         else if (label.equals("Stop button"))
         {
-        TCPEchoClient.sendMessage("STOP");
+        model.terminateConnection();
         }
         else if(label.equals("Move afternoon classes to mornings"))
         {
-        TCPEchoClient.sendMessage("EarlyTimes");
+        model.afternoonToMorning();
         }
     }
    
-    private void openNewStage() {
-    if (AppView.currentStage != null) {
-            AppView.currentStage.close();
-    }    
-    Stage newStage = new Stage();
-    Button dateButton = new Button("Date");
-
-    dateButton.setOnAction(e -> {
-        MonthPickerView monthPicker = new MonthPickerView();
-        try {
-            monthPicker.start(new Stage());
-            AppView.currentStage.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    });
-
-    HBox newButtonBox = new HBox(10);
-    newButtonBox.getChildren().addAll(dateButton);
-    newButtonBox.setAlignment(Pos.CENTER);
-
-    Rectangle newBox = new Rectangle(300, 100);
-    newBox.setFill(Color.GREY);
-    StackPane newStackPane = new StackPane(newBox, newButtonBox);
-
-    Scene newScene = new Scene(newStackPane, 300, 100);
-    newStage.setTitle("Additional Options");
-    newStage.setScene(newScene);
-    newStage.show();
-    AppView.currentStage= newStage;
-}
 }
 

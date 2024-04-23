@@ -1,7 +1,5 @@
 package group1.mavenproject2;
 
-import static group1.mavenproject2.MonthPickerView.currentStage;
-import static group1.mavenproject2.MonthPickerView.daysStage;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Pos;

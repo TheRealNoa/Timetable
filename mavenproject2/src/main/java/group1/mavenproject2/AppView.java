@@ -49,7 +49,6 @@ public class AppView extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         
-        //Button Controlls
         addButton.setOnAction(e->{controller.handleButtonAction("Add Class");});
         removeButton.setOnAction(e->{controller.handleButtonAction("Remove Class");});
         displayTimetable.setOnAction(e->{controller.handleButtonAction("Display Timetable button");});
