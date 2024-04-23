@@ -155,7 +155,7 @@ public class TCPEchoClient {
             s.add(parts[i]);
         }
         TimetableController tc = new TimetableController(s);
-        tc.inputsToUI();
+        tc.inputsToArrays();
     }
     public static void stop() {
         isRunning = false;
