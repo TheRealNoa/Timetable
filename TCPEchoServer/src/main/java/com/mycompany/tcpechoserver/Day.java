@@ -65,10 +65,10 @@ public class Day {
     public synchronized String displayDay()
     {
     if(BusyPeriodsOut()!=""){
-    return "Day: " + this.name + "\n" + "Schedule:" + "\n" + BusyPeriodsOut() ;
+    return "Day," + this.name + "\n" + BusyPeriodsOut() ;
     }
     else{
-    return "Day: " + this.name + ", no scheduled classes.";
+    return "Day," + this.name + ",No scheduled classes.";
     }
     }
     public synchronized void addTimeSlot(TimePeriod a, Module m){

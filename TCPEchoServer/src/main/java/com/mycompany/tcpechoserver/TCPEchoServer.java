@@ -178,7 +178,8 @@ public class TCPEchoServer{
      }
      public static synchronized void dealWithTD(PrintWriter pw)
      {
-      System.out.println("Timetable:");
+      System.out.println("Timetable sent.");
+      pw.println("TimetableDisplay");
       displayTimetable(pw);
      }
      public static synchronized void dealWithStop(PrintWriter pw, BufferedReader br) {

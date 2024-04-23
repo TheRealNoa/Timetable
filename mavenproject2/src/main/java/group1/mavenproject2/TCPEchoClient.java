@@ -15,6 +15,8 @@ public class TCPEchoClient {
     private static PrintWriter out;
     public static boolean connection=true;
     public static boolean isRunning = true;
+    
+    public static String message;
     public static void start()
     
     {
@@ -46,7 +48,6 @@ public class TCPEchoClient {
     private static void startListening() {
         while(isRunning){
         try {
-            String message;
             
             while ((message = in.readLine()) != null) {
                 if(message.equals("TERMINATE"))
@@ -78,11 +79,14 @@ public class TCPEchoClient {
                     t.add(s);
                     }
                   Platform.runLater(() -> MonthPickerView.showClasses(t));
+                }else if(message.startsWith("Day"))
+                {
+                processTimetableEntry(message);
                 }
                 else
                 
                 {
-                System.out.println("Received from server: " + message);
+                System.out.println(message);
                 }
             }
         }
@@ -141,6 +145,26 @@ public class TCPEchoClient {
         
         return tempBuilder.toString();
     }
+    
+    public static void processTimetableDisplay()
+    {
+    String[] lines = message.split("\n");
+    for (int i = 1; i < lines.length; i++) {
+        String line = lines[i].trim();
+        if (!line.isEmpty()) {
+            processTimetableEntry(line);
+        }
+    }
+    }
+    public static void processTimetableEntry(String message)
+    {
+        //System.out.println("Processing timetable entry");
+        String[] parts = message.split(",");
+        for(int i=1;i<parts.length;i++)
+        {
+        System.out.println(parts[i]);
+        }
+    }
     public static void stop() {
         isRunning = false;
         try {
@@ -154,4 +178,5 @@ public class TCPEchoClient {
             e.printStackTrace();
         }
     }
+    
 }
