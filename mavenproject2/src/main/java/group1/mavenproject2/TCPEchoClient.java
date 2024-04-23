@@ -121,7 +121,7 @@ public class TCPEchoClient {
         }
     }
     // keeping this just in case...
-    public static void sendMessage(String message) {
+    public static synchronized void sendMessage(String message) {
         if(socket!=null && connection){
         out.println(message);
         }else

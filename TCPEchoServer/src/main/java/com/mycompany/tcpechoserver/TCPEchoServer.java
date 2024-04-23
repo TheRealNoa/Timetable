@@ -29,15 +29,12 @@ public class TCPEchoServer{
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connected to client: " + clientSocket.getInetAddress().getHostAddress());
-                //handleClient(clientSocket);
                 Thread tempT = new Thread(new ClientHandler(clientSocket));
                 tempT.start();
             }
-        }catch(SocketException b)
-        {
+        } catch (SocketException b) {
             System.out.println("Client terminated the server app. Server shutdown.");
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -47,14 +44,16 @@ public class TCPEchoServer{
                 tempArr = message.split(",");
                 List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
                 arrayList.remove(0);
-                for(Day d:days)
-                {
-                if (arrayList.contains(d.toString())){
-                    CurrentDay = d;
-                }
+                synchronized(TCPEchoServer.class){
+                    for(Day d:days)
+                        {
+                        if (arrayList.contains(d.toString())){
+                        CurrentDay = d;
+                        }
+                    }
                 }
     }
-    private static void displayTimetable()
+    private static synchronized void displayTimetable()
     {
         for(Day d:days)
         {
