@@ -33,9 +33,12 @@ public class ClassCreation extends Application {
         ok.setOnAction(e->
         {
         TCPEchoClient.sendMessage("NewClass," + ClassName);
+        
         primaryStage.close();
-        App.currentStage=App.primaryStage;
-        App.currentStage.show();
+        AppView.primaryStage.show();
+        
+        //App.currentStage=App.primaryStage;
+        //App.currentStage.show();
         MonthPickerView.classes.add(ClassName);
         });
         VBox root = new VBox(10);

@@ -29,12 +29,15 @@ public class TCPEchoServer{
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connected to client: " + clientSocket.getInetAddress().getHostAddress());
+                //handleClient(clientSocket);
                 Thread tempT = new Thread(new ClientHandler(clientSocket));
                 tempT.start();
             }
-        } catch (SocketException b) {
+        }catch(SocketException b)
+        {
             System.out.println("Client terminated the server app. Server shutdown.");
-        } catch (IOException e) {
+        } 
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -44,16 +47,14 @@ public class TCPEchoServer{
                 tempArr = message.split(",");
                 List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
                 arrayList.remove(0);
-                synchronized(TCPEchoServer.class){
-                    for(Day d:days)
-                        {
-                        if (arrayList.contains(d.toString())){
-                        CurrentDay = d;
-                        }
-                    }
+                for(Day d:days)
+                {
+                if (arrayList.contains(d.toString())){
+                    CurrentDay = d;
+                }
                 }
     }
-    private static synchronized void displayTimetable()
+    private static void displayTimetable()
     {
         for(Day d:days)
         {
@@ -103,10 +104,10 @@ public class TCPEchoServer{
 
         @Override
         public void run() {
-            if(clientSocket!=null){
             try {
             reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             writer = new PrintWriter(clientSocket.getOutputStream(), true);
+
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
                 // Echo back to client
@@ -130,9 +131,7 @@ public class TCPEchoServer{
                 }
                 else if(message.contains("RemClassMsG,"))
                 {
-                    try{
-                 dealWithRC();}
-                    catch(java.lang.ArrayIndexOutOfBoundsException a){}
+                 dealWithRC();
                 }
                 else if(message.contains("NewClass"))
                 {
@@ -149,21 +148,15 @@ public class TCPEchoServer{
                 dealWithET();
                 }
             }
-            }catch(java.net.SocketException s)
-            {
-            s.printStackTrace();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 try {
                     clientSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }
         }
     }
      public static synchronized void dealWithET()
@@ -204,11 +197,12 @@ public class TCPEchoServer{
         System.err.println("Error occurred during server shutdown:");
         e.printStackTrace();
     }
-}
+}   
+     public static String dayString;
      public static synchronized void dealWithSDS()
      {
       String[] tempArr = message.split(",");
-      String dayString = tempArr[1];
+      dayString = tempArr[1];
       System.out.println("Day recieved:" + tempArr[1]);
       for(Day d : days)
       {
@@ -218,32 +212,31 @@ public class TCPEchoServer{
         }
       }       
      }
-     public static synchronized void dealWithRC()
-     {
-      String[] tempArr = message.split(",");
-      if(!tempArr[1].equals(""))
-      {
-        for(Day d:days)
-        {
-            if(d.name.equalsIgnoreCase(tempArr[2]))
-            {
-                System.out.println("Trying to remove class.");
-                String[]tempArr2 = tempArr[1].split("-");
-                Double t1 = convertTimeToDecimal(tempArr2[0]);
-                Double t2 = convertTimeToDecimal(tempArr2[1]);
-                long milliseconds1 = (long) ((t1 * 60 * 60 * 1000)-(60*60*1000));
-                long milliseconds2 = (long) ((t2 * 60 * 60 * 1000)-(60*60*1000));
-                
-                Time startTime = new Time(milliseconds1);
-                Time endTime = new Time(milliseconds2);
-                TimePeriod tempT = new TimePeriod(startTime,endTime);
-                System.out.println(tempT);
-                d.removeBooking(tempT);
-                System.out.println(d.getBusyPeriods());
+     public static synchronized void dealWithRC() {
+    String[] tempArr = message.split(",");
+            for (int i = 0; i < days.length; i++) {
+                if (days[i].name.equalsIgnoreCase(dayString)) {
+                    System.out.println("Trying to remove class.");
+                    String[] tempArr2 = tempArr[1].split("-");
+                    if (tempArr2.length == 2) { // Check if tempArr2 has 2 elements
+                        Double t1 = convertTimeToDecimal(tempArr2[0]);
+                        Double t2 = convertTimeToDecimal(tempArr2[1]);
+                        long milliseconds1 = (long) ((t1 * 60 * 60 * 1000) - (60 * 60 * 1000));
+                        long milliseconds2 = (long) ((t2 * 60 * 60 * 1000) - (60 * 60 * 1000));
+
+                        Time startTime = new Time(milliseconds1);
+                        Time endTime = new Time(milliseconds2);
+                        TimePeriod tempT = new TimePeriod(startTime, endTime);
+                        System.out.println(tempT);
+                        days[i].removeBooking(tempT);
+                        System.out.println(days[i].getBusyPeriods());
+                    } else {
+                        System.out.println("Invalid format for time range");
+                    }
+                }
             }
-        }
-      }
-    }
+}
+
      public static synchronized void dealWithNC()
      {
      String[] tempArr = message.split(",");

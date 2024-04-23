@@ -115,8 +115,9 @@ public class TCPEchoClient {
         {
         System.out.println("Not connected to server.");
         MonthPickerView.currentStage.close();
-        App.currentStage = App.primaryStage;
-        App.currentStage.show();
+        AppView.primaryStage.show();
+        //App.currentStage = App.primaryStage;
+        //App.currentStage.show();
         a.show();
         }
     }

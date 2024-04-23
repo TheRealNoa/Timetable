@@ -26,11 +26,11 @@ public class Day {
     modules = new ArrayList<>();
     combinedList = new ArrayList<>();
     }
-    public void addModule(Module m)
+    public synchronized void addModule(Module m)
     {
     this.modules.add(m);
     }
-    public void removeModuleByClass(String c)
+    public synchronized void removeModuleByClass(String c)
     {
     for(int i=1;i<modules.size();i++)
     {
@@ -45,21 +45,21 @@ public class Day {
     {
         return this.name;
     }
-    public List<TimePeriod> getBusyPeriods() {
+    public synchronized List<TimePeriod> getBusyPeriods() {
     return Collections.unmodifiableList(BusyPeriods);
 }
-    public String BusyPeriodsOut() {
+    public synchronized String BusyPeriodsOut() {
     String temp = "";
     for (TimePeriod t : BusyPeriods) {
         temp += t + "\n";
     }
     return temp;
 }
-    public String displayDay()
+    public synchronized String displayDay()
     {
     return "Day: " + this.name + "\n" + "Busy periods:" + "\n" + BusyPeriodsOut() + "\n";
     }
-    public void addTimeSlot(TimePeriod a, Module m){
+    public synchronized void addTimeSlot(TimePeriod a, Module m){
     if(checkBookings(a))
     {
     System.out.println("Error, can't book.");
@@ -68,21 +68,29 @@ public class Day {
     {
     System.out.println("Added a booking");
 
-    BusyPeriods.add(a);
+    if(BusyPeriods!=null)
+        {
+        BusyPeriods.add(a);
+        }
     ModuleTimePeriodEntry entry =  new ModuleTimePeriodEntry(m, a);
-    combinedList.add(entry);    
+    if(combinedList!=null)
+        {
+        combinedList.add(entry);
+        }    
     }
     }
-    public boolean checkBookings(TimePeriod a)
+    public synchronized boolean checkBookings(TimePeriod a)
     {
-     for(TimePeriod t:BusyPeriods)
+     if(BusyPeriods !=null){
+        for(TimePeriod t:BusyPeriods)
      {
          if(t.clashesWith(a))
              return true;
      }
+     }
       return false;
     }
-    public void removeBooking(TimePeriod a)
+    public synchronized void removeBooking(TimePeriod a)
     {
     for(int i=0;i<BusyPeriods.size();i++)
     {
@@ -94,7 +102,7 @@ public class Day {
     }
     }
     }
-     public void removeAllClassTimes(String className)
+     public synchronized void removeAllClassTimes(String className)
     {
     for(TimePeriod t:BusyPeriods)
     {
@@ -109,7 +117,7 @@ public class Day {
      
      /// part 2 methods
      
-     public ArrayList<TimePeriod> getEarlyBookings() {
+     public synchronized ArrayList<TimePeriod> getEarlyBookings() {
     ArrayList<TimePeriod> earlyPeriods = new ArrayList<>();
     Time twelvePM = new Time(11 * 3600 * 1000);
 

@@ -22,6 +22,7 @@ public class AppView extends Application {
     private AppModel model;
     private AppController controller;
     public static Stage primaryStage;
+    public static Stage currentStage;
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;

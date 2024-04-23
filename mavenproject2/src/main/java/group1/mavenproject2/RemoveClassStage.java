@@ -38,6 +38,7 @@ public class RemoveClassStage extends Application {
     Button button = new Button(buttonText);
     button.setOnAction(e -> {
         System.out.println("Button clicked: " + buttonText);
+        System.out.println("Day of week:" + DayOfWeek);
         TCPEchoClient.sendMessage("RemClassMsG," + schedule1 + "," + DayOfWeek);
         scheduleStage.close();
     });
@@ -51,34 +52,40 @@ public class RemoveClassStage extends Application {
         scheduleStage.show();
     }
 
-    public void openDays()
-    {
-        if (currentStage != null) {
+   public void openDays() {
+    if (currentStage != null) {
         currentStage.close();
     }
-        VBox vb = new VBox(10);
-        vb.setAlignment(Pos.CENTER);
+    
+    VBox vb = new VBox(10);
+    vb.setAlignment(Pos.CENTER);
+    
+    Label infoLabel = new Label("Please select a day of the week: ");
+    
+    Stage daysStage = new Stage();
+    GridPane daysButtons = new GridPane();
+    
+    for (int i = 0; i < MonthPickerView.daysOfWeek.length; i++) {
+        String selectedDay = MonthPickerView.daysOfWeek[i]; // Create a local variable for the selected day
+        Button button = new Button(selectedDay);
         
-        Label infoLabel = new Label("Please select a day of the week: ");
+        button.setOnAction(e -> {
+            DayOfWeek = selectedDay; // Use the local variable instead of the member variable
+            System.out.println("Day selected is: " + DayOfWeek);
+            sendDaySchedules();
+            daysStage.close(); // Close the window after clicking a button
+        });
         
-        Stage daysStage = new Stage();
-        GridPane daysButtons = new GridPane();
-        for (int i = 0; i < MonthPickerView.daysOfWeek.length; i++) {
-            Button button = new Button(MonthPickerView.daysOfWeek[i]);
-            button.setOnAction(e -> {
-                DayOfWeek = MonthPickerView.daysOfWeek[daysButtons.getChildren().indexOf(button)];
-                sendDaySchedules();
-                daysStage.close(); // Close the window after clicking a button
-            });
-            daysButtons.add(button, i, 0);
-        }
-        daysButtons.setAlignment(Pos.CENTER);
-        vb.getChildren().addAll(infoLabel,daysButtons);
-        Scene scene = new Scene(vb, 350, 50);
-        daysStage.setScene(scene);
-        daysStage.setTitle("Days of Week");
-        daysStage.show();
+        daysButtons.add(button, i, 0);
     }
+    
+    daysButtons.setAlignment(Pos.CENTER);
+    vb.getChildren().addAll(infoLabel, daysButtons);
+    Scene scene = new Scene(vb, 350, 50);
+    daysStage.setScene(scene);
+    daysStage.setTitle("Days of Week");
+    daysStage.show();
+}
     
     @Override
     public void start(Stage primaryStage) {

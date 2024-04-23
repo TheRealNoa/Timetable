@@ -4,7 +4,6 @@
  */
 package group1.mavenproject2;
 
-import static group1.mavenproject2.App.currentStage;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -54,8 +53,8 @@ public class AppController {
     }
    
     private void openNewStage() {
-    if (currentStage != null) {
-            currentStage.close();
+    if (AppView.currentStage != null) {
+            AppView.currentStage.close();
     }    
     Stage newStage = new Stage();
     Button dateButton = new Button("Date");
@@ -64,7 +63,7 @@ public class AppController {
         MonthPickerView monthPicker = new MonthPickerView();
         try {
             monthPicker.start(new Stage());
-            currentStage.close();
+            AppView.currentStage.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -82,7 +81,7 @@ public class AppController {
     newStage.setTitle("Additional Options");
     newStage.setScene(newScene);
     newStage.show();
-    App.currentStage= newStage;
+    AppView.currentStage= newStage;
 }
 }
 
