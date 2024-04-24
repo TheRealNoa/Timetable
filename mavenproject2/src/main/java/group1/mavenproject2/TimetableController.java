@@ -33,7 +33,11 @@ public class TimetableController {
     System.out.println(Inputs);
     if(Inputs.get(0).startsWith("Fri"))
     {
-    displayTimtable();
+        Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
+        
+        //NOTE TO SELF:
+        //Apparently if you try to call a method like displayTimetable() which executes something
+        //on the javaFX thread, then you have to call that method from a javaFX thread as well...
     }
     }
     public void displayTimtable()
@@ -41,7 +45,10 @@ public class TimetableController {
     if (AppView.currentStage != null) {
             AppView.currentStage.close();
     }    
-    TimetableView tv = new TimetableView();
-    Platform.runLater(() -> tv.start(new Stage()));
-    }
+    Platform.runLater(() -> {
+        TimetableView timetableView = new TimetableView();
+        Stage stage = new Stage();
+        timetableView.start(stage);
+    });
+}
 }
