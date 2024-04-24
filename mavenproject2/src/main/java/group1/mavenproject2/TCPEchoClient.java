@@ -82,6 +82,8 @@ public class TCPEchoClient {
                 }else if(message.startsWith("Day"))
                 {
                 processTimetableEntry(message);
+                System.out.println("Message recieved:");
+                System.out.println(message);
                 }
                 else
                 

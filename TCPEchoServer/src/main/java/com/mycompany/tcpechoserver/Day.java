@@ -53,7 +53,7 @@ public class Day {
     if(BusyPeriods.size()>0){
     for (int i=0;i<BusyPeriods.size();i++) {
         if(i<BusyPeriods.size()-1){
-        temp += BusyPeriods.get(i) + "\n";
+        temp += BusyPeriods.get(i) + ",";
         }else
         {
         temp += BusyPeriods.get(i);
@@ -68,7 +68,7 @@ public class Day {
     return "Day," + this.name + "," + BusyPeriodsOut() ;
     }
     else{
-    return "Day," + this.name + ",No scheduled classes.";
+    return "Day," + this.name + ",No scheduled classes,";
     }
     }
     public synchronized void addTimeSlot(TimePeriod a, Module m){
