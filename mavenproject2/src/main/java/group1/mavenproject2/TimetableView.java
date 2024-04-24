@@ -21,7 +21,9 @@ import javafx.stage.Stage;
 public class TimetableView extends Application {
     Stage primaryStage;
     private TimetableModel model;
-    private TimetableController controller;
+    private static TimetableController controller;
+    private boolean addedCells = false;
+    public  static boolean stopModel = false;
    @Override
     public void start(Stage primaryStage) {
         GridPane gridPane = new GridPane();
@@ -51,34 +53,24 @@ public class TimetableView extends Application {
                 cellLabel.setPrefSize(100, 50);
                 cellLabel.setStyle("-fx-border-color: black");
                 gridPane.add(cellLabel, col, row);
-                controller.addLabel(cellLabel); // Add labels to the controller
-            }
+                controller.addLabel(cellLabel, col, row);
+            }addedCells=true;
         }
+        
+        
+            controller.checkLabelList();
 
         Scene scene = new Scene(gridPane, 620, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Timetable");
         primaryStage.show();
+        primaryStage.setOnHidden(e -> {
+            controller.stopThread();
+    // This just stops the thread in the controller once this thread is exited
+    // I tried just calling controller.stopThread() after launch but it didn't work
+    // so this is the adjusted solution.
+    });
         
-        // Start a background thread to simulate changes to the timetable
-        new Thread(() -> {
-            Random random = new Random();
-            while (true) {
-                try {
-                    Label l = new Label("a");
-                    Thread.sleep(2000); // Simulate checking for changes every 2 seconds
-                    Platform.runLater(() -> {
-                        if (random.nextBoolean()) {
-                            controller.addLabel(l); // Simulate adding a random label
-                        } else {
-                            controller.removeRandomLabel(); // Simulate removing a random label
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public static void main(String[] args) {

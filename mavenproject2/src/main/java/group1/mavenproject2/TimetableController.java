@@ -4,17 +4,10 @@
  */
 package group1.mavenproject2;
 
-import static group1.mavenproject2.TCPEchoClient.daysList;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Platform;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -24,6 +17,8 @@ import javafx.stage.Stage;
 public class TimetableController {
     public static ArrayList<String> Inputs;
     private TimetableModel model;
+    int timesChecked;
+    public boolean running=true;
     public TimetableController(TimetableModel model) {
         this.model = model;
     }
@@ -57,25 +52,47 @@ public class TimetableController {
     
 }
     //Experimental
-    public void addLabel(Label label) {
-        model.addLabel(label,1,1);
+    public void addLabel(Label label, int col, int row) {
+        model.addLabel(label,col,row);
     }
 
     public void removeLabel(Label label) {
         model.removeLabel(label);
     }
 
-    public void addRandomLabel() {
-        Label newLabel = new Label("New Label");
-        newLabel.setPrefSize(100, 50);
-        newLabel.setStyle("-fx-border-color: black");
-        model.addLabel(newLabel,1,1);
+   public void checkLabelList() {
+    new Thread(() -> {
+        List<Label> currentLabels;
+        while (running) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Label l = new Label("l");
+            timesChecked++;
+            List<Label> newLabels = model.getLabels();
+            synchronized (model) {
+                currentLabels = new ArrayList<>(model.getLabels()); 
+            }
+            if (!newLabels.equals(currentLabels)) {
+                System.out.println("It changed");
+                synchronized (model) {
+                    currentLabels = newLabels;
+                }
+            }else
+            {
+            System.out.println("No change");
+            }
+        }
+    }).start();
+}
+    public void stopThread()
+    {
+        running=false;
     }
 
-    public void removeRandomLabel() {
-        if (!model.getLabels().isEmpty()) {
-            Label labelToRemove = model.getLabels().remove((int) (Math.random() * model.getLabels().size()));
-            model.removeLabel(labelToRemove);
-        }
+    private void handleLabelListChanges() {
+        System.out.println("Label list has changed.");
     }
 }

@@ -22,16 +22,15 @@ public class TimetableModel {
         this.gridPane = gridPane;
     }
     
-     public void addLabel(Label label,int columnIndex, int rowIndex) {
-        if (!labels.contains(label)) {
-            // Remove the label from the grid if it's already added
-            if (gridPane.getChildren().contains(label)) {
-                gridPane.getChildren().remove(label);
-            }
-            labels.add(label);
-            gridPane.add(label, columnIndex, rowIndex);
+    public void addLabel(Label label, int columnIndex, int rowIndex) {
+    if (!labels.contains(label)) {
+        if (gridPane.getChildren().contains(label)) {
+            gridPane.getChildren().remove(label);
         }
+        labels.add(label);
+        gridPane.add(label, columnIndex, rowIndex);
     }
+}
 
     public void removeLabel(Label label) {
         labels.remove(label);
