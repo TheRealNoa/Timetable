@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -22,7 +23,10 @@ import javafx.stage.Stage;
  */
 public class TimetableController {
     public static ArrayList<String> Inputs;
-    
+    private TimetableModel model;
+    public TimetableController(TimetableModel model) {
+        this.model = model;
+    }
     TimetableController(ArrayList<String> s)
     {
     this.Inputs = s;
@@ -50,5 +54,28 @@ public class TimetableController {
         Stage stage = new Stage();
         timetableView.start(stage);
     });
+    
 }
+    //Experimental
+    public void addLabel(Label label) {
+        model.addLabel(label,1,1);
+    }
+
+    public void removeLabel(Label label) {
+        model.removeLabel(label);
+    }
+
+    public void addRandomLabel() {
+        Label newLabel = new Label("New Label");
+        newLabel.setPrefSize(100, 50);
+        newLabel.setStyle("-fx-border-color: black");
+        model.addLabel(newLabel,1,1);
+    }
+
+    public void removeRandomLabel() {
+        if (!model.getLabels().isEmpty()) {
+            Label labelToRemove = model.getLabels().remove((int) (Math.random() * model.getLabels().size()));
+            model.removeLabel(labelToRemove);
+        }
+    }
 }
