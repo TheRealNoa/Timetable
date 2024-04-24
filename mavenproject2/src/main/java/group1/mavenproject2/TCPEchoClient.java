@@ -82,13 +82,13 @@ public class TCPEchoClient {
                 }else if(message.startsWith("Day"))
                 {
                 processTimetableEntry(message);
-                System.out.println("Message recieved:");
+                System.out.println("Message recieved:");// each message is data for one day...
                 System.out.println(message);
                 }
                 else
                 
                 {
-                System.out.println(message);
+                //System.out.println("Msg recieved:" + message);
                 }
             }
         }
@@ -147,7 +147,7 @@ public class TCPEchoClient {
         
         return tempBuilder.toString();
     }
-    
+    public static ArrayList<ArrayList<String>> ArrayListOfMultipleMessages = new ArrayList<>();
     public static void processTimetableEntry(String message)
     {
         ArrayList<String> s = new ArrayList<String>();
@@ -155,11 +155,16 @@ public class TCPEchoClient {
         for(int i=1;i<parts.length;i++)
         {
             s.add(parts[i]);
+            
         }
-        System.out.println("S:" + s);
+        ArrayListOfMultipleMessages.add(s);
+        if(ArrayListOfMultipleMessages.size()==5){
         TimetableView tv = new TimetableView();
-        TimetableController tc = new TimetableController(s,tv.model);
+        TimetableController tc = new TimetableController(ArrayListOfMultipleMessages,tv.model);
         tc.inputsToArrays();
+        System.out.println("S:" + ArrayListOfMultipleMessages);
+        ArrayListOfMultipleMessages.clear();
+        }
     }
     public static void stop() {
         isRunning = false;

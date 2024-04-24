@@ -48,7 +48,6 @@ public class TimetableView extends Application {
         model = new TimetableModel(gridPane);
         controller = new TimetableController(model,gridPane);
         controller.model = model;
-        System.out.println("Model from view from controller:" + controller.model);
         //controller.processInputs();
         for (int row = 1; row <= 10; row++) {
             for (int col = 1; col <= 5; col++) {

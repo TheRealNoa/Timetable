@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  * @author noaca
  */
 public class TimetableController {
-    public static ArrayList<String> Inputs;
+    public static ArrayList<ArrayList<String>> Inputs;
     int timesChecked;
     public boolean running=true;
     public int col;
@@ -27,18 +27,20 @@ public class TimetableController {
      public TimetableController(TimetableModel model, GridPane gridPane) {
         this.model = model;
         model.setGridPane(gridPane); // Pass GridPane to TimetableMode
-        processInputs();
+        //processInputs();
     }
     
-    TimetableController(ArrayList<String> s, TimetableModel m)
+    TimetableController(ArrayList<ArrayList<String>> s, TimetableModel m)
     {
-    this.Inputs = s;
+    this.Inputs = new ArrayList<>();
+    this.Inputs=s;
     this.model=m;
+    
     }
 
     public void inputsToArrays()
     {
-    if(Inputs.get(0).startsWith("Mon"))
+    if(Inputs.get(0).get(0).startsWith("Mon"))
     {
         Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
         
@@ -46,6 +48,7 @@ public class TimetableController {
         //Apparently if you try to call a method like displayTimetable() which executes something
         //on the javaFX thread, then you have to call that method from a javaFX thread as well...
     }
+    
     }
     public void displayTimtable()
     {
@@ -116,7 +119,7 @@ public class TimetableController {
     
     public synchronized void processInputs() {
         labelsInfo = new ArrayList<>();
-        String day = Inputs.get(0);
+        String day = Inputs.get(0).get(0);
         for (int i = 0; i < TimetableView.daysOfWeek.length; i++) {
             if (day.equals(TimetableView.daysOfWeek[i])) {
                 col = i;
@@ -128,8 +131,8 @@ public class TimetableController {
         if (Inputs.size() > 2) {
             for (int i = 1; i < Inputs.size(); i += 2) {
                 String[] timeClass = new String[2];
-                timeClass[0] = Inputs.get(i);
-                timeClass[1] = Inputs.get(i + 1).trim();
+                timeClass[0] = Inputs.get(i).get(i);
+                timeClass[1] = Inputs.get(i + 1).get(i+1).trim();
                 timeClasses.add(timeClass);
             }
             for (String[] tc : timeClasses) {
