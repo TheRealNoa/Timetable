@@ -6,6 +6,8 @@ package group1.mavenproject2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -17,12 +19,12 @@ import javafx.stage.Stage;
  */
 public class TimetableController {
     public static ArrayList<ArrayList<String>> Inputs;
-    int timesChecked;
-    public boolean running=true;
-    public int col;
-    public int row;
+    static int timesChecked;
+    public  static boolean running=true;
+    public static int col;
+    public static int row;
     TimetableModel model;
-    private volatile List<LabelInfo> labelsInfo = new ArrayList<>();
+    private static volatile List<LabelInfo> labelsInfo = new ArrayList<>();
     
      public TimetableController(TimetableModel model, GridPane gridPane) {
         this.model = model;
@@ -38,10 +40,12 @@ public class TimetableController {
     
     }
 
-    public void inputsToArrays()
+    public void openTimetable()// stupid name
     {
     if(Inputs.get(0).get(0).startsWith("Mon"))
     {
+        System.out.println("Inputs recieved:" + Inputs);
+        processing(Inputs);
         Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
         
         //NOTE TO SELF:
@@ -117,9 +121,9 @@ public class TimetableController {
         System.out.println("Label list has changed.");
     }// will use this in a bit...
     
-    public synchronized void processInputs() {
+    public static void processInputs(ArrayList<String> list) { // TO RE-DO lol
         labelsInfo = new ArrayList<>();
-        String day = Inputs.get(0).get(0);
+        String day = list.get(0);
         for (int i = 0; i < TimetableView.daysOfWeek.length; i++) {
             if (day.equals(TimetableView.daysOfWeek[i])) {
                 col = i;
@@ -127,12 +131,11 @@ public class TimetableController {
             }
         }
         ArrayList<String[]> timeClasses = new ArrayList<>();
-        System.out.println("Inputs:" + Inputs);
-        if (Inputs.size() > 2) {
-            for (int i = 1; i < Inputs.size(); i += 2) {
+        if (list.size() > 2) {
+            for (int i = 1; i < list.size(); i += 2) {
                 String[] timeClass = new String[2];
-                timeClass[0] = Inputs.get(i).get(i);
-                timeClass[1] = Inputs.get(i + 1).get(i+1).trim();
+                timeClass[0] = list.get(i);
+                timeClass[1] = list.get(i + 1).trim();
                 timeClasses.add(timeClass);
             }
             for (String[] tc : timeClasses) {
@@ -154,7 +157,31 @@ public class TimetableController {
 
 }
     
+    private static void processing(ArrayList<ArrayList<String>> a)
+    {
+    ExecutorService executor = Executors.newFixedThreadPool(5); // Create a thread pool with 5 threads
 
+        for (ArrayList<String> list : a) {
+            executor.submit(new ParallelTimetableProcessing.ProcessListTask(list));
+        }
+
+        executor.shutdown();
+    }
+    static class ProcessListTask implements Runnable {
+        private ArrayList<String> list;
+
+        public ProcessListTask(ArrayList<String> list) {
+            this.list = list;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("Processing list: " + list);
+            for (String item : list) {
+                processInputs(list);
+            }
+        }
+    }
     private synchronized void addlabelz()
     {
     for (LabelInfo labelInfo : labelsInfo) { // Iterate over labelsInfo
@@ -163,7 +190,7 @@ public class TimetableController {
        
     }
     }
-    private int findRow(String s)
+    private static int findRow(String s)
     {
         String temp = s.substring(0,2);
     //System.out.println("temp" + temp);

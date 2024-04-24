@@ -82,8 +82,8 @@ public class TCPEchoClient {
                 }else if(message.startsWith("Day"))
                 {
                 processTimetableEntry(message);
-                System.out.println("Message recieved:");// each message is data for one day...
-                System.out.println(message);
+                //System.out.println("Message recieved:");// each message is data for one day...
+                //System.out.println(message);
                 }
                 else
                 
@@ -161,8 +161,8 @@ public class TCPEchoClient {
         if(ArrayListOfMultipleMessages.size()==5){
         TimetableView tv = new TimetableView();
         TimetableController tc = new TimetableController(ArrayListOfMultipleMessages,tv.model);
-        tc.inputsToArrays();
-        System.out.println("S:" + ArrayListOfMultipleMessages);
+        tc.openTimetable();
+        //System.out.println("S:" + ArrayListOfMultipleMessages);
         ArrayListOfMultipleMessages.clear();
         }
     }
