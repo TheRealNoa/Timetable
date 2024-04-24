@@ -25,11 +25,11 @@ public class TimetableController {
     TimetableController(ArrayList<String> s)
     {
     this.Inputs = s;
+    processInputs();
     }
 
     public void inputsToArrays()
     {
-    System.out.println(Inputs);
     if(Inputs.get(0).startsWith("Fri"))
     {
         Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
@@ -94,5 +94,23 @@ public class TimetableController {
 
     private void handleLabelListChanges() {
         System.out.println("Label list has changed.");
+    }// will use this in a bit...
+    
+    private void processInputs()
+    {
+    System.out.println(Inputs.get(0));  
+    ArrayList<String[]> timeClasses = new ArrayList<>();
+    if(Inputs.size()>2){
+    for(int i=1; i<Inputs.size();i+=2)
+    {
+    String[] timeClass = new String[2];
+            timeClass[0] = Inputs.get(i);
+            timeClass[1] = Inputs.get(i + 1);
+            timeClasses.add(timeClass);
+    }
+   for (String[] tc : timeClasses) {
+        System.out.println("Time: " + tc[0] + tc[1]);
+        }
+    }
     }
 }

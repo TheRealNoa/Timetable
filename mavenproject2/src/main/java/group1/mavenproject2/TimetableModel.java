@@ -40,5 +40,7 @@ public class TimetableModel {
     public List<Label> getLabels() {
         return labels;
     }
+    
+    
 }
 
