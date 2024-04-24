@@ -20,20 +20,19 @@ import javafx.stage.Stage;
 
 public class TimetableView extends Application {
     Stage primaryStage;
-    private TimetableModel model;
-    private static TimetableController controller;
+    public TimetableModel model;
+    public static TimetableController controller;
     private boolean addedCells = false;
     public  static boolean stopModel = false;
+    public static String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    public static String[] times = {"09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"};
    @Override
     public void start(Stage primaryStage) {
         GridPane gridPane = new GridPane();
         
-        model = new TimetableModel(gridPane);
-        controller = new TimetableController(model);
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
         for (int i = 0; i < 5; i++) {
             Label dayLabel = new Label(daysOfWeek[i]);
             dayLabel.setFont(Font.font(16));
@@ -42,11 +41,15 @@ public class TimetableView extends Application {
 
         for (int i = 0; i < 10; i++) {
             int hour = 9 + i;
-            Label timeLabel = new Label(hour + ":00");
+            Label timeLabel = new Label(times[i]);
             timeLabel.setFont(Font.font(16));
             gridPane.add(timeLabel, 0, i + 1);
         }
-
+        model = new TimetableModel(gridPane);
+        controller = new TimetableController(model,gridPane);
+        controller.model = model;
+        System.out.println("Model from view from controller:" + controller.model);
+        //controller.processInputs();
         for (int row = 1; row <= 10; row++) {
             for (int col = 1; col <= 5; col++) {
                 Label cellLabel = new Label();
@@ -73,6 +76,7 @@ public class TimetableView extends Application {
         
     }
 
+    
     public static void main(String[] args) {
         launch(args);
     }

@@ -156,7 +156,9 @@ public class TCPEchoClient {
         {
             s.add(parts[i]);
         }
-        TimetableController tc = new TimetableController(s);
+        System.out.println("S:" + s);
+        TimetableView tv = new TimetableView();
+        TimetableController tc = new TimetableController(s,tv.model);
         tc.inputsToArrays();
     }
     public static void stop() {

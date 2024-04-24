@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 
 public class TimetableModel {
@@ -28,7 +29,12 @@ public class TimetableModel {
             gridPane.getChildren().remove(label);
         }
         labels.add(label);
-        gridPane.add(label, columnIndex, rowIndex);
+        if(this.gridPane!=null){
+        Platform.runLater(() -> gridPane.add(label, columnIndex, rowIndex));
+        }else
+        {
+        System.out.println("GridPane is null");
+        }
     }
 }
 
@@ -41,6 +47,8 @@ public class TimetableModel {
         return labels;
     }
     
-    
+    public void setGridPane(GridPane gridPane) {
+        this.gridPane = gridPane; // Set GridPane when provided
+    }
 }
 

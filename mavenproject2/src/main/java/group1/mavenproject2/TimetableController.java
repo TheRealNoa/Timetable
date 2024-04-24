@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
@@ -16,21 +17,28 @@ import javafx.stage.Stage;
  */
 public class TimetableController {
     public static ArrayList<String> Inputs;
-    private TimetableModel model;
     int timesChecked;
     public boolean running=true;
-    public TimetableController(TimetableModel model) {
+    public int col;
+    public int row;
+    TimetableModel model;
+    private volatile List<LabelInfo> labelsInfo = new ArrayList<>();
+    
+     public TimetableController(TimetableModel model, GridPane gridPane) {
         this.model = model;
+        model.setGridPane(gridPane); // Pass GridPane to TimetableMode
+        processInputs();
     }
-    TimetableController(ArrayList<String> s)
+    
+    TimetableController(ArrayList<String> s, TimetableModel m)
     {
     this.Inputs = s;
-    processInputs();
+    this.model=m;
     }
 
     public void inputsToArrays()
     {
-    if(Inputs.get(0).startsWith("Fri"))
+    if(Inputs.get(0).startsWith("Mon"))
     {
         Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
         
@@ -44,12 +52,10 @@ public class TimetableController {
     if (AppView.currentStage != null) {
             AppView.currentStage.close();
     }    
-    Platform.runLater(() -> {
         TimetableView timetableView = new TimetableView();
         Stage stage = new Stage();
         timetableView.start(stage);
-    });
-    
+        this.model = timetableView.model;
 }
     //Experimental
     public void addLabel(Label label, int col, int row) {
@@ -63,23 +69,35 @@ public class TimetableController {
    public void checkLabelList() {
     new Thread(() -> {
         List<Label> currentLabels;
+        List<LabelInfo> localLabelsInfo;
         while (running) {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Label l = new Label("l");
+            //model.addLabel(l, 1, 1);
+            //addlabelz(model,l,1,1);
+            addlabelz();
+            synchronized(this)
+        {
+        localLabelsInfo = new ArrayList<>(labelsInfo);
+        }
+            //System.out.println("Label infos " +localLabelsInfo);
+            //for (LabelInfo labelInfo : localLabelsInfo) { // Iterate over labelsInfo
+              // System.out.println("Checked a label");
+               //model.addLabel(labelInfo.getLabel(), labelInfo.getRow(), labelInfo.getCol());
+            //}
             timesChecked++;
             List<Label> newLabels = model.getLabels();
-            synchronized (model) {
+            //synchronized (model) {
                 currentLabels = new ArrayList<>(model.getLabels()); 
-            }
+            //}
             if (!newLabels.equals(currentLabels)) {
                 System.out.println("It changed");
-                synchronized (model) {
+                //synchronized (model) {
                     currentLabels = newLabels;
-                }
+                //}
             }else
             {
             System.out.println("No change");
@@ -96,21 +114,63 @@ public class TimetableController {
         System.out.println("Label list has changed.");
     }// will use this in a bit...
     
-    private void processInputs()
-    {
-    System.out.println(Inputs.get(0));  
-    ArrayList<String[]> timeClasses = new ArrayList<>();
-    if(Inputs.size()>2){
-    for(int i=1; i<Inputs.size();i+=2)
-    {
-    String[] timeClass = new String[2];
-            timeClass[0] = Inputs.get(i);
-            timeClass[1] = Inputs.get(i + 1);
-            timeClasses.add(timeClass);
-    }
-   for (String[] tc : timeClasses) {
-        System.out.println("Time: " + tc[0] + tc[1]);
+    public synchronized void processInputs() {
+        labelsInfo = new ArrayList<>();
+        String day = Inputs.get(0);
+        for (int i = 0; i < TimetableView.daysOfWeek.length; i++) {
+            if (day.equals(TimetableView.daysOfWeek[i])) {
+                col = i;
+                break; // Exit loop once column index is found
+            }
         }
+        ArrayList<String[]> timeClasses = new ArrayList<>();
+        System.out.println("Inputs:" + Inputs);
+        if (Inputs.size() > 2) {
+            for (int i = 1; i < Inputs.size(); i += 2) {
+                String[] timeClass = new String[2];
+                timeClass[0] = Inputs.get(i);
+                timeClass[1] = Inputs.get(i + 1).trim();
+                timeClasses.add(timeClass);
+            }
+            for (String[] tc : timeClasses) {
+                System.out.println("For class: " + tc[0] + ", " + tc[1]);
+                int rowS = findRow(tc[0]);
+                System.out.println("We have entry: " + col + rowS);
+                Label temp = new Label("trial");
+                labelsInfo.add(new LabelInfo(temp, col, rowS));
+            }
+            System.out.println("Labels:" + labelsInfo);
+            Label temp = new Label("trial");
+            //model.addLabel(temp, col, row);
+            //addlabelz();
+            System.out.println("WTF");
+        }else
+        {
+        System.out.println("Input size is less then 2");
+        }
+
+}
+    
+
+    private synchronized void addlabelz()
+    {
+    for (LabelInfo labelInfo : labelsInfo) { // Iterate over labelsInfo
+        System.out.println("Checked a label");
+            model.addLabel(labelInfo.getLabel(), labelInfo.getRow(), labelInfo.getCol());
+       
     }
+    }
+    private int findRow(String s)
+    {
+        String temp = s.substring(0,2);
+    //System.out.println("temp" + temp);
+    for(int i=0;i<TimetableView.times.length;i++)
+    {
+    if(temp.equals(TimetableView.times[i].substring(0,2)))
+    {
+    row =i+1;
+    }
+    }
+    return row;
     }
 }
