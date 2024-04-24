@@ -44,8 +44,8 @@ public class TimetableController {
     {
     if(Inputs.get(0).get(0).startsWith("Mon"))
     {
-        System.out.println("Inputs recieved:" + Inputs);
-        processing(Inputs);
+        //System.out.println("Inputs recieved:" + Inputs);
+        ParallelTimetableProcessing.processing(Inputs);
         Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
         
         //NOTE TO SELF:
@@ -121,12 +121,16 @@ public class TimetableController {
         System.out.println("Label list has changed.");
     }// will use this in a bit...
     
-    public static void processInputs(ArrayList<String> list) { // TO RE-DO lol
+    
+
+
+        public static void processInputs(ArrayList<String> list) { // TO RE-DO lol
+        System.out.println("Started processing: " + list);
         labelsInfo = new ArrayList<>();
         String day = list.get(0);
         for (int i = 0; i < TimetableView.daysOfWeek.length; i++) {
             if (day.equals(TimetableView.daysOfWeek[i])) {
-                col = i;
+                col = i-1;
                 break; // Exit loop once column index is found
             }
         }
@@ -154,33 +158,7 @@ public class TimetableController {
         {
         System.out.println("Input size is less then 2");
         }
-
-}
-    
-    private static void processing(ArrayList<ArrayList<String>> a)
-    {
-    ExecutorService executor = Executors.newFixedThreadPool(5); // Create a thread pool with 5 threads
-
-        for (ArrayList<String> list : a) {
-            executor.submit(new ParallelTimetableProcessing.ProcessListTask(list));
-        }
-
-        executor.shutdown();
-    }
-    static class ProcessListTask implements Runnable {
-        private ArrayList<String> list;
-
-        public ProcessListTask(ArrayList<String> list) {
-            this.list = list;
-        }
-
-        @Override
-        public void run() {
-            System.out.println("Processing list: " + list);
-            for (String item : list) {
-                processInputs(list);
-            }
-        }
+        
     }
     private synchronized void addlabelz()
     {

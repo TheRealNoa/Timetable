@@ -13,19 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ParallelTimetableProcessing {
-    public static void main(String[] args) {
-        ArrayList<ArrayList<String>> dataList = new ArrayList<>(); // Your list of lists
 
-        ExecutorService executor = Executors.newFixedThreadPool(5); // Create a thread pool with 5 threads
-
-        for (ArrayList<String> list : dataList) {
-            executor.submit(new ProcessListTask(list));
-        }
-
-        executor.shutdown(); // Shutdown the executor after all tasks are submitted
-    }
-
-    static class ProcessListTask implements Runnable {
+    public static class ProcessListTask implements Runnable {
         private ArrayList<String> list;
 
         public ProcessListTask(ArrayList<String> list) {
@@ -34,13 +23,19 @@ public class ParallelTimetableProcessing {
 
         @Override
         public void run() {
-            // Process the list here
-            System.out.println("Processing list: " + list);
-            // Example: Print each element of the list
-            for (String item : list) {
-                System.out.println(item);
-            }
+                TimetableController.processInputs(list);
+            
         }
+    }
+    public static void processing(ArrayList<ArrayList<String>> a)
+    {
+    ExecutorService executor = Executors.newFixedThreadPool(5); 
+
+        for (ArrayList<String> list : a) {
+            executor.submit(new ParallelTimetableProcessing.ProcessListTask(list));
+        }
+
+        executor.shutdown();
     }
 }
 
