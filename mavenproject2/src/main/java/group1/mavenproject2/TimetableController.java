@@ -128,7 +128,8 @@ public class TimetableController {
 
 
         public static void processInputs(ArrayList<String> list, TimetableModel m) { // TO RE-DO lol
-        System.out.println("Started processing: " + list);
+            System.out.println("Model :" + m);
+            System.out.println("Started processing: " + list);
         String day = list.get(0);
         int column = findCol(day);
         int rowS=0;
@@ -148,7 +149,7 @@ public class TimetableController {
                 Label tempLabel = new Label(day);
                 if(m!=null)
                 {
-                 System.out.println("Added a label");
+                 //System.out.println("Added a label");
                  m.addToLabelList(tempLabel, column, rowS);
                 }else
                 {

@@ -53,7 +53,7 @@ public class TimetableView extends Application {
         //controller.processInputs();
         //controller.runParallel(model);
         System.out.println("These inputs: " + Inputs);
-        //ParallelTimetableProcessing.processing(Inputs,model);
+        ParallelTimetableProcessing.processing(Inputs,model);
         
         
             //controller.checkLabelList();

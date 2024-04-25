@@ -46,6 +46,15 @@ public class TimetableModel {
     {
     LabelInfo temp = new LabelInfo(label,columnIndex,rowIndex);
     labelInfos.add(temp);
+    System.out.println("Added a label woohoo!");
+    System.out.println(labelInfos.toString());
+    addToGridPane(label,columnIndex,rowIndex);
+    }
+    
+    public void addToGridPane(Label label, int columnIndex, int rowIndex)
+    {
+        System.out.println("Added to gridpane");
+    Platform.runLater(() -> gridPane.add(label, columnIndex, rowIndex));
     }
 
     public void removeLabel(Label label) {

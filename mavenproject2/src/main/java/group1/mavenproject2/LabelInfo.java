@@ -35,6 +35,6 @@ class LabelInfo {
     @Override
     public String toString()
     {
-    return label.getText();
+    return (label.getText() + ":" + row + "-" + col);
     }
 }
