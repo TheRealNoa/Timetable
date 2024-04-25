@@ -23,7 +23,9 @@ public class ParallelTimetableProcessing {
 
         @Override
         public void run() {
-                TimetableController.processInputs(list);
+             synchronized (TimetableController.class) {
+        TimetableController.processInputs(list);
+    }
             
         }
     }

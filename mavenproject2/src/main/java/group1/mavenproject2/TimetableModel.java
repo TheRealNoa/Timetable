@@ -25,7 +25,7 @@ public class TimetableModel {
     
     public void addLabel(Label label, int columnIndex, int rowIndex) {
     if (!labels.contains(label)) {
-        if (gridPane.getChildren().contains(label)) {
+       if (gridPane.getChildren().contains(label)) {
             gridPane.getChildren().remove(label);
         }
         labels.add(label);
@@ -36,7 +36,7 @@ public class TimetableModel {
         System.out.println("GridPane is null");
         }
     }
-}
+    }
 
     public void removeLabel(Label label) {
         labels.remove(label);

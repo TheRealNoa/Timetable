@@ -45,8 +45,12 @@ public class TimetableController {
     if(Inputs.get(0).get(0).startsWith("Mon"))
     {
         //System.out.println("Inputs recieved:" + Inputs);
+        synchronized(this)
+        {
         ParallelTimetableProcessing.processing(Inputs);
-        Platform.runLater(() -> displayTimtable()); // gosh this gave me a headache
+        Platform.runLater(() -> displayTimtable());
+        }
+         // gosh this gave me a headache
         
         //NOTE TO SELF:
         //Apparently if you try to call a method like displayTimetable() which executes something
@@ -85,7 +89,7 @@ public class TimetableController {
             }
             //model.addLabel(l, 1, 1);
             //addlabelz(model,l,1,1);
-            addlabelz();
+            //addlabelz();
             synchronized(this)
         {
         localLabelsInfo = new ArrayList<>(labelsInfo);
@@ -126,7 +130,6 @@ public class TimetableController {
 
         public static void processInputs(ArrayList<String> list) { // TO RE-DO lol
         System.out.println("Started processing: " + list);
-        labelsInfo = new ArrayList<>();
         String day = list.get(0);
         int column = findCol(day);
         int rowS=0;
@@ -140,15 +143,19 @@ public class TimetableController {
             }
             for (String[] tc : timeClasses) {
                 rowS = findRow(tc[0]);
-                Label temp = new Label("trial");
-                labelsInfo.add(new LabelInfo(temp, column, rowS));
+                //Label temp = new Label("trial");
+                //labelsInfo.add(new LabelInfo(temp, column, rowS));
                 System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
+                Label tempLabel = new Label(day);
+                model.addLabel(tempLabel, column, rowS);
+                //if(!labelsInfo.contains(tempLabel))
+                //{
+                //labelsInfo.add(new LabelInfo(tempLabel, column, rowS));
+                //System.out.println("Added a label");
+                //}
             }
             System.out.println("Labels:" + labelsInfo);
-            Label temp = new Label("trial");
-            model.addLabel(temp, column, rowS);
             //addlabelz();
-            System.out.println("WTF");
         }else
         {
         System.out.println("Input size is less then 2 for " + day);
@@ -163,7 +170,7 @@ public class TimetableController {
        
     }
     }
-    private static int findRow(String s)
+    private synchronized static int findRow(String s)
     {
         String temp = s.substring(0,2);
     //System.out.println("temp" + temp);
@@ -177,7 +184,7 @@ public class TimetableController {
     return row;
     }
     
-    private static int findCol(String s)
+    private synchronized static int findCol(String s)
     {
         int tempCol=0;
     for(int i=0;i<TimetableView.daysOfWeek.length;i++)
