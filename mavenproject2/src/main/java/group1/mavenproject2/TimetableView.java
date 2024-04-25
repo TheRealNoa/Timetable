@@ -8,6 +8,8 @@ package group1.mavenproject2;
  *
  * @author noaca
  */
+import static group1.mavenproject2.TimetableController.Inputs;
+import java.util.ArrayList;
 import java.util.Random;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -26,6 +28,7 @@ public class TimetableView extends Application {
     public  static boolean stopModel = false;
     public static String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
     public static String[] times = {"09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"};
+    public ArrayList<ArrayList<String>> Inputs = new ArrayList();
    @Override
     public void start(Stage primaryStage) {
         GridPane gridPane = new GridPane();
@@ -46,21 +49,13 @@ public class TimetableView extends Application {
             gridPane.add(timeLabel, 0, i + 1);
         }
         model = new TimetableModel(gridPane);
-        controller = new TimetableController(model,gridPane);
-        controller.model = model;
+        controller = new TimetableController(Inputs,model);
         //controller.processInputs();
-        for (int row = 1; row <= 10; row++) {
-            for (int col = 1; col <= 5; col++) {
-                Label cellLabel = new Label();
-                cellLabel.setPrefSize(100, 50);
-                cellLabel.setStyle("-fx-border-color: black");
-                gridPane.add(cellLabel, col, row);
-                controller.addLabel(cellLabel, col, row);
-            }addedCells=true;
-        }
+        //controller.runParallel(model);
+        System.out.println("These inputs: " + Inputs);
         
         
-            controller.checkLabelList();
+            //controller.checkLabelList();
 
         Scene scene = new Scene(gridPane, 620, 600);
         primaryStage.setScene(scene);
@@ -74,7 +69,11 @@ public class TimetableView extends Application {
     });
         
     }
-
+    
+    public void setInputs(ArrayList<ArrayList<String>> s)
+    {
+    this.Inputs=s;
+    }
     
     public static void main(String[] args) {
         launch(args);

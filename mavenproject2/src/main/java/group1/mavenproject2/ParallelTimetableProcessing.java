@@ -17,24 +17,26 @@ public class ParallelTimetableProcessing {
 
     public static class ProcessListTask implements Runnable {
         private ArrayList<String> list;
-
-        public ProcessListTask(ArrayList<String> list) {
+        private TimetableModel m;
+        public ProcessListTask(ArrayList<String> list, TimetableModel m) {
             this.list = list;
+            this.m=m;
         }
 
         @Override
         public void run() {
             synchronized (TimetableController.class) {
-                TimetableController.processInputs(list);
+                TimetableController.processInputs(list,m);
             }
         }
     }
 
-    public static void processing(ArrayList<ArrayList<String>> a) {
+    public static void processing(ArrayList<ArrayList<String>> a, TimetableModel m) {
         ExecutorService executor = Executors.newSingleThreadExecutor(); // Use single-threaded executor
-
+        System.out.println(a);
         for (ArrayList<String> list : a) {
-            executor.submit(new ParallelTimetableProcessing.ProcessListTask(list));
+            executor.submit(new ProcessListTask(list,m));
+            System.out.println("Submitted list:" + list);
             executor.shutdown(); // Ensure the task completes before submitting the next one
             while (!executor.isTerminated()) {
                 // Wait for the task to complete

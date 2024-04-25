@@ -159,9 +159,8 @@ public class TCPEchoClient {
         }
         ArrayListOfMultipleMessages.add(s);
         if(ArrayListOfMultipleMessages.size()==5){
-        TimetableView tv = new TimetableView();
-        TimetableController tc = new TimetableController(ArrayListOfMultipleMessages,tv.model);
-        tc.openTimetable();
+        TimetableController.Inputs = ArrayListOfMultipleMessages;
+        TimetableController.getInputs();
         //System.out.println("S:" + ArrayListOfMultipleMessages);
         ArrayListOfMultipleMessages.clear();
         }

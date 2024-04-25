@@ -18,54 +18,57 @@ import javafx.stage.Stage;
  * @author noaca
  */
 public class TimetableController {
-    public static ArrayList<ArrayList<String>> Inputs;
+    public static ArrayList<ArrayList<String>> Inputs = new ArrayList<>();
     static int timesChecked;
     public  static boolean running=true;
     public static int col;
     public static int row;
     public static TimetableModel model;
     
-     public TimetableController(TimetableModel model, GridPane gridPane) {
-        this.model = model;
-        model.setGridPane(gridPane); // Pass GridPane to TimetableMode
+    // public TimetableController(TimetableModel model, GridPane gridPane) {
+       // this.model = model;
+        //model.setGridPane(gridPane); // Pass GridPane to TimetableMode
         //processInputs();
+    //}
+    public static void getInputs()
+    {
+    openTimetable();
     }
-    
     TimetableController(ArrayList<ArrayList<String>> s, TimetableModel m)
     {
-    this.Inputs = new ArrayList<>();
-    this.Inputs=s;
     this.model=m;
-    
     }
 
-    public void openTimetable()// stupid name
+    public static void openTimetable()// stupid name
     {
     if(Inputs.get(0).get(0).startsWith("Mon"))
     {
-        //System.out.println("Inputs recieved:" + Inputs);
-        synchronized(this)
-        {
-        ParallelTimetableProcessing.processing(Inputs);
-        Platform.runLater(() -> displayTimtable());
-        }
+        System.out.println("Inputs recieved:" + Inputs);
+       
+        Platform.runLater(() -> 
+                System.out.println("Here inputs are:" + Inputs));
+                //displayTimtable());
+        
          // gosh this gave me a headache
         
         //NOTE TO SELF:
         //Apparently if you try to call a method like displayTimetable() which executes something
         //on the javaFX thread, then you have to call that method from a javaFX thread as well...
     }
-    
+    ParallelTimetableProcessing.processing(Inputs,model);
     }
-    public void displayTimtable()
+     
+    public static void displayTimtable()
     {
     if (AppView.currentStage != null) {
             AppView.currentStage.close();
     }    
         TimetableView timetableView = new TimetableView();
+        System.out.println("Check: " + Inputs);
+        timetableView.setInputs(Inputs);
         Stage stage = new Stage();
         timetableView.start(stage);
-        this.model = timetableView.model;
+        //this.model = timetableView.model;
 }
     //Experimental
     public static void addLabel(Label label, int col, int row) {
@@ -124,7 +127,7 @@ public class TimetableController {
     
 
 
-        public static void processInputs(ArrayList<String> list) { // TO RE-DO lol
+        public static void processInputs(ArrayList<String> list, TimetableModel m) { // TO RE-DO lol
         System.out.println("Started processing: " + list);
         String day = list.get(0);
         int column = findCol(day);
@@ -143,8 +146,15 @@ public class TimetableController {
                 //labelsInfo.add(new LabelInfo(temp, column, rowS));
                 System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
                 Label tempLabel = new Label(day);
-                addLabel(tempLabel, column, rowS);
-                System.out.println("Added a label");
+                if(m!=null)
+                {
+                 System.out.println("Added a label");
+                 m.addToLabelList(tempLabel, column, rowS);
+                }else
+                {
+                System.out.println("Label is null");
+                }
+                
                 //if(!labelsInfo.contains(tempLabel))
                 //{
                 //labelsInfo.add(new LabelInfo(tempLabel, column, rowS));

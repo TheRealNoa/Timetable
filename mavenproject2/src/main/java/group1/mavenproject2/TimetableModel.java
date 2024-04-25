@@ -17,13 +17,14 @@ import javafx.scene.layout.GridPane;
 
 public class TimetableModel {
     private List<Label> labels = new ArrayList<>();
+    private ArrayList<LabelInfo> labelInfos = new ArrayList<>();
     private GridPane gridPane;
     
     public TimetableModel(GridPane gridPane) {
         this.gridPane = gridPane;
     }
     
-    public void addLabel(Label label, int columnIndex, int rowIndex) {
+    /*public void addLabel(Label label, int columnIndex, int rowIndex) {
     if (!labels.contains(label)) {
        if (gridPane.getChildren().contains(label)) {
             gridPane.getChildren().remove(label);
@@ -36,6 +37,15 @@ public class TimetableModel {
         System.out.println("GridPane is null");
         }
     }
+    }*/
+    //first add to list then get from list and apply
+    public void addLabel(Label label, int columnIndex, int rowIndex) {
+    labels.add(label);
+    }
+    public void addToLabelList(Label label, int columnIndex, int rowIndex)
+    {
+    LabelInfo temp = new LabelInfo(label,columnIndex,rowIndex);
+    labelInfos.add(temp);
     }
 
     public void removeLabel(Label label) {
