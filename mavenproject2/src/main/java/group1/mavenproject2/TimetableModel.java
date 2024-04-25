@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 public class TimetableModel {
     private List<Label> labels = new ArrayList<>();
     private ArrayList<LabelInfo> labelInfos = new ArrayList<>();
+    private ArrayList<int[]> coordinates = new ArrayList<>();
     private GridPane gridPane;
     
     public TimetableModel(GridPane gridPane) {
@@ -46,8 +47,12 @@ public class TimetableModel {
     {
     LabelInfo temp = new LabelInfo(label,columnIndex,rowIndex);
     labelInfos.add(temp);
+    int[] coordinatesArray = {columnIndex,rowIndex};
+    coordinates.add(coordinatesArray);
     System.out.println("Added a label woohoo!");
     System.out.println(labelInfos.toString());
+    label.setPrefSize(100,50);
+    label.setStyle("-fx-border-color: black");
     addToGridPane(label,columnIndex,rowIndex);
     }
     
@@ -56,7 +61,25 @@ public class TimetableModel {
         System.out.println("Added to gridpane");
     Platform.runLater(() -> gridPane.add(label, columnIndex, rowIndex));
     }
-
+    
+    public void addEmptyCells()
+    {
+    for(int row = 1; row<=10; row++)
+    {
+        for (int col=1; col<=5; col++)
+        {
+            int[] tempCoord = {col,row};
+            if(!coordinates.contains(tempCoord))
+            {
+            Label cellLabel = new Label();
+            cellLabel.setPrefSize(100, 50);
+            cellLabel.setStyle("-fx-border-color: black");
+            gridPane.add(cellLabel, col, row);
+            }
+        }
+    }
+    }
+    
     public void removeLabel(Label label) {
         labels.remove(label);
         gridPane.getChildren().remove(label);
