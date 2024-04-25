@@ -45,8 +45,8 @@ public class Day {
     {
         return this.name;
     }
-    public synchronized List<TimePeriod> getBusyPeriods() {
-    return Collections.unmodifiableList(BusyPeriods);
+    public synchronized ArrayList<TimePeriod> getBusyPeriods() {
+    return BusyPeriods;
 }
     public synchronized String BusyPeriodsOut() {
     String temp = "";
@@ -71,14 +71,15 @@ public class Day {
     return "Day," + this.name + ",No scheduled classes,";
     }
     }
-    public synchronized void addTimeSlot(TimePeriod a, Module m){
-    if(checkBookings(a))
+    public synchronized String addTimeSlot(TimePeriod a, Module m){
+    String tempS;
+        if(checkBookings(a))
     {
-    System.out.println("Error, can't book.");
+    tempS = ("Error, can't book.");
     }
     else
     {
-    System.out.println("Added a booking");
+    tempS = ("Added a booking");
 
     if(BusyPeriods!=null)
         {
@@ -90,6 +91,7 @@ public class Day {
         combinedList.add(entry);
         }    
     }
+        return tempS;
     }
     public synchronized boolean checkBookings(TimePeriod a)
     {

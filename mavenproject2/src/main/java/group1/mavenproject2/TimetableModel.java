@@ -85,8 +85,8 @@ public class TimetableModel {
         gridPane.getChildren().remove(label);
     }
 
-    public List<Label> getLabels() {
-        return labels;
+    public List<LabelInfo> getLabels() {
+        return labelInfos;
     }
     
     public void setGridPane(GridPane gridPane) {

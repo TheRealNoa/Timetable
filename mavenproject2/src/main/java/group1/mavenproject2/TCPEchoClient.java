@@ -85,10 +85,18 @@ public class TCPEchoClient {
                 //System.out.println("Message recieved:");// each message is data for one day...
                 //System.out.println(message);
                 }
+                else if(message.equals("Error, can't book."))
+                {
+                
+                }
+                else if(message.equals("Added a booking"))
+                {
+                   // sendMessage("TD");
+                }
                 else
                 
                 {
-                //System.out.println("Msg recieved:" + message);
+                System.out.println("Msg recieved:" + message);
                 }
             }
         }

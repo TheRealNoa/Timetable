@@ -57,7 +57,7 @@ public class TimetableView extends Application {
         model.addEmptyCells();
         
         
-            //controller.checkLabelList();
+        //controller.checkLabelList();
 
         Scene scene = new Scene(gridPane, 620, 600);
         primaryStage.setScene(scene);

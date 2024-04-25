@@ -82,8 +82,8 @@ public class TimetableController {
 
    public void checkLabelList() {
     new Thread(() -> {
-        List<Label> currentLabels;
-        List<LabelInfo> localLabelsInfo;
+        List<LabelInfo> currentLabels;
+        //List<LabelInfo> localLabelsInfo = Inputs;
         while (running) {
             try {
                 Thread.sleep(3000);
@@ -98,8 +98,7 @@ public class TimetableController {
               // System.out.println("Checked a label");
                //model.addLabel(labelInfo.getLabel(), labelInfo.getRow(), labelInfo.getCol());
             //}
-            timesChecked++;
-            List<Label> newLabels = model.getLabels();
+            List<LabelInfo> newLabels = model.getLabels();
             //synchronized (model) {
                 currentLabels = new ArrayList<>(model.getLabels()); 
             //}
@@ -110,6 +109,7 @@ public class TimetableController {
                 //}
             }else
             {
+            System.out.println(currentLabels + ":" + newLabels);
             System.out.println("No change");
             }
         }

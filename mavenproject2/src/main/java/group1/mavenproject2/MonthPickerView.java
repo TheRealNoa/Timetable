@@ -441,7 +441,6 @@ private void showSelectedDay(String month, int day) {
         okButton.setOnAction(e->
         {
             TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime, ClassName, classSelected);
-            
         }
         );
         

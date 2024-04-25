@@ -11,12 +11,21 @@ public class TCPEchoServer{
     private static ServerSocket serverSocket;
     private static final int PORT = 12345;
     private static Day CurrentDay = new Day();
+    
     private static  final Day Monday = new Day("Monday");
     private static final Day Tuesday = new Day("Tuesday");
     private static final Day Wednesday = new Day("Wednesday");
     private static final Day Thursday = new Day ("Thursday");
     private static final Day Friday = new Day ("Friday");
     public static final Day[] days = {Monday,Tuesday,Wednesday,Thursday,Friday};
+    
+    private static  final Day Mon = new Day("Monday");
+    private static final Day Tue = new Day("Tuesday");
+    private static final Day Wed = new Day("Wednesday");
+    private static final Day Thu = new Day ("Thursday");
+    private static final Day Fri = new Day ("Friday");
+    public static final Day[] OGdays = {Mon,Tue,Wed,Thu,Fri};
+    
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
     private static String message;
@@ -54,12 +63,53 @@ public class TCPEchoServer{
     }
     private static void displayTimetable(PrintWriter pw)
     {
+        System.out.println("Sending a display of the timetable to client");
         for(Day d:days)
         {
             pw.println(d.displayDay());
         }
     }
-    private static void assignTimePeriod(String message)
+    
+    private static void checkForChanges(PrintWriter pw)
+    { 
+        new Thread(() -> {
+        while (true) {
+            try {
+                //System.out.println("wtf");
+                Thread.sleep(3000);
+                for(int i=0;i<5;i++)
+                {
+                        if(days[i].BusyPeriods.size()>OGdays[i].BusyPeriods.size())
+                        {
+                        for(TimePeriod t:days[i].BusyPeriods)
+                        {
+                                TimePeriod ntp = new TimePeriod(t.Stime,t.Etime);//this is the time period we've added
+                                if(!OGdays[i].checkBookings(ntp))
+                                {
+                                OGdays[i].BusyPeriods.add(ntp);
+                                pw.println("UpdateAdd," + days[i].name + "," + ntp);
+                                }
+                        }
+                        System.out.println("Og busy periods:"+OGdays[i].BusyPeriodsOut());
+                        }else if(days[i].BusyPeriods.size()<OGdays[i].BusyPeriods.size())
+                        {
+                        System.out.println("We have removed something");
+                        }
+                    //System.out.println("For " + days[i].name + ", we updated: " +days[i].BusyPeriodsOut());
+                    //OGdays[i].BusyPeriods=days[i].BusyPeriods;
+                    }
+                //BusyTOriginal=lNew;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }).start();
+    }
+    private static void sendUpdate(PrintWriter pw, String data)
+    {
+        pw.println("Update,");
+    }
+    private static void assignTimePeriod(String message, PrintWriter pw)
     {
         String[]tempArr= message.split(",");
                 List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
@@ -71,12 +121,19 @@ public class TCPEchoServer{
                 
                 Time startTime = new Time(milliseconds1);
                 Time endTime = new Time(milliseconds2);
-                
+                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
+                System.out.println(arrayList.get(arrayList.size()-2));
+                System.out.println(arrayList.get(arrayList.size()-1));
+                System.out.println(arrayList.get(arrayList.size()));
+                System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
                 TP = new TimePeriod(startTime,endTime,arrayList.get(arrayList.size()-1));
-                
+                pw.println("aaaaaaaaaaa sise");
                 CurrentDay.addTimeSlot(TP,assignModule(message));
+                String result = CurrentDay.addTimeSlot(TP,assignModule(message));
+                pw.println(result);
                 
     }
+   
     static String className;
     private static void assignClassName(String message)
     {
@@ -113,12 +170,13 @@ public class TCPEchoServer{
 
             while ((message = reader.readLine()) != null) {
                 System.out.println("Received from client: " + message);
+                checkForChanges(writer);
                 // Echo back to client
                 //writer.println("Server received: " + message);
                 // going to change this to include memory access control
                 if(message.contains("FI"))
                 {
-                dealWithFI();
+                dealWithFI(writer);
                 }
                 else if(message.contains("TD"))
                 {
@@ -168,10 +226,10 @@ public class TCPEchoServer{
      String[] args = {};
      earlyMorningShift.main(args);
      }
-     public static synchronized void dealWithFI()
+     public static synchronized void dealWithFI(PrintWriter pw)
      {
      assignDay(message);
-     assignTimePeriod(message);
+     assignTimePeriod(message,pw);
      assignClassName(message);
      assignModule(message);
      System.out.println(TP.toString());
@@ -236,7 +294,8 @@ public class TCPEchoServer{
                         TimePeriod tempT = new TimePeriod(startTime, endTime);
                         System.out.println(tempT);
                         days[i].removeBooking(tempT);
-                        System.out.println(days[i].getBusyPeriods());
+                        System.out.println("Day bookings:" + days[i].getBusyPeriods());
+                        System.out.println("OGday bookings:" +OGdays[i].getBusyPeriods());
                     } else {
                         System.out.println("Invalid format for time range");
                     }
