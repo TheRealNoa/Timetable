@@ -24,7 +24,6 @@ public class TimetableController {
     public static int col;
     public static int row;
     public static TimetableModel model;
-    private static volatile List<LabelInfo> labelsInfo = new ArrayList<>();
     
      public TimetableController(TimetableModel model, GridPane gridPane) {
         this.model = model;
@@ -69,7 +68,8 @@ public class TimetableController {
         this.model = timetableView.model;
 }
     //Experimental
-    public void addLabel(Label label, int col, int row) {
+    public static void addLabel(Label label, int col, int row) {
+        System.out.println("Called addLabel");
         model.addLabel(label,col,row);
     }
 
@@ -90,10 +90,6 @@ public class TimetableController {
             //model.addLabel(l, 1, 1);
             //addlabelz(model,l,1,1);
             //addlabelz();
-            synchronized(this)
-        {
-        localLabelsInfo = new ArrayList<>(labelsInfo);
-        }
             //System.out.println("Label infos " +localLabelsInfo);
             //for (LabelInfo labelInfo : localLabelsInfo) { // Iterate over labelsInfo
               // System.out.println("Checked a label");
@@ -147,28 +143,20 @@ public class TimetableController {
                 //labelsInfo.add(new LabelInfo(temp, column, rowS));
                 System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
                 Label tempLabel = new Label(day);
-                model.addLabel(tempLabel, column, rowS);
+                addLabel(tempLabel, column, rowS);
+                System.out.println("Added a label");
                 //if(!labelsInfo.contains(tempLabel))
                 //{
                 //labelsInfo.add(new LabelInfo(tempLabel, column, rowS));
                 //System.out.println("Added a label");
                 //}
             }
-            System.out.println("Labels:" + labelsInfo);
             //addlabelz();
         }else
         {
         System.out.println("Input size is less then 2 for " + day);
         }
         
-    }
-    private synchronized void addlabelz()
-    {
-    for (LabelInfo labelInfo : labelsInfo) { // Iterate over labelsInfo
-        System.out.println("Checked a label");
-            model.addLabel(labelInfo.getLabel(), labelInfo.getRow(), labelInfo.getCol());
-       
-    }
     }
     private synchronized static int findRow(String s)
     {
