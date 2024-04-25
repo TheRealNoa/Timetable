@@ -71,7 +71,7 @@ public class Day {
     return "Day," + this.name + ",No scheduled classes,";
     }
     }
-    public synchronized String addTimeSlot(TimePeriod a, Module m){
+    public synchronized String addTimeSlot(TimePeriod a){
     String tempS;
         if(checkBookings(a))
     {
@@ -85,11 +85,6 @@ public class Day {
         {
         BusyPeriods.add(a);
         }
-    ModuleTimePeriodEntry entry =  new ModuleTimePeriodEntry(m, a);
-    if(combinedList!=null)
-        {
-        combinedList.add(entry);
-        }    
     }
         return tempS;
     }
@@ -98,6 +93,7 @@ public class Day {
      if(BusyPeriods !=null){
         for(TimePeriod t:BusyPeriods)
      {
+         System.out.println("Checking for class:" + a.Class);
          if(t.clashesWith(a))
              return true;
      }

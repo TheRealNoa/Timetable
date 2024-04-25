@@ -74,8 +74,9 @@ public String toString() {
            System.out.println("Clash");
            System.out.println("------------------------");
            System.out.println("Clashing times:");
-           System.out.println(this.Stime + "-" + this.Etime);
+           System.out.println(this.Class + "-" + this.Etime);
            System.out.println(a.getStime() + "-" + a.getEtime());
+            System.out.println("------------------------");
        return true;
        }
       }
