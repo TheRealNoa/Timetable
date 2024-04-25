@@ -23,7 +23,7 @@ public class TimetableController {
     public  static boolean running=true;
     public static int col;
     public static int row;
-    TimetableModel model;
+    public static TimetableModel model;
     private static volatile List<LabelInfo> labelsInfo = new ArrayList<>();
     
      public TimetableController(TimetableModel model, GridPane gridPane) {
@@ -128,12 +128,8 @@ public class TimetableController {
         System.out.println("Started processing: " + list);
         labelsInfo = new ArrayList<>();
         String day = list.get(0);
-        for (int i = 0; i < TimetableView.daysOfWeek.length; i++) {
-            if (day.equals(TimetableView.daysOfWeek[i])) {
-                col = i-1;
-                break; // Exit loop once column index is found
-            }
-        }
+        int column = findCol(day);
+        int rowS=0;
         ArrayList<String[]> timeClasses = new ArrayList<>();
         if (list.size() > 2) {
             for (int i = 1; i < list.size(); i += 2) {
@@ -143,20 +139,19 @@ public class TimetableController {
                 timeClasses.add(timeClass);
             }
             for (String[] tc : timeClasses) {
-                System.out.println("For class: " + tc[0] + ", " + tc[1]);
-                int rowS = findRow(tc[0]);
-                System.out.println("We have entry: " + col + rowS);
+                rowS = findRow(tc[0]);
                 Label temp = new Label("trial");
-                labelsInfo.add(new LabelInfo(temp, col, rowS));
+                labelsInfo.add(new LabelInfo(temp, column, rowS));
+                System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
             }
             System.out.println("Labels:" + labelsInfo);
             Label temp = new Label("trial");
-            //model.addLabel(temp, col, row);
+            model.addLabel(temp, column, rowS);
             //addlabelz();
             System.out.println("WTF");
         }else
         {
-        System.out.println("Input size is less then 2");
+        System.out.println("Input size is less then 2 for " + day);
         }
         
     }
@@ -181,4 +176,21 @@ public class TimetableController {
     }
     return row;
     }
+    
+    private static int findCol(String s)
+    {
+        int tempCol=0;
+    for(int i=0;i<TimetableView.daysOfWeek.length;i++)
+    {
+    if(s.equals(TimetableView.daysOfWeek[i]))
+    {
+    tempCol =i+1;
+    break;
+    }
+    }
+    System.out.println("For " + s + " We have column:" + tempCol);
+    return tempCol;
+    }
+    
+    
 }
