@@ -24,12 +24,14 @@ public class TimetableController {
     public static int col;
     public static int row;
     public static TimetableModel model;
+    private static final Object lock = new Object();
     
     // public TimetableController(TimetableModel model, GridPane gridPane) {
        // this.model = model;
         //model.setGridPane(gridPane); // Pass GridPane to TimetableMode
         //processInputs();
     //}
+    
     public static void getInputs()
     {
     openTimetable();
@@ -39,32 +41,30 @@ public class TimetableController {
     this.model=m;
     }
 
-    public static void openTimetable()// stupid name
+    public static synchronized void openTimetable()// stupid name
     {
     if(Inputs.get(0).get(0).startsWith("Mon"))
     {
         System.out.println("Inputs recieved:" + Inputs);
-       
-        Platform.runLater(() -> 
-                System.out.println("Here inputs are:" + Inputs));
-                //displayTimtable());
-        
-         // gosh this gave me a headache
-        
-        //NOTE TO SELF:
-        //Apparently if you try to call a method like displayTimetable() which executes something
-        //on the javaFX thread, then you have to call that method from a javaFX thread as well...
+       synchronized(lock)
+       {
+       System.out.println("Here inputs are:" + Inputs);
+       ArrayList<ArrayList<String>> inputsCopy = new ArrayList<>(Inputs);
+       Platform.runLater(() -> displayTimtable(inputsCopy));
+       }
     }
-    ParallelTimetableProcessing.processing(Inputs,model);
+    System.out.println("Model is:" + model);
+    //ParallelTimetableProcessing.processing(Inputs,model);
     }
      
-    public static void displayTimtable()
+    public static void displayTimtable(ArrayList<ArrayList<String>> as)
     {
-    if (AppView.currentStage != null) {
+        System.out.println("AS:" + as);
+        Inputs=as;
+        if (AppView.currentStage != null) {
             AppView.currentStage.close();
-    }    
+        }    
         TimetableView timetableView = new TimetableView();
-        System.out.println("Check: " + Inputs);
         timetableView.setInputs(Inputs);
         Stage stage = new Stage();
         timetableView.start(stage);

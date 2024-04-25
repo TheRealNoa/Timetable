@@ -35,14 +35,10 @@ public class ParallelTimetableProcessing {
         ExecutorService executor = Executors.newSingleThreadExecutor(); // Use single-threaded executor
         System.out.println(a);
         for (ArrayList<String> list : a) {
-            executor.submit(new ProcessListTask(list,m));
-            System.out.println("Submitted list:" + list);
-            executor.shutdown(); // Ensure the task completes before submitting the next one
-            while (!executor.isTerminated()) {
-                // Wait for the task to complete
-            }
-            executor = Executors.newSingleThreadExecutor(); // Reinitialize executor for the next task
-        }
+        executor.submit(new ProcessListTask(list,m));
+        System.out.println("Submitted list:" + list);
+    }
+    executor.shutdown(); // Shutdown the executor after submitting all tasks
     }
 }
 
