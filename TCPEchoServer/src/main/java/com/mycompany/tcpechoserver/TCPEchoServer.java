@@ -83,7 +83,7 @@ public class TCPEchoServer{
                         {
                         for(TimePeriod t:days[i].BusyPeriods)
                         {
-                                TimePeriod ntp = new TimePeriod(t.Stime,t.Etime,t.Class);//this is the time period we've added
+                                TimePeriod ntp = new TimePeriod(t.Stime,t.Etime,t.ModuleName);//this is the time period we've added
                                 if(!OGdays[i].checkBookings(ntp))
                                 {
                                 OGdays[i].BusyPeriods.add(ntp);
@@ -124,7 +124,7 @@ public class TCPEchoServer{
                 String className = arrayList.get(arrayList.size()-2);
                 System.out.println("Class name:" + className);
                 TP = new TimePeriod(startTime,endTime,arrayList.get(arrayList.size()-2));
-                System.out.println("TP Class:"+TP.Class);
+                System.out.println("TP Class:"+TP.ModuleName);
                 CurrentDay.addTimeSlot(TP);
                 String result = CurrentDay.addTimeSlot(TP);
                 pw.println(result);
@@ -288,7 +288,7 @@ public class TCPEchoServer{
 
                         Time startTime = new Time(milliseconds1);
                         Time endTime = new Time(milliseconds2);
-                        TimePeriod tempT = new TimePeriod(startTime, endTime);
+                        TimePeriod tempT = new TimePeriod(startTime, endTime,"doesn't matter lol");
                         System.out.println(tempT);
                         days[i].removeBooking(tempT);
                         System.out.println("Day bookings:" + days[i].getBusyPeriods());

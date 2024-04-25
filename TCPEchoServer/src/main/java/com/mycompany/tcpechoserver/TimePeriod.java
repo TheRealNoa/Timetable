@@ -15,22 +15,15 @@ import java.text.SimpleDateFormat;
 public class TimePeriod {
     public Time Stime;
     public Time Etime;
-    public String Class;
+    public String ModuleName;
     public String formattedTime;
     public TimePeriod(){};
-    public TimePeriod(Time Stime, Time Etime)
+
+    public TimePeriod(Time Stime, Time Etime, String ModuleName)
     {
         this.Stime=Stime;
         this.Etime=Etime;
-        this.Class=Class;
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        formattedTime = formatter.format(Stime) + "-" + formatter.format(Etime);
-    }
-    public TimePeriod(Time Stime, Time Etime, String Class)
-    {
-        this.Stime=Stime;
-        this.Etime=Etime;
-        this.Class=Class;
+        this.ModuleName=ModuleName;
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         formattedTime = formatter.format(Stime) + "-" + formatter.format(Etime);
     }
@@ -50,13 +43,13 @@ public class TimePeriod {
     public void setETime(Time time) {
     this.Etime.setTime(time.getTime());
     }
-    public String getClassName()
+    public String getModuleName()
     {
-    return this.Class;
+    return this.ModuleName;
     }
     @Override
 public String toString() {
-    return new SimpleDateFormat("HH:mm").format(Stime) + "-" + new SimpleDateFormat("HH:mm").format(Etime) + ", Class: " + Class;
+    return new SimpleDateFormat("HH:mm").format(Stime) + "-" + new SimpleDateFormat("HH:mm").format(Etime) + ", Module: " + ModuleName;
 }
      public boolean clashesWith(TimePeriod a)
       {
@@ -74,7 +67,7 @@ public String toString() {
            System.out.println("Clash");
            System.out.println("------------------------");
            System.out.println("Clashing times:");
-           System.out.println(this.Class + "-" + this.Etime);
+           System.out.println(this.Stime + "-" + this.Etime);
            System.out.println(a.getStime() + "-" + a.getEtime());
             System.out.println("------------------------");
        return true;

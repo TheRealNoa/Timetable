@@ -93,7 +93,7 @@ public class Day {
      if(BusyPeriods !=null){
         for(TimePeriod t:BusyPeriods)
      {
-         System.out.println("Checking for class:" + a.Class);
+         System.out.println("Checking for class:" + a.ModuleName);
          if(t.clashesWith(a))
              return true;
      }
