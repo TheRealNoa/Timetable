@@ -102,7 +102,7 @@ public class TCPEchoClient {
 
     }
 
-    public static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime,
+    public synchronized static void sendClientData(String StartDate, String EndDate, String DayOfWeek, String StartTime,
             String EndTime, String Class, String CourseName) {
         Alert a = new Alert(AlertType.ERROR);
         String[] client = { StartDate, EndDate, DayOfWeek, StartTime, EndTime, Class, CourseName };
@@ -121,7 +121,7 @@ public class TCPEchoClient {
         }
     }
 
-    public static synchronized void sendMessage(String message) {
+    public synchronized static  void sendMessage(String message) {
         if (socket != null && connection) {
             out.println(message);
             System.out.println("sendMessage ran");
@@ -132,7 +132,7 @@ public class TCPEchoClient {
         }
     }
 
-    public static String concatenateWithComma(String[] array) {
+    public synchronized static String concatenateWithComma(String[] array) {
         StringBuilder tempBuilder = new StringBuilder();
 
         for (int i = 0; i < array.length; i++) {
@@ -148,7 +148,7 @@ public class TCPEchoClient {
 
     public static ArrayList<ArrayList<String>> ArrayListOfMultipleMessages = new ArrayList<>();
 
-    public static void processTimetableEntry(String message) {
+    public synchronized static void processTimetableEntry(String message) {
         ArrayList<String> s = new ArrayList<String>();
         String[] parts = message.split(",");
         for (int i = 1; i < parts.length; i++) {
@@ -163,7 +163,7 @@ public class TCPEchoClient {
         }
     }
 
-    public static void dealWithUpdateAdd(String msg) {
+    public synchronized static void dealWithUpdateAdd(String msg) {
         boolean isRunning = TimetableView.isRunning;
         if (isRunning) {
             String info = dealWithUpdateFormat(msg);
@@ -175,7 +175,7 @@ public class TCPEchoClient {
 
     }
 
-    public static void dealWithUpdateRemove(String msg) {
+    public synchronized static void dealWithUpdateRemove(String msg) {
         boolean isRunning = TimetableView.isRunning;
         if (isRunning) {
             String info = dealWithUpdateFormat(msg);
@@ -186,13 +186,13 @@ public class TCPEchoClient {
         }
     }
 
-    public static String dealWithUpdateFormat(String msg) {
+    public synchronized static String dealWithUpdateFormat(String msg) {
         String[] splitMessage = msg.split(",");
         String info = splitMessage[1] + "," + splitMessage[2] + "," + splitMessage[3];
         return info;
     }
 
-    public static void stop() {
+    public synchronized static void stop() {
         isRunning = false;
         try {
             if (socket != null && !socket.isClosed()) {

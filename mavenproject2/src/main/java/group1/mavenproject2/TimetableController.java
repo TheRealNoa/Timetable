@@ -42,7 +42,7 @@ public class TimetableController {
         System.out.println("Model is:" + model);
     }
 
-    public static void displayTimtable(ArrayList<ArrayList<String>> as) {
+    public synchronized static void displayTimtable(ArrayList<ArrayList<String>> as) {
         System.out.println("AS:" + as);
         Inputs = as;
         if (AppView.currentStage != null) {
@@ -54,24 +54,24 @@ public class TimetableController {
         timetableView.start(stage);
     }
 
-    public static void addLabel(Label label, int col, int row) {
+    public synchronized static void addLabel(Label label, int col, int row) {
         System.out.println("Called addLabel");
         model.addLabel(label, col, row);
     }
 
-    public void updateAddCell(String info) {
+    public synchronized void updateAddCell(String info) {
         model.updateAddCell(info);
     }
 
-    public void updateRemoveCell(String info) {
+    public synchronized void updateRemoveCell(String info) {
         model.updateRemoveCell(info);
     }
 
-    public void removeLabel(Label label) {
+    public synchronized void removeLabel(Label label) {
         model.removeLabel(label);
     }
 
-    public void checkLabelList() {
+    public synchronized void checkLabelList() {
         new Thread(() -> {
             List<LabelInfo> currentLabels;
             while (running) {
@@ -93,15 +93,15 @@ public class TimetableController {
         }).start();
     }
 
-    public void stopThread() {
+    public synchronized void stopThread() {
         running = false;
     }
 
-    private void handleLabelListChanges() {
+    private synchronized void handleLabelListChanges() {
         System.out.println("Label list has changed.");
     }
 
-    public static void processInputs(ArrayList<String> list, TimetableModel m) {
+    public synchronized static void processInputs(ArrayList<String> list, TimetableModel m) {
         System.out.println("Model :" + m);
         System.out.println("Started processing: " + list);
         String day = list.get(0);

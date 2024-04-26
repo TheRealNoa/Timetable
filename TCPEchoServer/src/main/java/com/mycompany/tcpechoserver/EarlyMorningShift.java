@@ -59,22 +59,18 @@ public class EarlyMorningShift {
         }
 
     private void clashesWithEarlyTime(TimePeriod t, Day d) {
-    // Get the list of early periods for the specified day
     breakIt = false;
     earlyPeriods = d.getEarlyBookings();
     System.out.println(earlyPeriods);
     long lenOfPeriodMillis = t.getEtime().getTime() - t.getStime().getTime();
     Time lenOfPeriod = new Time(lenOfPeriodMillis);
-    Time ogS = t.getStime(); // Corrected method call
-    Time ogE = t.getEtime(); // Corrected method call
+    Time ogS = t.getStime(); 
+    Time ogE = t.getEtime(); 
     
-    // Adjust start time to 9 AM
     
     t.Stime =NINE_AM;
-    // Adjust end time accordingly
     t.Etime = (new Time(NINE_AM.getTime() + lenOfPeriod.getTime()));
 
-    // Check if the adjusted start time is before 12 PM
     if (t.getStime().after(TWELVE_PM)) {
         System.out.println("Start time is after 12 PM. Cannot add before 12 PM.");
         return;
@@ -82,7 +78,6 @@ public class EarlyMorningShift {
 
     boolean going = true;
         while (going) {
-            // Break loop if start time is after 11 AM
             if (t.getStime().after(ELEVEN)) {
                 System.out.println("Start time is after 11 AM. Cannot proceed further.");
                 System.out.println("OG S:" + ogS + "OG E: " + ogE);
@@ -91,13 +86,10 @@ public class EarlyMorningShift {
                 breakIt = true;
                 going = false;
             } else if (clashesWith(t, earlyPeriods)) {
-                // Adjust start time by an hour
                 t.Stime = (new Time(t.getStime().getTime() + HOUR.getTime()));
-                // Adjust end time accordingly
                 t.Etime = (new Time(t.getStime().getTime() + lenOfPeriod.getTime()));
             } else {
                 System.out.println("Added " + t);
-                //earlyPeriods.add(t);
                 going = false;
             
         }
