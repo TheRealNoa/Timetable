@@ -201,7 +201,16 @@ public class TCPEchoClient {
     
     public static void dealWithUpdateRemove(String msg)
     {
-    
+    boolean isRunning = TimetableView.isRunning;
+    if(isRunning)
+    {
+    String info = dealWithUpdateFormat(msg);
+    System.out.println("Tried to remove " + info);
+    TimetableView.controller.updateRemoveCell(info);
+    }else
+    {
+    System.out.println("TimetableView not running");
+    }
     }
     
     public static String dealWithUpdateFormat(String msg)

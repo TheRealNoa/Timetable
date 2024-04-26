@@ -70,6 +70,33 @@ public class TimetableModel {
     String timePeriod = updateInfo[1];
     int localRow = findRow(timePeriod);
     System.out.println("Debug:" + localCol + ":" + localRow);
+    Platform.runLater(()->
+    {
+    gridPane.getChildren().removeIf(node->
+    GridPane.getColumnIndex(node) == localCol && GridPane.getRowIndex(node) == localRow);
+    Label newLabel = new Label("testing");
+    newLabel.setPrefSize(100,50);
+    newLabel.setStyle("-fx-border-color: black");
+    gridPane.add(newLabel,localCol,localRow);
+    });
+    }
+    public void updateRemoveCell(String info)
+    {
+    String[] updateInfo = info.split(",");
+    String day = updateInfo[0];
+    int localCol = findCol(day);
+    String timePeriod = updateInfo[1];
+    int localRow = findRow(timePeriod);
+    System.out.println("Debug:" + localCol + ":" + localRow);
+    Platform.runLater(()->
+    {
+    gridPane.getChildren().removeIf(node->
+    GridPane.getColumnIndex(node) == localCol && GridPane.getRowIndex(node) == localRow);
+    Label cellLabel = new Label();
+    cellLabel.setPrefSize(100, 50);
+    cellLabel.setStyle("-fx-border-color: black");
+    gridPane.add(cellLabel,localCol,localRow);
+    });
     }
     
     public synchronized static int findCol(String s)

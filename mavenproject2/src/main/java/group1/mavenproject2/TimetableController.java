@@ -80,6 +80,12 @@ public class TimetableController {
     model.updateAddCell(info);
     }
     
+    public void updateRemoveCell(String info)
+    {
+    model.updateRemoveCell(info);
+    }
+    
+    
 
     public void removeLabel(Label label) {
         model.removeLabel(label);

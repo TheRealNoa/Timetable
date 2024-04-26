@@ -29,6 +29,8 @@ public class TCPEchoServer{
     private static TimePeriod TP = new TimePeriod();
     private static ArrayList<String> classes = new ArrayList<>();
     private static String message;
+    
+    private static ArrayList<PrintWriter> clientWriters= new ArrayList<>();
     public static void main(String[] args) {
         try {
             serverSocket = new ServerSocket(PORT);
@@ -88,7 +90,10 @@ public class TCPEchoServer{
                                 {
                                 OGdays[i].BusyPeriods.add(ntp);
                                 System.out.println("We have added "+ ntp + " to " + OGdays[i].name);
-                                pw.println("UpdateAdd," + days[i].name + "," + ntp);
+                                for(PrintWriter p:clientWriters)
+                                {
+                                p.println("UpdateAdd," + days[i].name + "," + ntp);
+                                }
                                 }
                         }
                       //  System.out.println("Og busy periods:"+OGdays[i].BusyPeriodsOut());
@@ -104,7 +109,10 @@ public class TCPEchoServer{
                                 if(OGdays[i].BusyPeriods.get(timePeriod).Stime.equals(ntp.Stime))
                                 {
                                 System.out.println("We have removed "+ ntp + " from " + OGdays[i].name);
-                                pw.println("UpdateRemove," + OGdays[i].name + "," + ntp);
+                                for(PrintWriter p:clientWriters)
+                                {
+                                p.println("UpdateRemove," + days[i].name + "," + ntp);
+                                }
                                 OGdays[i].BusyPeriods.remove(timePeriod);
                                 System.out.println("OG:" + OGdays[i].BusyPeriodsOut() + "::: Days" + days[i].BusyPeriodsOut() );
                                 }
@@ -174,6 +182,7 @@ public class TCPEchoServer{
             try {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 writer = new PrintWriter(clientSocket.getOutputStream(), true);
+                clientWriters.add(writer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
