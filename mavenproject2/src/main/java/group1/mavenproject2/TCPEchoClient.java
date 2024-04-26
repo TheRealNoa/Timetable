@@ -93,6 +93,16 @@ public class TCPEchoClient {
                 {
                    // sendMessage("TD");
                 }
+                else if(message.startsWith("UpdateAdd"))
+                {
+                    dealWithUpdateAdd(message);
+                }
+                else if(message.startsWith("UpdateRemove"))
+                {
+                    dealWithUpdateRemove(message);
+                }
+                
+                
                 else
                 
                 {
@@ -172,6 +182,33 @@ public class TCPEchoClient {
         //System.out.println("S:" + ArrayListOfMultipleMessages);
         ArrayListOfMultipleMessages.clear();
         }
+    }
+    
+    public static void dealWithUpdateAdd(String msg)
+    {
+    boolean isRunning = TimetableView.isRunning;
+    if(isRunning)
+    {
+    String info = dealWithUpdateFormat(msg);
+    System.out.println("Tried to add " + info);
+    TimetableView.controller.updateAddCell(info);
+    }else
+    {
+    System.out.println("TimetableView not running");
+    }
+    
+    }
+    
+    public static void dealWithUpdateRemove(String msg)
+    {
+    
+    }
+    
+    public static String dealWithUpdateFormat(String msg)
+    {
+    String[] splitMessage = msg.split(",");
+    String info = splitMessage[1] + "," + splitMessage[2];
+    return info;
     }
     public static void stop() {
         isRunning = false;

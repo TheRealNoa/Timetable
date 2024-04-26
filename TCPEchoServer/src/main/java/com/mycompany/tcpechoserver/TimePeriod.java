@@ -64,12 +64,12 @@ public String toString() {
        return false;
        }else
        {
-           System.out.println("Clash");
-           System.out.println("------------------------");
-           System.out.println("Clashing times:");
-           System.out.println(this.Stime + "-" + this.Etime);
-           System.out.println(a.getStime() + "-" + a.getEtime());
-            System.out.println("------------------------");
+           //System.out.println("Clash");
+           //System.out.println("------------------------");
+           //System.out.println("Clashing times:");
+           //System.out.println(this.Stime + "-" + this.Etime);
+           //System.out.println(a.getStime() + "-" + a.getEtime());
+            //System.out.println("------------------------");
        return true;
        }
       }

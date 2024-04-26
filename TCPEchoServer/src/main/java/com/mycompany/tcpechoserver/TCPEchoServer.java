@@ -87,13 +87,30 @@ public class TCPEchoServer{
                                 if(!OGdays[i].checkBookings(ntp))
                                 {
                                 OGdays[i].BusyPeriods.add(ntp);
+                                System.out.println("We have added "+ ntp + " to " + OGdays[i].name);
                                 pw.println("UpdateAdd," + days[i].name + "," + ntp);
                                 }
                         }
-                        System.out.println("Og busy periods:"+OGdays[i].BusyPeriodsOut());
+                      //  System.out.println("Og busy periods:"+OGdays[i].BusyPeriodsOut());
                         }else if(days[i].BusyPeriods.size()<OGdays[i].BusyPeriods.size())
                         {
-                        System.out.println("We have removed something");
+                            for(int tp1=0;tp1<OGdays[i].BusyPeriods.size();tp1++)
+                            {
+                            TimePeriod ntp = new TimePeriod(OGdays[i].BusyPeriods.get(tp1).Stime,OGdays[i].BusyPeriods.get(tp1).Etime,OGdays[i].BusyPeriods.get(tp1).ModuleName);
+                            if(!days[i].checkBookings(ntp))
+                            {
+                                for(int timePeriod=0;timePeriod<OGdays[i].BusyPeriods.size();timePeriod++)
+                                {
+                                if(OGdays[i].BusyPeriods.get(timePeriod).Stime.equals(ntp.Stime))
+                                {
+                                System.out.println("We have removed "+ ntp + " from " + OGdays[i].name);
+                                pw.println("UpdateRemove," + OGdays[i].name + "," + ntp);
+                                OGdays[i].BusyPeriods.remove(timePeriod);
+                                System.out.println("OG:" + OGdays[i].BusyPeriodsOut() + "::: Days" + days[i].BusyPeriodsOut() );
+                                }
+                                }
+                            }
+                            }
                         }
                     //System.out.println("For " + days[i].name + ", we updated: " +days[i].BusyPeriodsOut());
                     //OGdays[i].BusyPeriods=days[i].BusyPeriods;
@@ -122,9 +139,9 @@ public class TCPEchoServer{
                 Time startTime = new Time(milliseconds1);
                 Time endTime = new Time(milliseconds2);
                 String className = arrayList.get(arrayList.size()-2);
-                System.out.println("Class name:" + className);
+                //System.out.println("Class name:" + className);
                 TP = new TimePeriod(startTime,endTime,arrayList.get(arrayList.size()-2));
-                System.out.println("TP Class:"+TP.ModuleName);
+                //System.out.println("TP Class:"+TP.ModuleName);
                 CurrentDay.addTimeSlot(TP);
                 String result = CurrentDay.addTimeSlot(TP);
                 pw.println(result);
@@ -262,7 +279,7 @@ public class TCPEchoServer{
      {
       String[] tempArr = message.split(",");
       dayString = tempArr[1];
-      System.out.println("Day recieved:" + tempArr[1]);
+      //System.out.println("Day recieved:" + tempArr[1]);
       for(Day d : days)
       {
        if(d.name.equalsIgnoreCase(dayString))
@@ -270,7 +287,7 @@ public class TCPEchoServer{
         pw.println("SBPTEAR, " + d.getBusyPeriods());
         }else
        {
-       pw.println("Wtf day");
+       //pw.println("Wtf day");
        }
       }       
      }
@@ -291,8 +308,8 @@ public class TCPEchoServer{
                         TimePeriod tempT = new TimePeriod(startTime, endTime,"doesn't matter lol");
                         System.out.println(tempT);
                         days[i].removeBooking(tempT);
-                        System.out.println("Day bookings:" + days[i].getBusyPeriods());
-                        System.out.println("OGday bookings:" +OGdays[i].getBusyPeriods());
+                        //System.out.println("Day bookings:" + days[i].getBusyPeriods());
+                        //System.out.println("OGday bookings:" +OGdays[i].getBusyPeriods());
                     } else {
                         System.out.println("Invalid format for time range");
                     }

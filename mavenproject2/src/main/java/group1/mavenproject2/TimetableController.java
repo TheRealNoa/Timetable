@@ -75,6 +75,11 @@ public class TimetableController {
         System.out.println("Called addLabel");
         model.addLabel(label,col,row);
     }
+    public void updateAddCell(String info)
+    {
+    model.updateAddCell(info);
+    }
+    
 
     public void removeLabel(Label label) {
         model.removeLabel(label);
@@ -131,7 +136,7 @@ public class TimetableController {
             System.out.println("Model :" + m);
             System.out.println("Started processing: " + list);
         String day = list.get(0);
-        int column = findCol(day);
+        int column = m.findCol(day);
         int rowS=0;
         ArrayList<String[]> timeClasses = new ArrayList<>();
         if (list.size() > 2) {
@@ -142,45 +147,22 @@ public class TimetableController {
                 timeClasses.add(timeClass);
             }
             for (String[] tc : timeClasses) {
-                rowS = findRow(tc[0]);
-                //Label temp = new Label("trial");
-                //labelsInfo.add(new LabelInfo(temp, column, rowS));
+                rowS = m.findRow(tc[0]);
                 System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
                 Label tempLabel = new Label(day);
                 if(m!=null)
                 {
-                 //System.out.println("Added a label");
                  m.addToLabelList(tempLabel, column, rowS);
                 }else
                 {
                 System.out.println("Label is null");
                 }
-                
-                //if(!labelsInfo.contains(tempLabel))
-                //{
-                //labelsInfo.add(new LabelInfo(tempLabel, column, rowS));
-                //System.out.println("Added a label");
-                //}
             }
-            //addlabelz();
         }else
         {
         System.out.println("Input size is less then 2 for " + day);
         }
         
-    }
-    private synchronized static int findRow(String s)
-    {
-        String temp = s.substring(0,2);
-    //System.out.println("temp" + temp);
-    for(int i=0;i<TimetableView.times.length;i++)
-    {
-    if(temp.equals(TimetableView.times[i].substring(0,2)))
-    {
-    row =i+1;
-    }
-    }
-    return row;
     }
     
     private synchronized static int findCol(String s)

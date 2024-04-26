@@ -62,6 +62,42 @@ public class TimetableModel {
     Platform.runLater(() -> gridPane.add(label, columnIndex, rowIndex));
     }
     
+    public void updateAddCell(String info)
+    {
+    String[] updateInfo = info.split(",");
+    String day = updateInfo[0];
+    String timePeriod = updateInfo[1];
+    
+    }
+    
+    public synchronized static int findCol(String s)
+    {
+        int tempCol=0;
+    for(int i=0;i<TimetableView.daysOfWeek.length;i++)
+    {
+    if(s.equals(TimetableView.daysOfWeek[i]))
+    {
+    tempCol =i+1;
+    break;
+    }
+    }return tempCol;
+    }
+    
+    public synchronized static int findRow(String s)
+    {
+        int tempRow=0;
+        String temp = s.substring(0,2);
+    //System.out.println("temp" + temp);
+    for(int i=0;i<TimetableView.times.length;i++)
+    {
+    if(temp.equals(TimetableView.times[i].substring(0,2)))
+    {
+    tempRow =i+1;
+    }
+    }
+    return tempRow;
+    }
+    
     public void addEmptyCells()
     {
     for(int row = 1; row<=10; row++)

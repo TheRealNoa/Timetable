@@ -29,8 +29,10 @@ public class TimetableView extends Application {
     public static String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
     public static String[] times = {"09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"};
     public ArrayList<ArrayList<String>> Inputs = new ArrayList();
+    public static boolean isRunning = false;
    @Override
     public void start(Stage primaryStage) {
+        isRunning=true;
         GridPane gridPane = new GridPane();
         
         gridPane.setHgap(10);
@@ -64,12 +66,18 @@ public class TimetableView extends Application {
         primaryStage.setTitle("Timetable");
         primaryStage.show();
         primaryStage.setOnHidden(e -> {
+            stop();
             controller.stopThread();
     // This just stops the thread in the controller once this thread is exited
     // I tried just calling controller.stopThread() after launch but it didn't work
     // so this is the adjusted solution.
     });
         
+    }
+    
+    @Override
+    public void stop() {
+        isRunning = false;
     }
     
     public void setInputs(ArrayList<ArrayList<String>> s)
