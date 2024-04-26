@@ -16,7 +16,6 @@ public class Day {
     private Time TempSTime;
     private Time TempETime;
     private ArrayList<Module> modules;
-    public ArrayList<TimePeriod> earlyPeriods;
 
     public Day() {
     }
@@ -117,6 +116,10 @@ public class Day {
                 System.out.println("tp Stime index:" + i + " Start time:" + BusyPeriods.get(i).getStime()
                         + ": twelvePM:" + twelvePM);
                 earlyPeriods.add(BusyPeriods.get(i));
+            }else
+            {
+            EarlyMorningShift.breakIt=true;
+            System.out.println("Now it's after 12");
             }
         }
 
