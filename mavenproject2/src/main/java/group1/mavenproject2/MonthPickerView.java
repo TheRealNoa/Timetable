@@ -8,13 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -23,38 +18,10 @@ import javafx.scene.control.TextField;
 public class MonthPickerView extends Application {
     public static Stage currentStage;
 
-    // Declare the variables for the selected month and day
-    private static String selectedMonth1;
-    private static String selectedMonth2;
-    private static int selectedDay1;
-    private static int selectedDay2;
-    
-
-    // Add a list of days in each month
-    private List<Integer> daysInMonth = Arrays.asList(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-
-    // Create an array of months
-    private String[] months = {
-            "January", "February", "March", "April",
-            "May", "June", "July", "August",
-            "September", "October", "November", "December"
-    };
-
     @Override
     public void start(Stage primaryStage) {
-        this.currentStage = primaryStage;
-        Button monthButton = createStyledButton("Choose Month");
-        monthButton.setOnAction(e -> openMonthPickerStage());
-
-        VBox buttonBox = new VBox();
-        buttonBox.getChildren().add(monthButton);
-        buttonBox.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(buttonBox, 400, 150);
-
-        primaryStage.setTitle("Month Picker");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    displayDayOfWeek();  
+    //openMonthPickerStage();
     }
 
     private Button createStyledButton(String label) {
@@ -63,165 +30,7 @@ public class MonthPickerView extends Application {
         return button;
     }
 
-    private void openMonthPickerStage() {
-        if (currentStage != null) {
-            currentStage.close();
-        }
 
-        Stage monthPickerStage = new Stage();
-        GridPane monthButtons = createMonthButtons();
-
-        Scene scene = new Scene(monthButtons, 300, 100); 
-       
-        monthPickerStage.setTitle("Select a Month");
-        monthPickerStage.setScene(scene);
-        monthPickerStage.centerOnScreen(); // 
-        monthPickerStage.show();
-
-        this.currentStage = monthPickerStage;
-    }
-
-    private GridPane createMonthButtons() {
-        GridPane monthButtons = new GridPane();
-        monthButtons.setHgap(10); 
-        monthButtons.setVgap(10); 
-
-        int rowIndex = 0;
-        int colIndex = 0;
-        for (String month : months) {
-            Button button = createStyledButton(month);
-            button.setOnAction(e -> showSelectedMonth(month));
-            monthButtons.add(button, colIndex, rowIndex);
-
-            colIndex++;
-            if (colIndex > 3) {
-                colIndex = 0;
-                rowIndex++;
-            }
-        }
-
-        return monthButtons;
-    }
-
-    private void showSelectedMonth(String month) {
-        if (currentStage != null) {
-            currentStage.close();
-        }
-
-        Stage dayPickerStage = new Stage();
-        GridPane dayButtons = createDayButtons(month);
-
-        Scene scene = new Scene(dayButtons, 400, 200); 
-
-        dayPickerStage.setTitle("Select a Day");
-        dayPickerStage.setScene(scene);
-        dayPickerStage.show();
-
-        this.currentStage = dayPickerStage;
-    }
-
-    private GridPane createDayButtons(String month) {
-        GridPane dayButtons = new GridPane();
-        dayButtons.setHgap(10); 
-        dayButtons.setVgap(10); 
-
-        int monthIndex = Arrays.asList(months).indexOf(month);
-        int days = daysInMonth.get(monthIndex);
-
-
-        if (month.equals("February")) {
-            int year = Calendar.getInstance().get(Calendar.YEAR);
-
-            if (isLeapYear(year)) {
-                days++;
-            }
-        }
-
-        String[] suffixes = {"st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th",
-                "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
-                "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th",
-                "st"};
-
-        int rowIndex = 0;
-        int colIndex = 0;
-        for (int day = 1; day <= days; day++) {
-            String label = day + suffixes[day - 1];
-            Button button = createStyledButton(label);
-
-            button.setOnAction(new DayButtonHandler(month, day));
-
-            dayButtons.add(button, colIndex, rowIndex);
-
-            colIndex++;
-            if (colIndex > 7) {
-                colIndex = 0;
-                rowIndex++;
-            }
-        }
-
-        return dayButtons;
-    }
-
-private void showSelectedDay(String month, int day) {
-    Stage selectedDayStage = new Stage();
-    if (currentStage != null) {
-        currentStage.close();
-    }
-
-    if (selectedMonth1 == null && selectedDay1 == 0) {
-        selectedMonth1 = month;
-        selectedDay1 = day;
-    } else {
-        selectedMonth2 = month;
-        selectedDay2 = day;
-    }
-
-    VBox vb = new VBox(10);
-    vb.setAlignment(Pos.CENTER);
-    
-    
-    Label selectionInfo = new Label("You have selected:" + month + " " + day);
-    Button selectedDayButton = createStyledButton("Continue");
-    selectedDayButton.setAlignment(Pos.CENTER);
-
-    selectedDayButton.setOnAction(e -> {
-        if (selectedMonth2 == null && selectedDay2 == 0) {
-            openMonthPickerStage();
-        } else {
-            selectedDayStage.close();
-            displayFinalResult();
-        }
-    });
-    
-    vb.getChildren().addAll(selectionInfo,selectedDayButton);
-
-    Scene scene = new Scene(vb, 200, 100); 
-
-    selectedDayStage.setTitle("Selected Day");
-    selectedDayStage.setScene(scene);
-    selectedDayStage.show();
-
-    this.currentStage = selectedDayStage;
-}
-
-    class DayButtonHandler implements EventHandler<ActionEvent> {
-        private String month;
-        private int day;
-
-        public DayButtonHandler(String month, int day) {
-            this.month = month;
-            this.day = day;
-        }
-
-        @Override
-        public void handle(ActionEvent event) {
-            showSelectedDay(month, day);
-        }
-    }
-
-    private boolean isLeapYear(int year) {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-    }
     public static String DayOfWeek = "";
     public static Stage daysStage;
    public static String[] daysOfWeek = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
@@ -436,11 +245,12 @@ private void showSelectedDay(String month, int day) {
             }
         });
 
-        String StartDate = selectedMonth1 + " " + selectedDay1;
-        String EndDate = selectedMonth2 + " " + selectedDay2;
+        String StartDate = "FutureProof";
+        String EndDate = "Dates addition";
         okButton.setOnAction(e->
         {
             TCPEchoClient.sendClientData(StartDate , EndDate, DayOfWeek, StartTime, EndTime, ClassName, classSelected);
+            upStartTime=9;
         }
         );
         
@@ -457,23 +267,6 @@ private void showSelectedDay(String month, int day) {
         currentStage = timeSelectionStage;
     }
     
-    private void displayFinalResult() {
-    Label InfoLabel = new Label("You have selected the period from: "+selectedMonth1 + " " + selectedDay1 + " to " + selectedMonth2 + " " + selectedDay2);
-    Button finalResultButton = createStyledButton("Next");
-    finalResultButton.setOnAction(e -> displayDayOfWeek());
-
-    VBox vb = new VBox(10);
-    vb.setAlignment(Pos.CENTER);
-    vb.getChildren().addAll(InfoLabel,finalResultButton);
-    Scene scene = new Scene(vb, 400, 100); 
-
-    Stage finalResultStage = new Stage();
-    finalResultStage.setTitle("Final Result");
-    finalResultStage.setScene(scene);
-    finalResultStage.show();
-
-    this.currentStage = finalResultStage;
-}
 
     public static void main(String[] args) {
         launch(args);

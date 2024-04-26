@@ -11,7 +11,6 @@ group1\mavenproject2\TCPEchoClient.class
 group1\mavenproject2\TimetableView.class
 group1\mavenproject2\MonthPickerView$1.class
 group1\mavenproject2\TimetableController.class
-group1\mavenproject2\MonthPickerView$DayButtonHandler.class
 group1\mavenproject2\TimetableModel.class
 group1\mavenproject2\IncorrectActionException.class
 group1\mavenproject2\DatePickerApp.class
