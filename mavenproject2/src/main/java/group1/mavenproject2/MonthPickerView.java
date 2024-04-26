@@ -130,19 +130,12 @@ public class MonthPickerView extends Application {
             classes.add(s);
         Button b = new Button(s);
         vb.getChildren().add(b);
-        b.setOnAction(e->
-        {
         classSelected=b.getText();
         currentStage.close();
         displayTimeSelection();
-        });
+
         }
-        Scene timeSelectionScene = new Scene(vb,300,200);
   
-        showDayScheduleScene.setTitle("Class selection");
-        showDayScheduleScene.setScene(timeSelectionScene);
-        showDayScheduleScene.show();
-        currentStage = showDayScheduleScene;
         
     }
    private void displayModuleSelection()

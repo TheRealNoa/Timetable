@@ -66,9 +66,6 @@ public class TCPEchoClient {
                         daysList.add(s);
                         }
                     Platform.runLater(() -> RemoveClassStage.showDaySchedule(daysList));
-                    // This handles the IllegalStateException that I was getting...
-                    // It was appearing because apparently we can't execute RemoveClassStage.showDaySchedule(daysList)
-                    // on the same thread as the TCPEchoClient thread... has to be a JavaFX thread
                 }else if(message.contains("RLC1"))
                 {
                     System.out.println("RECIEVED RLC FROM SERVER" + message);
@@ -179,7 +176,6 @@ public class TCPEchoClient {
         if(ArrayListOfMultipleMessages.size()==5){
         TimetableController.Inputs = ArrayListOfMultipleMessages;
         TimetableController.getInputs();
-        //System.out.println("S:" + ArrayListOfMultipleMessages);
         ArrayListOfMultipleMessages.clear();
         }
     }
