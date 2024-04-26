@@ -89,20 +89,7 @@ public class RemoveClassStage extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        this.currentStage = primaryStage;
-
-        Button classesHereButton = new Button("Classes here");
-        classesHereButton.setOnAction(e -> {
-            openDays();
-        });
-
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(classesHereButton);
-        layout.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(layout, 200, 100);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        openDays();
     }
 
     private void openClassRemovedStage() {

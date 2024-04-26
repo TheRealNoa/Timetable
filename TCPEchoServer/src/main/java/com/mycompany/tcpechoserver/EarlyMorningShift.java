@@ -45,7 +45,7 @@ public class EarlyMorningShift {
 
         }
 
-        private void shiftClasses(Day d) {// processes one day
+        private void shiftClasses(Day d) {
             for (TimePeriod tp : d.getBusyPeriods()) {
                 if (tp.getStime().after(TWELVE_PM)) {
                     System.out.println("Checking for a time after 12");

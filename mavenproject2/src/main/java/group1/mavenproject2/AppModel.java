@@ -8,7 +8,10 @@ import javafx.stage.Stage;
  */
 public class AppModel {
     public void displayTimeTable() {
+        if(!TimetableView.isRunning)
+        {
         TCPEchoClient.sendMessage("TD");
+        }
     }
 
     public void openRemoveClassStage() {
