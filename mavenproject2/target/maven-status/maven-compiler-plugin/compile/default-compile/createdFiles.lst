@@ -1,5 +1,6 @@
+group1\mavenproject2\ConcurrentTimetableProcessing.class
+group1\mavenproject2\ConcurrentTimetableProcessing$ProcessListTask.class
 group1\mavenproject2\AppController.class
-group1\mavenproject2\TimetableView$2.class
 group1\mavenproject2\LabelInfo.class
 group1\mavenproject2\AppModel.class
 group1\mavenproject2\MonthPickerView$4.class
@@ -9,7 +10,6 @@ group1\mavenproject2\SystemInfo.class
 group1\mavenproject2\TCPEchoClient.class
 group1\mavenproject2\TimetableView.class
 group1\mavenproject2\MonthPickerView$1.class
-group1\mavenproject2\ParallelTimetableProcessing$ProcessListTask.class
 group1\mavenproject2\TimetableController.class
 group1\mavenproject2\MonthPickerView$DayButtonHandler.class
 group1\mavenproject2\TimetableModel.class
@@ -20,4 +20,3 @@ group1\mavenproject2\RemoveClassStage.class
 group1\mavenproject2\Main.class
 group1\mavenproject2\MonthPickerView$3.class
 group1\mavenproject2\TimetableView$1.class
-group1\mavenproject2\ParallelTimetableProcessing.class

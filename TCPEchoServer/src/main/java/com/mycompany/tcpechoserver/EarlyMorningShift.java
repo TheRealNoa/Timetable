@@ -10,28 +10,42 @@ public class EarlyMorningShift {
     private static final Time HALF_HOUR = new Time(1800000);
 
     public static void main(String[] args) {
-        System.out.println("Executing main from EarlyMorningShift");
-        ForkJoinPool forkJoinPool = new ForkJoinPool(TCPEchoServer.days.length);
-        for (Day day : TCPEchoServer.days) {
-            forkJoinPool.submit(new ShiftClassesRecursion(day));
-        }
-        forkJoinPool.shutdown();
+       System.out.println("Executing main from EarlyMorningShift");
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ShiftClassesRecursion task = new ShiftClassesRecursion(TCPEchoServer.days, 0, TCPEchoServer.days.length);
+        forkJoinPool.invoke(task);
     }
 
     static class ShiftClassesRecursion extends RecursiveAction {
-        private Day day;
+        private Day[] days;
+        private int start;
+        private int end;
 
-        public ShiftClassesRecursion(Day day) {
-            this.day = day;
+        public ShiftClassesRecursion(Day[] days, int start, int end) {
+            this.days = days;
+            this.start = start;
+            this.end = end;
         }
 
         @Override
         protected void compute() {
-            shiftClasses(day);
-            //System.out.println("Computing " + day.name);
+            if (end - start <= 1) {
+            shiftClasses(days[start]);
+        } else {
+            int mid = start + (end - start) / 2;
+            ShiftClassesRecursion leftTask = new ShiftClassesRecursion(days, start, mid);
+            ShiftClassesRecursion rightTask = new ShiftClassesRecursion(days, mid, end);
+            
+            leftTask.fork();
+            rightTask.fork();
+            
+            leftTask.join();
+            rightTask.join();
+        }
+            
         }
 
-        private void shiftClasses(Day d) {
+        private void shiftClasses(Day d) {//processes one day
             for (TimePeriod tp : d.getBusyPeriods()) {
                 if (tp.getStime().after(TWELVE_PM)) {
                     System.out.println("Checking for a time after 12");
