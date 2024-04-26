@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
  * @author noaca
  */
 
-public class ParallelTimetableProcessing {
+public class ConcurrentTimetableProcessing {
 
     public static class ProcessListTask implements Runnable {
         private ArrayList<String> list;

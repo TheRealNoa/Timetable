@@ -8,17 +8,16 @@ package group1.mavenproject2;
  *
  * @author noaca
  */
-import static group1.mavenproject2.TimetableController.Inputs;
 import java.util.ArrayList;
-import java.util.Random;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import javafx.concurrent.Task;
 
 public class TimetableView extends Application {
     Stage primaryStage;
@@ -34,6 +33,15 @@ public class TimetableView extends Application {
     public void start(Stage primaryStage) {
         isRunning=true;
         GridPane gridPane = new GridPane();
+        
+        Task<Void> addingEntries = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                ConcurrentTimetableProcessing.processing(Inputs, model);
+                return null;
+            }
+        };
+        
         
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -55,7 +63,8 @@ public class TimetableView extends Application {
         //controller.processInputs();
         //controller.runParallel(model);
         System.out.println("These inputs: " + Inputs);
-        ParallelTimetableProcessing.processing(Inputs,model);
+        
+        new Thread(addingEntries).start();
         model.addEmptyCells();
         
         

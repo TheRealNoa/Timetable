@@ -1,4 +1,5 @@
 group1\mavenproject2\AppController.class
+group1\mavenproject2\TimetableView$2.class
 group1\mavenproject2\LabelInfo.class
 group1\mavenproject2\AppModel.class
 group1\mavenproject2\MonthPickerView$4.class
@@ -18,4 +19,5 @@ group1\mavenproject2\MonthPickerView.class
 group1\mavenproject2\RemoveClassStage.class
 group1\mavenproject2\Main.class
 group1\mavenproject2\MonthPickerView$3.class
+group1\mavenproject2\TimetableView$1.class
 group1\mavenproject2\ParallelTimetableProcessing.class
