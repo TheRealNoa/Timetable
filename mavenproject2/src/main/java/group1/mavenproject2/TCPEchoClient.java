@@ -216,7 +216,7 @@ public class TCPEchoClient {
     public static String dealWithUpdateFormat(String msg)
     {
     String[] splitMessage = msg.split(",");
-    String info = splitMessage[1] + "," + splitMessage[2];
+    String info = splitMessage[1] + "," + splitMessage[2] + "," + splitMessage[3];
     return info;
     }
     public static void stop() {

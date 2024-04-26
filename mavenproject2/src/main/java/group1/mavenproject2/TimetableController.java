@@ -155,7 +155,9 @@ public class TimetableController {
             for (String[] tc : timeClasses) {
                 rowS = m.findRow(tc[0]);
                 System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
-                Label tempLabel = new Label(day);
+                String [] moduleSplit = tc[1].split(":");
+                String moduleName = moduleSplit[1].strip();
+                Label tempLabel = new Label("          "+ moduleName + "\n" + "     " + tc[0]);
                 if(m!=null)
                 {
                  m.addToLabelList(tempLabel, column, rowS);

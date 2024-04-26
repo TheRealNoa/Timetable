@@ -92,7 +92,7 @@ public class TCPEchoServer{
                                 System.out.println("We have added "+ ntp + " to " + OGdays[i].name);
                                 for(PrintWriter p:clientWriters)
                                 {
-                                p.println("UpdateAdd," + days[i].name + "," + ntp);
+                                p.println("UpdateAdd," + days[i].name + "," + ntp + "," + ntp.ModuleName);
                                 }
                                 }
                         }

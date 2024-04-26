@@ -69,12 +69,14 @@ public class TimetableModel {
     int localCol = findCol(day);
     String timePeriod = updateInfo[1];
     int localRow = findRow(timePeriod);
+    String[] moduleNameL = updateInfo[2].split(":");
+    String moduleName = moduleNameL[1].strip();
     System.out.println("Debug:" + localCol + ":" + localRow);
     Platform.runLater(()->
     {
     gridPane.getChildren().removeIf(node->
     GridPane.getColumnIndex(node) == localCol && GridPane.getRowIndex(node) == localRow);
-    Label newLabel = new Label("testing");
+    Label newLabel = new Label("          "+ moduleName + "\n" + "     " + timePeriod);
     newLabel.setPrefSize(100,50);
     newLabel.setStyle("-fx-border-color: black");
     gridPane.add(newLabel,localCol,localRow);
