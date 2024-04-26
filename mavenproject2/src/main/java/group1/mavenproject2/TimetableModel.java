@@ -66,8 +66,10 @@ public class TimetableModel {
     {
     String[] updateInfo = info.split(",");
     String day = updateInfo[0];
+    int localCol = findCol(day);
     String timePeriod = updateInfo[1];
-    
+    int localRow = findRow(timePeriod);
+    System.out.println("Debug:" + localCol + ":" + localRow);
     }
     
     public synchronized static int findCol(String s)
