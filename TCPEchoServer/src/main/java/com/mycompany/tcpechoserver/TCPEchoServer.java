@@ -136,14 +136,6 @@ public class TCPEchoServer {
 
     }
 
-    static String className;
-
-    private static void assignClassName(String message) {
-        String[] tempArr = message.split(",");
-        List<String> arrayList = new ArrayList<>(Arrays.asList(tempArr));
-        className = arrayList.getLast();
-    }
-
     private static class ClientHandler implements Runnable {
         private final Socket clientSocket;
         private BufferedReader reader;
@@ -208,7 +200,6 @@ public class TCPEchoServer {
     public static synchronized void dealWithFI(PrintWriter pw) {
         assignDay(message);
         assignTimePeriod(message, pw);
-        assignClassName(message);
         System.out.println(TP.toString());
     }
 
