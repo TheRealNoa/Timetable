@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.tcpechoserver;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-
 
 /**
  *
@@ -17,61 +12,54 @@ public class TimePeriod {
     public Time Etime;
     public String ModuleName;
     public String formattedTime;
-    public TimePeriod(){};
 
-    public TimePeriod(Time Stime, Time Etime, String ModuleName)
-    {
-        this.Stime=Stime;
-        this.Etime=Etime;
-        this.ModuleName=ModuleName;
+    public TimePeriod() {
+    };
+
+    public TimePeriod(Time Stime, Time Etime, String ModuleName) {
+        this.Stime = Stime;
+        this.Etime = Etime;
+        this.ModuleName = ModuleName;
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         formattedTime = formatter.format(Stime) + "-" + formatter.format(Etime);
     }
-    
-    public Time getStime()
-    {
+
+    public Time getStime() {
         return this.Stime;
     }
-    public Time getEtime()
-    {
+
+    public Time getEtime() {
         return this.Etime;
     }
+
     public void setSTime(Time tim) {
-    this.Stime.setTime(tim.getTime());
+        this.Stime.setTime(tim.getTime());
     }
 
     public void setETime(Time time) {
-    this.Etime.setTime(time.getTime());
+        this.Etime.setTime(time.getTime());
     }
-    public String getModuleName()
-    {
-    return this.ModuleName;
+
+    public String getModuleName() {
+        return this.ModuleName;
     }
+
     @Override
-public String toString() {
-    return new SimpleDateFormat("HH:mm").format(Stime) + "-" + new SimpleDateFormat("HH:mm").format(Etime) + ", Module: " + ModuleName;
-}
-     public boolean clashesWith(TimePeriod a)
-      {
-          if(a.getStime().equals(this.Etime))
-          {
-          return false;
-          }else if(this.Etime.before(a.getStime())|| this.Stime.after(a.getEtime()))
-       {
-       return false;
-       }else if(this.Stime.equals(a.getEtime()))
-       {
-       return false;
-       }else
-       {
-           //System.out.println("Clash");
-           //System.out.println("------------------------");
-           //System.out.println("Clashing times:");
-           //System.out.println(this.Stime + "-" + this.Etime);
-           //System.out.println(a.getStime() + "-" + a.getEtime());
-            //System.out.println("------------------------");
-       return true;
-       }
-      }
-     
+    public String toString() {
+        return new SimpleDateFormat("HH:mm").format(Stime) + "-" + new SimpleDateFormat("HH:mm").format(Etime)
+                + ", Module: " + ModuleName;
+    }
+
+    public boolean clashesWith(TimePeriod a) {
+        if (a.getStime().equals(this.Etime)) {
+            return false;
+        } else if (this.Etime.before(a.getStime()) || this.Stime.after(a.getEtime())) {
+            return false;
+        } else if (this.Stime.equals(a.getEtime())) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
