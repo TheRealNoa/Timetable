@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package group1.mavenproject2;
 
 /**
@@ -18,30 +14,27 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ClassCreationView extends Application {
-     public String ClassName;
+    public String ClassName;
+
     @Override
     public void start(Stage primaryStage) {
         Label label = new Label("Enter class name:");
         TextField tf = new TextField();
         tf.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
-                ClassName=newValue;
+                ClassName = newValue;
             }
         });
         Button ok = new Button("ok");
-        ok.setOnAction(e->
-        {
-        TCPEchoClient.sendMessage("NewClass," + ClassName);
-        
-        primaryStage.close();
-        AppView.primaryStage.show();
-        
-        //App.currentStage=App.primaryStage;
-        //App.currentStage.show();
-        MonthPickerView.classes.add(ClassName);
+        ok.setOnAction(e -> {
+            TCPEchoClient.sendMessage("NewClass," + ClassName);
+
+            primaryStage.close();
+            AppView.primaryStage.show();
+            MonthPickerView.classes.add(ClassName);
         });
         VBox root = new VBox(10);
-        root.getChildren().addAll(label,tf,ok);
+        root.getChildren().addAll(label, tf, ok);
 
         Scene scene = new Scene(root, 200, 100);
 
@@ -54,4 +47,3 @@ public class ClassCreationView extends Application {
         launch(args);
     }
 }
-

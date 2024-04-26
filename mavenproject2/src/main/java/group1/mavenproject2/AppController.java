@@ -1,9 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package group1.mavenproject2;
-
 
 /**
  *
@@ -17,26 +12,17 @@ public class AppController {
     }
 
     public void handleButtonAction(String label) {
-        if (label.equals("Add Class")) {    
-        model.openDateStage();
-        } 
-        else if (label.equals("Remove Class")) 
-        {
-        model.openRemoveClassStage();
-        }
-        else if (label.equals("Display Timetable button"))
-        {
-        model.displayTimeTable();
-        }
-        else if (label.equals("Stop button"))
-        {
-        model.terminateConnection();
-        }
-        else if(label.equals("Move afternoon classes to mornings"))
-        {
-        model.afternoonToMorning();
+        if (label.equals("Add Class")) {
+            model.openDateStage();
+        } else if (label.equals("Remove Class")) {
+            model.openRemoveClassStage();
+        } else if (label.equals("Display Timetable button")) {
+            model.displayTimeTable();
+        } else if (label.equals("Stop button")) {
+            model.terminateConnection();
+        } else if (label.equals("Move afternoon classes to mornings")) {
+            model.afternoonToMorning();
         }
     }
-   
-}
 
+}

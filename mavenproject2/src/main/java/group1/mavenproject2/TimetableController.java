@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package group1.mavenproject2;
 
 import java.util.ArrayList;
@@ -20,130 +16,97 @@ import javafx.stage.Stage;
 public class TimetableController {
     public static ArrayList<ArrayList<String>> Inputs = new ArrayList<>();
     static int timesChecked;
-    public  static boolean running=true;
+    public static boolean running = true;
     public static int col;
     public static int row;
     public static TimetableModel model;
     private static final Object lock = new Object();
-    
-    // public TimetableController(TimetableModel model, GridPane gridPane) {
-       // this.model = model;
-        //model.setGridPane(gridPane); // Pass GridPane to TimetableMode
-        //processInputs();
-    //}
-    
-    public static void getInputs()
-    {
-    openTimetable();
-    }
-    TimetableController(ArrayList<ArrayList<String>> s, TimetableModel m)
-    {
-    this.model=m;
+
+    public static void getInputs() {
+        openTimetable();
     }
 
-    public static synchronized void openTimetable()// stupid name
-    {
-    if(Inputs.get(0).get(0).startsWith("Mon"))
-    {
-        System.out.println("Inputs recieved:" + Inputs);
-       synchronized(lock)
-       {
-       System.out.println("Here inputs are:" + Inputs);
-       ArrayList<ArrayList<String>> inputsCopy = new ArrayList<>(Inputs);
-       Platform.runLater(() -> displayTimtable(inputsCopy));
-       }
+    TimetableController(ArrayList<ArrayList<String>> s, TimetableModel m) {
+        this.model = m;
     }
-    System.out.println("Model is:" + model);
-    //ParallelTimetableProcessing.processing(Inputs,model);
+
+    public static synchronized void openTimetable() {
+        if (Inputs.get(0).get(0).startsWith("Mon")) {
+            System.out.println("Inputs recieved:" + Inputs);
+            synchronized (lock) {
+                System.out.println("Here inputs are:" + Inputs);
+                ArrayList<ArrayList<String>> inputsCopy = new ArrayList<>(Inputs);
+                Platform.runLater(() -> displayTimtable(inputsCopy));
+            }
+        }
+        System.out.println("Model is:" + model);
     }
-     
-    public static void displayTimtable(ArrayList<ArrayList<String>> as)
-    {
+
+    public static void displayTimtable(ArrayList<ArrayList<String>> as) {
         System.out.println("AS:" + as);
-        Inputs=as;
+        Inputs = as;
         if (AppView.currentStage != null) {
             AppView.currentStage.close();
-        }    
+        }
         TimetableView timetableView = new TimetableView();
         timetableView.setInputs(Inputs);
         Stage stage = new Stage();
         timetableView.start(stage);
-        //this.model = timetableView.model;
-}
-    //Experimental
+    }
+
     public static void addLabel(Label label, int col, int row) {
         System.out.println("Called addLabel");
-        model.addLabel(label,col,row);
+        model.addLabel(label, col, row);
     }
-    public void updateAddCell(String info)
-    {
-    model.updateAddCell(info);
+
+    public void updateAddCell(String info) {
+        model.updateAddCell(info);
     }
-    
-    public void updateRemoveCell(String info)
-    {
-    model.updateRemoveCell(info);
+
+    public void updateRemoveCell(String info) {
+        model.updateRemoveCell(info);
     }
-    
-    
 
     public void removeLabel(Label label) {
         model.removeLabel(label);
     }
 
-   public void checkLabelList() {
-    new Thread(() -> {
-        List<LabelInfo> currentLabels;
-        //List<LabelInfo> localLabelsInfo = Inputs;
-        while (running) {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //model.addLabel(l, 1, 1);
-            //addlabelz(model,l,1,1);
-            //addlabelz();
-            //System.out.println("Label infos " +localLabelsInfo);
-            //for (LabelInfo labelInfo : localLabelsInfo) { // Iterate over labelsInfo
-              // System.out.println("Checked a label");
-               //model.addLabel(labelInfo.getLabel(), labelInfo.getRow(), labelInfo.getCol());
-            //}
-            List<LabelInfo> newLabels = model.getLabels();
-            //synchronized (model) {
-                currentLabels = new ArrayList<>(model.getLabels()); 
-            //}
-            if (!newLabels.equals(currentLabels)) {
-                System.out.println("It changed");
-                //synchronized (model) {
+    public void checkLabelList() {
+        new Thread(() -> {
+            List<LabelInfo> currentLabels;
+            while (running) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                List<LabelInfo> newLabels = model.getLabels();
+                currentLabels = new ArrayList<>(model.getLabels());
+                if (!newLabels.equals(currentLabels)) {
+                    System.out.println("It changed");
                     currentLabels = newLabels;
-                //}
-            }else
-            {
-            System.out.println(currentLabels + ":" + newLabels);
-            System.out.println("No change");
+                } else {
+                    System.out.println(currentLabels + ":" + newLabels);
+                    System.out.println("No change");
+                }
             }
-        }
-    }).start();
-}
-    public void stopThread()
-    {
-        running=false;
+        }).start();
+    }
+
+    public void stopThread() {
+        running = false;
     }
 
     private void handleLabelListChanges() {
         System.out.println("Label list has changed.");
-    }// will use this in a bit...
-    
-    
+    }
 
-
-        public static void processInputs(ArrayList<String> list, TimetableModel m) { // TO RE-DO lol
-            System.out.println("Model :" + m);
-            System.out.println("Started processing: " + list);
+    public static void processInputs(ArrayList<String> list, TimetableModel m) {
+        System.out.println("Model :" + m);
+        System.out.println("Started processing: " + list);
         String day = list.get(0);
         int column = m.findCol(day);
-        int rowS=0;
+        int rowS = 0;
         ArrayList<String[]> timeClasses = new ArrayList<>();
         if (list.size() > 2) {
             for (int i = 1; i < list.size(); i += 2) {
@@ -154,39 +117,33 @@ public class TimetableController {
             }
             for (String[] tc : timeClasses) {
                 rowS = m.findRow(tc[0]);
-                System.out.println("For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
-                String [] moduleSplit = tc[1].split(":");
+                System.out.println(
+                        "For class: " + tc[0] + ", " + tc[1] + " on " + day + "We have entry: " + column + rowS);
+                String[] moduleSplit = tc[1].split(":");
                 String moduleName = moduleSplit[1].strip();
-                Label tempLabel = new Label("          "+ moduleName + "\n" + "     " + tc[0]);
-                if(m!=null)
-                {
-                 m.addToLabelList(tempLabel, column, rowS);
-                }else
-                {
-                System.out.println("Label is null");
+                Label tempLabel = new Label("          " + moduleName + "\n" + "     " + tc[0]);
+                if (m != null) {
+                    m.addToLabelList(tempLabel, column, rowS);
+                } else {
+                    System.out.println("Label is null");
                 }
             }
-        }else
-        {
-        System.out.println("Input size is less then 2 for " + day);
+        } else {
+            System.out.println("Input size is less then 2 for " + day);
         }
-        
+
     }
-    
-    private synchronized static int findCol(String s)
-    {
-        int tempCol=0;
-    for(int i=0;i<TimetableView.daysOfWeek.length;i++)
-    {
-    if(s.equals(TimetableView.daysOfWeek[i]))
-    {
-    tempCol =i+1;
-    break;
+
+    private synchronized static int findCol(String s) {
+        int tempCol = 0;
+        for (int i = 0; i < TimetableView.daysOfWeek.length; i++) {
+            if (s.equals(TimetableView.daysOfWeek[i])) {
+                tempCol = i + 1;
+                break;
+            }
+        }
+        System.out.println("For " + s + " We have column:" + tempCol);
+        return tempCol;
     }
-    }
-    System.out.println("For " + s + " We have column:" + tempCol);
-    return tempCol;
-    }
-    
-    
+
 }

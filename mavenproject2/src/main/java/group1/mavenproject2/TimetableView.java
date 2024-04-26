@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package group1.mavenproject2;
 
 /**
@@ -24,16 +20,18 @@ public class TimetableView extends Application {
     public TimetableModel model;
     public static TimetableController controller;
     private boolean addedCells = false;
-    public  static boolean stopModel = false;
-    public static String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
-    public static String[] times = {"09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00"};
+    public static boolean stopModel = false;
+    public static String[] daysOfWeek = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+    public static String[] times = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+            "18:00" };
     public ArrayList<ArrayList<String>> Inputs = new ArrayList();
     public static boolean isRunning = false;
-   @Override
+
+    @Override
     public void start(Stage primaryStage) {
-        isRunning=true;
+        isRunning = true;
         GridPane gridPane = new GridPane();
-        
+
         Task<Void> addingEntries = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -41,8 +39,7 @@ public class TimetableView extends Application {
                 return null;
             }
         };
-        
-        
+
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
@@ -59,16 +56,11 @@ public class TimetableView extends Application {
             gridPane.add(timeLabel, 0, i + 1);
         }
         model = new TimetableModel(gridPane);
-        controller = new TimetableController(Inputs,model);
-        //controller.processInputs();
-        //controller.runParallel(model);
+        controller = new TimetableController(Inputs, model);
         System.out.println("These inputs: " + Inputs);
-        
+
         new Thread(addingEntries).start();
         model.addEmptyCells();
-        
-        
-        //controller.checkLabelList();
 
         Scene scene = new Scene(gridPane, 620, 600);
         primaryStage.setScene(scene);
@@ -77,23 +69,19 @@ public class TimetableView extends Application {
         primaryStage.setOnHidden(e -> {
             stop();
             controller.stopThread();
-    // This just stops the thread in the controller once this thread is exited
-    // I tried just calling controller.stopThread() after launch but it didn't work
-    // so this is the adjusted solution.
-    });
-        
+        });
+
     }
-    
+
     @Override
     public void stop() {
         isRunning = false;
     }
-    
-    public void setInputs(ArrayList<ArrayList<String>> s)
-    {
-    this.Inputs=s;
+
+    public void setInputs(ArrayList<ArrayList<String>> s) {
+        this.Inputs = s;
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }

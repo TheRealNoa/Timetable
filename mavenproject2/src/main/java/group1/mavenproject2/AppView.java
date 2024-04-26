@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package group1.mavenproject2;
 
 /**
@@ -23,6 +19,7 @@ public class AppView extends Application {
     private AppController controller;
     public static Stage primaryStage;
     public static Stage currentStage;
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -36,9 +33,9 @@ public class AppView extends Application {
         Button earlyButton = createStyledButton("Move to mornings");
 
         HBox buttonBox = new HBox(10);
-        buttonBox.getChildren().addAll(addButton,removeButton,displayTimetable,stopButton,earlyButton);
+        buttonBox.getChildren().addAll(addButton, removeButton, displayTimetable, stopButton, earlyButton);
         buttonBox.setAlignment(Pos.CENTER);
-        
+
         Rectangle box = new Rectangle(800, 150);
         box.setFill(Color.GREY);
         StackPane stackPane = new StackPane(box, buttonBox);
@@ -48,12 +45,22 @@ public class AppView extends Application {
         primaryStage.setTitle("Class Scheduler");
         primaryStage.setScene(scene);
         primaryStage.show();
-        
-        addButton.setOnAction(e->{controller.handleButtonAction("Add Class");});
-        removeButton.setOnAction(e->{controller.handleButtonAction("Remove Class");});
-        displayTimetable.setOnAction(e->{controller.handleButtonAction("Display Timetable button");});
-        stopButton.setOnAction(e->{controller.handleButtonAction("Stop button");});
-        earlyButton.setOnAction(e->{controller.handleButtonAction("Move afternoon classes to mornings");});
+
+        addButton.setOnAction(e -> {
+            controller.handleButtonAction("Add Class");
+        });
+        removeButton.setOnAction(e -> {
+            controller.handleButtonAction("Remove Class");
+        });
+        displayTimetable.setOnAction(e -> {
+            controller.handleButtonAction("Display Timetable button");
+        });
+        stopButton.setOnAction(e -> {
+            controller.handleButtonAction("Stop button");
+        });
+        earlyButton.setOnAction(e -> {
+            controller.handleButtonAction("Move afternoon classes to mornings");
+        });
     }
 
     private Button createStyledButton(String label) {
@@ -62,6 +69,5 @@ public class AppView extends Application {
         button.setOnAction(event -> controller.handleButtonAction(label));
         return button;
     }
-    
-}
 
+}

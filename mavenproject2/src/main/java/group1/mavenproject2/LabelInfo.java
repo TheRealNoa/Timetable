@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package group1.mavenproject2;
 
 import javafx.scene.control.Label;
@@ -32,9 +28,9 @@ class LabelInfo {
     public int getCol() {
         return col;
     }
+
     @Override
-    public String toString()
-    {
-    return (label.getText() + ":" + row + "-" + col);
+    public String toString() {
+        return (label.getText() + ":" + row + "-" + col);
     }
 }
